@@ -41,3 +41,13 @@ tetris implemented with java
 - complete row effect
 - game end condition check
 
+
+## Console Management (TUI)
+
+JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
+
+- create new window
+- non blocking input handle
+- paint border
+- paint border with character
+- move window position
