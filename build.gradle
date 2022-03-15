@@ -1,9 +1,12 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'c'
 }
 
 group 'org.tetris'
 version '1.0-SNAPSHOT'
+jar.archiveFileName = "tetris.jar"
 
 repositories {
     mavenCentral()
@@ -14,6 +17,92 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
+
+application {
+    mainClass = 'tetris.Tetris'
+    applicationDefaultJvmArgs = ['-Djava.library.path=./lib']
+}
+
+tasks.register('cp', Copy) {
+    dependsOn 'build'
+    from(layout.buildDirectory)
+    println layout.buildDirectory
+    include "libs/**/*.dylib"
+    eachFile {
+        path = name
+    }
+    includeEmptyDirs = false
+    into 'lib'
+}
+
+
+tasks.register('jniHeader', Exec) {
+    def targetDir = sourceSets.main.runtimeClasspath.asPath
+    commandLine "javah", "-d", "src/native", "-classpath", targetDir, "tetris.console.Console"
+    dependsOn classes
+}
+
+build.dependsOn 'jniHeader'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'tetris.Tetris'
+    }
+
+    from("$buildDir/libs") {
+        include "**/*.dylib"
+        eachFile {
+            path = name
+        }
+        includeEmptyDirs = false
+        into "lib"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+jar.dependsOn 'ConsoleSharedLibrary'
+
+
 test {
     useJUnitPlatform()
 }
+
+model {
+
+    platforms {
+        x86 {
+            architecture "x86"
+        }
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    components {
+        Console(NativeLibrarySpec) {
+            targetPlatform "x64"
+            binaries.all {
+                cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                linker.args '-lncurses'
+            }
+            sources {
+                c {
+                    source {
+                        srcDir "src/native"
+                        include "**/*.c"
+                    }
+                    exportedHeaders {
+                        srcDir "src/native"
+                    }
+                }
+            }
+        }
+    }
+}
+
