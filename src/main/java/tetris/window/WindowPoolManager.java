@@ -8,7 +8,7 @@ public class WindowPoolManager {
     private static final LinkedList<Window> windowPool = new LinkedList<>();
 
     public static void refreshAll() {
-        windowPool.forEach(w -> w.paint());
+        windowPool.forEach(Window::refreshWindow);
         Console.refresh();
     }
 

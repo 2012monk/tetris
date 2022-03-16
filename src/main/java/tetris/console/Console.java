@@ -2,6 +2,7 @@ package tetris.console;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Objects;
 import tetris.window.Rectangle;
 
 public class Console {
@@ -21,7 +22,7 @@ public class Console {
             if (file.listFiles() == null) {
                 throw new RuntimeException(ERR_NO_LIBRARY);
             }
-            File library = Arrays.stream(file.listFiles())
+            File library = Arrays.stream(Objects.requireNonNull(file.listFiles()))
                 .filter(f -> f.getName().startsWith(LIBRARY_NAME))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException(ERR_NO_LIBRARY));
@@ -46,17 +47,23 @@ public class Console {
         drawBorder(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
     }
 
+    public static void clearArea(Rectangle rectangle) {
+        clearArea(rectangle.getX() + 1, rectangle.getY() + 1, rectangle.getWidth() - 1, rectangle.getHeight() - 1);
+    }
+
     private static native int getScreenWidth();
 
     private static native int getScreenHeight();
 
     public static native int readBytes();
 
-    private static native void drawChar(int x, int y, char chr);
+    public static native void drawChar(int x, int y, char chr);
 
     private static native void drawBorder(int x, int y, int width, int height);
 
-    private static native void drawString(int x, int y, String text);
+    public static native void drawString(int x, int y, String text);
+
+    private static native void clearArea(int x, int y, int width, int height);
 
     private static native void printString(int x, int y, int length, String text);
 

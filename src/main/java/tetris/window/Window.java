@@ -1,5 +1,7 @@
 package tetris.window;
 
+import java.util.ArrayList;
+import java.util.List;
 import tetris.console.Console;
 
 public class Window {
@@ -7,6 +9,8 @@ public class Window {
     private Rectangle border;
 
     private boolean activateBorder = true;
+
+    private List<Component> components = new ArrayList<>();
 
     public Window(int x, int y, int width, int height) {
         this.border = new Rectangle(x, y, width, height);
@@ -20,19 +24,34 @@ public class Window {
         this.border = new Rectangle(width, height);
     }
 
+    public void add(Component component) {
+        components.add(component);
+        component.setWindow(this);
+        refreshWindow();
+    }
 
-    public void paint() {
+    public void refreshWindow() {
         if (activateBorder) {
             Console.drawBorder(this.border);
         }
-        paintPanel();
+        Console.clearArea(this.border);
+        components.forEach(Component::update);
     }
 
-    public void paintPanel() {
-        for (int i = 1; i < this.border.getWidth(); i++) {
-            for (int j = 1; j < this.border.getHeight(); j++) {
-                Console.addCell(i, j);
-            }
-        }
+    public int getY() {
+        return
+            this.border.getY();
+    }
+
+    public int getX() {
+        return this.border.getX();
+    }
+
+    public int getHeight() {
+        return this.border.getHeight();
+    }
+
+    public int getWidth() {
+        return this.border.getWidth();
     }
 }

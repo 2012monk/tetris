@@ -8,6 +8,15 @@ tetris implemented with java
 - presenting next block
 - global score board
 
+## UI
+
+### 게임 화면
+
+- game board
+- score board
+- next block notification
+- timer
+
 ## function list
 
 ### menu select

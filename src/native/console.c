@@ -27,43 +27,29 @@ void drawCorners(int x, int y, int width, int height) {
   mvaddch(x + height, y + width, ACS_LRCORNER);
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes (JNIEnv *, jclass) {
+JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes (JNIEnv *env, jclass clazz) {
   return getch();
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxWidth (JNIEnv *, jobject) {
+JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxWidth (JNIEnv *env, jobject obj) {
   return COLS;
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxHeight (JNIEnv *, jobject) {
+JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxHeight (JNIEnv *env, jobject obj) {
   return LINES;
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_shutdown (JNIEnv *, jobject) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_shutdown (JNIEnv *env, jobject obj) {
   endwin();
 }
 
-JNIEXPORT jchar JNICALL Java_tetris_console_Console_getChar (JNIEnv *, jobject) {
-  initscr();
-  cbreak();
-  char c = getch();
-  endwin();
-  return c;
-}
-
-JNIEXPORT void JNICALL Java_tetris_console_Console_writeChar (JNIEnv *, jobject, jint x, jint y, jchar chr) {
-  move(y, x);
-  addch(chr);
-  endDraw();
-}
-
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine (JNIEnv *, jobject, jint x, jint y) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine (JNIEnv *env, jobject obj, jint x, jint y) {
   move(y, 0);
   clrtoeol();
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *, jobject) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject obj) {
   initscr();
   curs_set(0);
   keypad(stdscr, TRUE);
@@ -73,21 +59,42 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *, jobject) {
   refresh();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_refresh (JNIEnv *, jclass) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_refresh (JNIEnv *env, jclass clazz) {
   refresh();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *, jclass, jint x, jint y, jint width, jint height) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height) {
   drawCorners(x, y, width, height);
   drawHorizontalLine(x, y, width, height);
   drawVerticalLine(x, y, width, height);
+  endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar (JNIEnv *, jclass, jint x, jint y, jchar chr) {
+JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar (JNIEnv *env, jclass clazz, jint x, jint y, jchar chr) {
   mvaddch(y, x, chr);
+  endDraw();
 }
 
 void printString(int x, int y, int width, int height, char str[]) {
 
 }
-JNIEXPORT void JNICALL Java_tetris_console_Console_printString (JNIEnv *, jclass, jint, jint, jint, jstring);
+
+JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jclass clazz, jint x, jint y, jstring str) {
+  const char *cString = (*env)->GetStringUTFChars(env, str, NULL);
+  mvaddstr(y, x, cString);
+  (*env)->ReleaseStringUTFChars(env, str, cString);
+  endDraw();
+}
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height) {
+  for (int i = x; i < x + height; i++) {
+    for (int j = y; j < y + width; j++) {
+      mvaddch(i, j, ' ');
+    }
+  }
+  endDraw();
+}
+
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearScreen (JNIEnv *env, jclass clazz) {
+  clear();
+  endDraw();
+}

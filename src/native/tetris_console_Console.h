@@ -49,6 +49,22 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder
 
 /*
  * Class:     tetris_console_Console
+ * Method:    drawString
+ * Signature: (IILjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_tetris_console_Console_drawString
+  (JNIEnv *, jclass, jint, jint, jstring);
+
+/*
+ * Class:     tetris_console_Console
+ * Method:    clearArea
+ * Signature: (IIII)V
+ */
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea
+  (JNIEnv *, jclass, jint, jint, jint, jint);
+
+/*
+ * Class:     tetris_console_Console
  * Method:    printString
  * Signature: (IIILjava/lang/String;)V
  */
