@@ -1,6 +1,8 @@
-package tetris.window;
+package tetris.components;
 
-public abstract class ComponentImpl implements Component{
+import tetris.window.Window;
+
+public abstract class ComponentImpl implements Component {
 
     protected Window window;
 

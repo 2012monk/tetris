@@ -3,12 +3,14 @@ package tetris.console;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
+import tetris.components.Color;
 import tetris.window.Rectangle;
 
 public class Console {
 
     private static final String LIBRARY_NAME = "libConsole";
     private static final String ERR_NO_LIBRARY = "no library";
+    private static final int DEFAULT_COLOR = -1;
 
     static {
         System.load(getLibraryPath());
@@ -32,24 +34,42 @@ public class Console {
         }
     }
 
-    public static void test() {
-        drawChar(0, 0, 'a');
-        drawChar(1, 0, 'b');
-        drawChar(2, 0, 'c');
-        drawChar(3, 0, 'd');
-    }
-
-    public static void addCell(int x, int y) {
-        drawChar(x, y, ' ');
-    }
-
     public static void drawBorder(Rectangle rectangle) {
-        drawBorder(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+        drawBorder(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight(),
+            DEFAULT_COLOR, DEFAULT_COLOR
+        );
     }
 
     public static void clearArea(Rectangle rectangle) {
-        clearArea(rectangle.getX() + 1, rectangle.getY() + 1, rectangle.getWidth() - 1, rectangle.getHeight() - 1);
+        clearArea(rectangle.getX() + 1, rectangle.getY() + 1, rectangle.getWidth() - 1,
+            rectangle.getHeight() - 1, DEFAULT_COLOR, DEFAULT_COLOR);
     }
+
+    public static void setForeGroundColor(Color color) {
+
+    }
+
+    public static void setBackGroundColor(Color color) {
+
+    }
+
+    public static void setColorPaint(Color foreGround, Color backGround) {
+
+    }
+
+    public static void drawChar(int x, int y, char chr, Color fg, Color bg) {
+        drawChar(x, y, chr, fg.getNumber(), bg.getNumber());
+    }
+
+    public static void drawChar(int x, int y, char chr) {
+        drawChar(x, y, chr, DEFAULT_COLOR, DEFAULT_COLOR);
+    }
+
+    public static void drawString(int x, int y, String text) {
+        drawString(x, y, text, DEFAULT_COLOR, DEFAULT_COLOR);
+    }
+
+    private static native int setColorPair(int foreGround, int backGround);
 
     private static native int getScreenWidth();
 
@@ -57,19 +77,15 @@ public class Console {
 
     public static native int readBytes();
 
-    public static native void drawChar(int x, int y, char chr);
+    private static native void drawChar(int x, int y, char chr, int fg, int bg);
 
-    private static native void drawBorder(int x, int y, int width, int height);
+    private static native void drawBorder(int x, int y, int width, int height, int fg, int bg);
 
-    public static native void drawString(int x, int y, String text);
+    private static native void drawString(int x, int y, String text, int fg, int bg);
 
-    private static native void clearArea(int x, int y, int width, int height);
-
-    private static native void printString(int x, int y, int length, String text);
+    private static native void clearArea(int x, int y, int width, int height, int fg, int bg);
 
     private static native void clearLine(int x, int y);
-
-    private static native void clearBox(int x, int y);
 
     private static native void clearScreen();
 

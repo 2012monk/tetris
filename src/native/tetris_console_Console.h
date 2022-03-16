@@ -7,6 +7,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef tetris_console_Console_DEFAULT_COLOR
+#define tetris_console_Console_DEFAULT_COLOR -1L
+/*
+ * Class:     tetris_console_Console
+ * Method:    setColorPair
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_tetris_console_Console_setColorPair
+  (JNIEnv *, jclass, jint, jint);
+
 /*
  * Class:     tetris_console_Console
  * Method:    getScreenWidth
@@ -34,42 +44,34 @@ JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes
 /*
  * Class:     tetris_console_Console
  * Method:    drawChar
- * Signature: (IIC)V
+ * Signature: (IICII)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar
-  (JNIEnv *, jclass, jint, jint, jchar);
+  (JNIEnv *, jclass, jint, jint, jchar, jint, jint);
 
 /*
  * Class:     tetris_console_Console
  * Method:    drawBorder
- * Signature: (IIII)V
+ * Signature: (IIIIII)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder
-  (JNIEnv *, jclass, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint);
 
 /*
  * Class:     tetris_console_Console
  * Method:    drawString
- * Signature: (IILjava/lang/String;)V
+ * Signature: (IILjava/lang/String;II)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawString
-  (JNIEnv *, jclass, jint, jint, jstring);
+  (JNIEnv *, jclass, jint, jint, jstring, jint, jint);
 
 /*
  * Class:     tetris_console_Console
  * Method:    clearArea
- * Signature: (IIII)V
+ * Signature: (IIIIII)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea
-  (JNIEnv *, jclass, jint, jint, jint, jint);
-
-/*
- * Class:     tetris_console_Console
- * Method:    printString
- * Signature: (IIILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_tetris_console_Console_printString
-  (JNIEnv *, jclass, jint, jint, jint, jstring);
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint);
 
 /*
  * Class:     tetris_console_Console
@@ -77,14 +79,6 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_printString
  * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine
-  (JNIEnv *, jclass, jint, jint);
-
-/*
- * Class:     tetris_console_Console
- * Method:    clearBox
- * Signature: (II)V
- */
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearBox
   (JNIEnv *, jclass, jint, jint);
 
 /*

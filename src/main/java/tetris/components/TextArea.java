@@ -1,4 +1,4 @@
-package tetris.window;
+package tetris.components;
 
 import java.util.ArrayList;
 import java.util.List;

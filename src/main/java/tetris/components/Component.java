@@ -1,4 +1,6 @@
-package tetris.window;
+package tetris.components;
+
+import tetris.window.Window;
 
 public interface Component {
 

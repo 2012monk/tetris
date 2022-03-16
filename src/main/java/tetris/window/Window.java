@@ -2,6 +2,7 @@ package tetris.window;
 
 import java.util.ArrayList;
 import java.util.List;
+import tetris.components.Component;
 import tetris.console.Console;
 
 public class Window {
@@ -24,7 +25,7 @@ public class Window {
         this.border = new Rectangle(width, height);
     }
 
-    public void add(Component component) {
+    public void addComponent(Component component) {
         components.add(component);
         component.setWindow(this);
         refreshWindow();
@@ -39,8 +40,7 @@ public class Window {
     }
 
     public int getY() {
-        return
-            this.border.getY();
+        return this.border.getY();
     }
 
     public int getX() {
