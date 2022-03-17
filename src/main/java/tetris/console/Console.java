@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 import tetris.components.Color;
-import tetris.window.Rectangle;
+import tetris.window.Spatial;
 
 public class Console {
 
@@ -34,15 +34,15 @@ public class Console {
         }
     }
 
-    public static void drawBorder(Rectangle rectangle) {
-        drawBorder(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight(),
+    public static void drawBorder(Spatial space) {
+        drawBorder(space.getAbsoluteX(), space.getAbsoluteY(), space.getWidth(), space.getHeight(),
             DEFAULT_COLOR, DEFAULT_COLOR
         );
     }
 
-    public static void clearArea(Rectangle rectangle) {
-        clearArea(rectangle.getX() + 1, rectangle.getY() + 1, rectangle.getWidth() - 1,
-            rectangle.getHeight() - 1, DEFAULT_COLOR, DEFAULT_COLOR);
+    public static void clearArea(Spatial space) {
+        clearArea(space.getAbsoluteX() + 1, space.getAbsoluteY() + 1, space.getWidth() - 1,
+            space.getHeight() - 1, DEFAULT_COLOR, DEFAULT_COLOR);
     }
 
     public static void setForeGroundColor(Color color) {
@@ -71,9 +71,9 @@ public class Console {
 
     private static native int setColorPair(int foreGround, int backGround);
 
-    private static native int getScreenWidth();
+    public static native int getScreenWidth();
 
-    private static native int getScreenHeight();
+    public static native int getScreenHeight();
 
     public static native int readBytes();
 

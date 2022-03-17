@@ -16,18 +16,18 @@ public class TextArea extends ComponentImpl {
 
     public void print() {
         String str = stringBuilder.toString();
-        if (!str.contains("\r") && !str.contains("\n") && str.length() <= getMaxWidth()) {
+        if (!str.contains("\r") && !str.contains("\n") && str.length() <= getWidth()) {
             printLine(getHorizontalPadding(str), 0, str);
             return;
         }
-        List<String> clippedString = clipString(str, getMaxWidth());
+        List<String> clippedString = clipString(str, getWidth());
         for (int i = 0; i < clippedString.size(); i++) {
             printLine(getHorizontalPadding(clippedString.get(i)), i, clippedString.get(i));
         }
     }
 
     private int getHorizontalPadding(String str) {
-        int maxWidth = getMaxWidth();
+        int maxWidth = getWidth();
         if (textAlign == TextAlign.START || str.length() >= maxWidth) {
             return 0;
         }
@@ -63,10 +63,10 @@ public class TextArea extends ComponentImpl {
     }
 
     private void printLine(int x, int y, String str) {
-        int startX = x + getCurrentX();
-        int startY = y + getCurrentY();
-        if (str.length() > x + getMaxWidth()) {
-            str = str.substring(0, x + getMaxWidth());
+        int startX = x + getAbsoluteX();
+        int startY = y + getAbsoluteY();
+        if (str.length() > x + getWidth()) {
+            str = str.substring(0, x + getWidth());
         }
 
         Console.drawString(startX, startY, str);

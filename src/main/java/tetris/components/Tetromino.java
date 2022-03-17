@@ -1,25 +1,35 @@
 package tetris.components;
 
-import java.util.ArrayList;
 import java.util.List;
-import tetris.window.Window;
+import java.util.stream.Collectors;
 
-public class Tetromino extends ComponentImpl {
+public class Tetromino extends ComponentContainer {
 
-    private static final int BLOCK_WIDTH = 3;
-    private static final int BLOCK_HEIGHT = 3;
-    private List<Point> points = new ArrayList<>();
+    private static final int DEFAULT_BLOCK_SIZE = 3;
+    private Shape shape;
     private Color color;
-    private int xOffset = 0;
-    private int yOffset = 0;
 
-    public Tetromino(Color color) {
+    private Tetromino(int x, int y, int blockSize, Color color, Shape shape) {
+        super(x, y, blockSize * 2, blockSize * 2);
         this.color = color;
+        this.shape = shape;
     }
 
-    public Tetromino(List<Point> points, Color color) {
-        this.points.addAll(points);
-        points.forEach(p -> p.setWindow(this.window));
+    private Tetromino(int x, int y, Color color, Shape shape) {
+        this(x, y, DEFAULT_BLOCK_SIZE, color, shape);
+    }
+
+    public Tetromino(List<Point> points, Color color, Shape shape, int blockSize) {
+        this(0, 0, blockSize, color, shape);
+        this.components.addAll(points);
+    }
+
+    public Tetromino(Color color, Shape shape, int blockSize) {
+        this(0, 0, blockSize, color, shape);
+    }
+
+    public Tetromino(Color color, Shape shape) {
+        this(color, shape, DEFAULT_BLOCK_SIZE);
     }
 
     public void rotate() {
@@ -43,29 +53,23 @@ public class Tetromino extends ComponentImpl {
     }
 
     public void addPoint(int x, int y) {
-        validateCoordinate(x);
-        validateCoordinate(y);
-        this.points.add(new Point(x, y, color));
+        addComponent(new Point(x, y * 2, color));
+        addComponent(new Point(x, y * 2 + 1, color));
     }
 
-    private void validateCoordinate(int p) {
-        if (p < 0 || p > BLOCK_WIDTH) {
-            throw new IllegalArgumentException();
-        }
+    public Tetromino copy() {
+        List<Point> copied = components.stream()
+            .map(c -> ((Point) c).copy())
+            .collect(Collectors.toList());
+        return new Tetromino(copied, color, shape, getWidth());
     }
 
-    @Override
-    public void setWindow(Window window) {
-        super.setWindow(window);
-        points.forEach(p -> p.setWindow(window));
+    public List<Component> points() {
+        return this.components;
     }
 
-    @Override
-    public void update() {
-        this.points.forEach(Point::update);
+    public Shape getShape() {
+        return shape;
     }
 
-    public List<Point> points() {
-        return this.points;
-    }
 }

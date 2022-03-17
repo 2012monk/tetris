@@ -42,11 +42,11 @@ JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes (JNIEnv *env, jclas
   return getch();
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxWidth (JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_tetris_console_Console_getScreenWidth (JNIEnv *env, jobject obj) {
   return COLS;
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getMaxHeight (JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_tetris_console_Console_getScreenHeight (JNIEnv *env, jobject obj) {
   return LINES;
 }
 
@@ -70,6 +70,7 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject ob
     use_default_colors();
     start_color();
   }
+  attron(A_BOLD|A_DIM|A_BLINK);
   clear();
   refresh();
 }
@@ -87,14 +88,14 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jcla
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar (JNIEnv *env, jclass clazz, jint x, jint y, jchar chr, jint fg, jint bg) {
   int n = setColorPair(fg, bg);
-  mvaddch(y, x, chr);
+  mvaddch(x, y, chr);
   unsetColorPair(n);
   endDraw();
 }
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jclass clazz, jint x, jint y, jstring str, jint fg, jint bg) {
   const char *cString = (*env)->GetStringUTFChars(env, str, NULL);
-  mvaddstr(y, x, cString);
+  mvaddstr(x, y, cString);
   (*env)->ReleaseStringUTFChars(env, str, cString);
   endDraw();
 }

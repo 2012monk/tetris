@@ -1,24 +1,31 @@
 package tetris.components;
 
-import java.util.LinkedList;
 import java.util.List;
+import tetris.window.Rectangle;
 
-public class TetrisBoard extends ComponentImpl {
+public class TetrisBoard extends ComponentContainer {
 
-    private List<Point> filledPoints = new LinkedList<>();
+    public TetrisBoard(Rectangle space) {
+        super(space);
+    }
+
+    public TetrisBoard(int x, int y, int width, int height, List<Point> filledPoints) {
+        this(x, y, width, height);
+        this.components.addAll(filledPoints);
+    }
+
+    public TetrisBoard(int x, int y, int width, int height) {
+        super(x, y, width, height);
+    }
 
     public void printBlock(Tetromino block) {
-        block.setWindow(this.window);
+        clear();
+        block.setSpace(this.space);
         block.update();
     }
 
     public void stackBlock(Tetromino block) {
-        filledPoints.addAll(block.points());
-        block.points().forEach(p -> p.setWindow(this.window));
-    }
-
-    @Override
-    public void update() {
-        filledPoints.forEach(Point::update);
+        components.addAll(block.points());
+        block.points().forEach(p -> p.setSpace(this.space));
     }
 }

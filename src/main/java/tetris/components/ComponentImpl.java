@@ -1,29 +1,66 @@
 package tetris.components;
 
-import tetris.window.Window;
+import tetris.console.Console;
+import tetris.window.Rectangle;
+import tetris.window.Spatial;
 
 public abstract class ComponentImpl implements Component {
 
-    protected Window window;
+    private static final int MINIMUM_SIZE = 1;
+    private static final int DEFAULT_COORDINATE = 0;
+    protected Spatial space;
+
+    public ComponentImpl(Spatial space) {
+        this.space = space;
+    }
+
+    public ComponentImpl(int x, int y, int width, int height) {
+        this.space = new Rectangle(x, y, width, height);
+    }
+
+    protected ComponentImpl() {
+        this.space = new Rectangle(
+            DEFAULT_COORDINATE, DEFAULT_COORDINATE,
+            MINIMUM_SIZE, MINIMUM_SIZE);
+    }
 
     @Override
-    public void setWindow(Window window) {
-        this.window = window;
+    public void setSpace(Spatial space) {
+        this.space = space;
     }
 
-    protected int getCurrentX() {
-        return this.window.getX() + 1;
+    @Override
+    public int getAbsoluteX() {
+        return space.getAbsoluteX();
     }
 
-    protected int getCurrentY() {
-        return this.window.getY() + 1;
+    @Override
+    public int getAbsoluteY() {
+        return space.getAbsoluteY();
     }
 
-    protected int getMaxWidth() {
-        return this.window.getWidth() - 2;
+    @Override
+    public int getWidth() {
+        return space.getWidth();
     }
 
-    protected int getMaxHeight() {
-        return this.window.getHeight() - 2;
+    @Override
+    public int getHeight() {
+        return space.getHeight();
+    }
+
+    @Override
+    public Spatial getParent() {
+        return this.space.getParent();
+    }
+
+    @Override
+    public void setParent(Spatial space) {
+        this.space.setParent(space);
+    }
+
+    @Override
+    public void clear() {
+        Console.clearArea(space);
     }
 }

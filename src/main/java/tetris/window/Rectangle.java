@@ -1,7 +1,10 @@
 package tetris.window;
 
-public class Rectangle {
+import tetris.console.Console;
 
+public class Rectangle implements Spatial {
+
+    protected Spatial parent;
     private int x;
     private int y;
     private int width;
@@ -14,23 +17,53 @@ public class Rectangle {
         this.height = height;
     }
 
-    public Rectangle(int width, int height) {
-        this(0, 0, width, height);
+    public Rectangle(Spatial parent, int x, int y, int width, int height) {
+        this(x, y, width, height);
+        this.parent = parent;
     }
 
-    public int getX() {
-        return x;
+    public int getAbsoluteX() {
+        if (parent == null) {
+            return x + 1;
+        }
+        return getCalibratedX();
     }
 
-    public int getY() {
-        return y;
+    public int getAbsoluteY() {
+        if (parent == null) {
+            return y + 1;
+        }
+        return getCalibratedY();
     }
 
     public int getWidth() {
-        return width;
+        return width - 2;
     }
 
     public int getHeight() {
-        return height;
+        return height - 2;
+    }
+
+    public int getCalibratedX() {
+        return this.parent.getAbsoluteX() + x;
+    }
+
+    public int getCalibratedY() {
+        return this.parent.getAbsoluteY() + y;
+    }
+
+    @Override
+    public Spatial getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(Spatial parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void clear() {
+        Console.clearArea(this);
     }
 }

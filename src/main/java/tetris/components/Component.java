@@ -1,10 +1,10 @@
 package tetris.components;
 
-import tetris.window.Window;
+import tetris.window.Spatial;
 
-public interface Component {
+public interface Component extends Spatial {
 
     void update();
 
-    void setWindow(Window window);
+    void setSpace(Spatial space);
 }
