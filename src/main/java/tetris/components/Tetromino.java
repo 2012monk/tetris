@@ -2,6 +2,9 @@ package tetris.components;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import tetris.console.Console;
+import tetris.constants.Color;
+import tetris.constants.Shape;
 
 public class Tetromino extends ComponentContainer {
 
@@ -10,7 +13,7 @@ public class Tetromino extends ComponentContainer {
     private Color color;
 
     private Tetromino(int x, int y, int blockSize, Color color, Shape shape) {
-        super(x, y, blockSize * 2, blockSize * 2);
+        super(x, y, blockSize * 2, blockSize * 2, false);
         this.color = color;
         this.shape = shape;
     }
@@ -19,9 +22,10 @@ public class Tetromino extends ComponentContainer {
         this(x, y, DEFAULT_BLOCK_SIZE, color, shape);
     }
 
-    public Tetromino(List<Point> points, Color color, Shape shape, int blockSize) {
+    private Tetromino(List<Point> points, Color color, Shape shape, int blockSize) {
         this(0, 0, blockSize, color, shape);
         this.components.addAll(points);
+        points.forEach(p -> p.setParent(this));
     }
 
     public Tetromino(Color color, Shape shape, int blockSize) {

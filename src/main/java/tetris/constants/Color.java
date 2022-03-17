@@ -1,4 +1,4 @@
-package tetris.components;
+package tetris.constants;
 
 public enum Color {
 

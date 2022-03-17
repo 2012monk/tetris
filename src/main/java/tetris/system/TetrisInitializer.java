@@ -1,9 +1,9 @@
 package tetris.system;
 
-import tetris.components.Color;
-import tetris.components.Shape;
 import tetris.components.Tetromino;
 import tetris.components.TetrominoRepository;
+import tetris.constants.Color;
+import tetris.constants.Shape;
 
 public class TetrisInitializer {
 
@@ -12,11 +12,7 @@ public class TetrisInitializer {
     }
 
     public static void initTetrominos() {
-        Tetromino S = new Tetromino(Color.BLUE, Shape.S);
-        S.addPoint(0, 0);
-        S.addPoint(0, 1);
-        S.addPoint(1, 1);
-        S.addPoint(1, 2);
+        Tetromino S = getS();
         Tetromino I = new Tetromino(Color.RED, Shape.I, 4);
         I.addPoint(0, 0);
         I.addPoint(0, 1);
@@ -55,5 +51,14 @@ public class TetrisInitializer {
         TetrominoRepository.addTetromino(L);
         TetrominoRepository.addTetromino(Z);
         TetrominoRepository.addTetromino(O);
+    }
+
+    public static Tetromino getS() {
+        Tetromino S = new Tetromino(Color.BLUE, Shape.S);
+        S.addPoint(0, 0);
+        S.addPoint(0, 1);
+        S.addPoint(1, 1);
+        S.addPoint(1, 2);
+        return S;
     }
 }

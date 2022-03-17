@@ -5,6 +5,4 @@ import tetris.window.Spatial;
 public interface Component extends Spatial {
 
     void update();
-
-    void setSpace(Spatial space);
 }

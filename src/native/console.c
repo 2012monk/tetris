@@ -11,13 +11,13 @@ void endDraw() {
 }
 
 void drawHorizontalLine(int x, int y, int width, int height) {
-  mvhline(y, x + 1, ACS_HLINE, width - 1);
-  mvhline(y + height, x + 1, ACS_HLINE, width - 1);
+  mvhline(x, y, ACS_HLINE, width);
+  mvhline(x + height, y, ACS_HLINE, width);
 }
 
 void drawVerticalLine(int x, int y, int width, int height) {
-  mvvline(y + 1, x, ACS_VLINE, height - 1);
-  mvvline(y + 1, x + width, ACS_VLINE, height - 1);
+  mvvline(x, y, ACS_VLINE, height);
+  mvvline(x, y + width, ACS_VLINE, height);
 }
 
 void drawCorners(int x, int y, int width, int height) {
@@ -80,9 +80,9 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_refresh (JNIEnv *env, jclass 
 }
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
-  drawCorners(x, y, width, height);
   drawHorizontalLine(x, y, width, height);
   drawVerticalLine(x, y, width, height);
+  drawCorners(x, y, width, height);
   endDraw();
 }
 

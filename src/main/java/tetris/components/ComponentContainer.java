@@ -2,29 +2,41 @@ package tetris.components;
 
 import java.util.ArrayList;
 import java.util.List;
-import tetris.console.Console;
-import tetris.window.Spatial;
 
 public abstract class ComponentContainer extends ComponentImpl {
 
     protected List<Component> components = new ArrayList<>();
 
-    public ComponentContainer(Spatial space) {
-        super(space);
+    public ComponentContainer(int x, int y, int width, int height, boolean borderOn,
+        List<? extends Component> components) {
+        this(x, y, width, height, borderOn);
+        this.components.addAll(components);
+        components.forEach(c -> c.setParent(this));
+    }
+
+    public ComponentContainer(int x, int y, int width, int height, boolean borderOn) {
+        super(x, y, width, height, borderOn);
     }
 
     public ComponentContainer(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
-    protected void addComponent(Component component) {
+    public <T extends Component> void addComponent(T component) {
         this.components.add(component);
-        component.setParent(this.space);
+        component.setParent(this);
+        update();
+    }
+
+    public <T extends Component> void addComponents(List<T> components) {
+        this.components.addAll(components);
+        components.forEach(c -> c.setParent(this));
+        update(); // TODO 업데이트 순서와 refresh 순서 점검
     }
 
     @Override
     public void update() {
-        Console.clearArea(space);
+        clear();
         components.forEach(Component::update);
     }
 }

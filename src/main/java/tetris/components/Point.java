@@ -1,8 +1,7 @@
 package tetris.components;
 
 import tetris.console.Console;
-import tetris.window.Rectangle;
-import tetris.window.Spatial;
+import tetris.constants.Color;
 
 public class Point extends ComponentImpl {
 
@@ -12,28 +11,17 @@ public class Point extends ComponentImpl {
     private Color color;
 
     public Point(int x, int y, Color color) {
-        setSpace(new Rectangle(x, y, POINT_SIZE, POINT_SIZE));
+        super(x, y, POINT_SIZE, POINT_SIZE, false);
         this.color = color;
-    }
-
-    public Point(Spatial space, Color color) {
-        setSpace(space);
-        this.color = color;
-    }
-
-    private void verifyCoordinate(int p) {
-        if (p < 0 || p >= space.getParent().getWidth()) {
-            throw new IllegalArgumentException(String.valueOf(space.getParent().getWidth()));
-        }
     }
 
     @Override
     public void update() {
         clear();
-        Console.drawChar(getAbsoluteX(), getAbsoluteY(), CELL, DEFAULT_FOREGROUND_COLOR, color);
+        Console.drawChar(getInnerX(), getInnerY(), CELL, DEFAULT_FOREGROUND_COLOR, color);
     }
 
     public Point copy() {
-        return new Point(getAbsoluteX(), getAbsoluteY(), color);
+        return new Point(getInnerX(), getInnerY(), color);
     }
 }

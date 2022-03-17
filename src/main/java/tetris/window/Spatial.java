@@ -6,6 +6,14 @@ public interface Spatial {
 
     int getAbsoluteY();
 
+    int getInnerX();
+
+    int getInnerY();
+
+    int getInnerWidth();
+
+    int getInnerHeight();
+
     int getWidth();
 
     int getHeight();
@@ -15,4 +23,6 @@ public interface Spatial {
     void setParent(Spatial parent);
 
     void clear();
+
+    boolean hasParent();
 }

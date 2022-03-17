@@ -2,6 +2,7 @@ package tetris.components;
 
 import java.util.HashMap;
 import java.util.Map;
+import tetris.constants.Shape;
 
 public class TetrominoRepository {
 

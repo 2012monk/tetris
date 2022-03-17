@@ -3,7 +3,7 @@ package tetris.console;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
-import tetris.components.Color;
+import tetris.constants.Color;
 import tetris.window.Spatial;
 
 public class Console {
@@ -41,8 +41,9 @@ public class Console {
     }
 
     public static void clearArea(Spatial space) {
-        clearArea(space.getAbsoluteX() + 1, space.getAbsoluteY() + 1, space.getWidth() - 1,
-            space.getHeight() - 1, DEFAULT_COLOR, DEFAULT_COLOR);
+        clearArea(space.getInnerX(), space.getInnerY(),
+            space.getInnerWidth(), space.getInnerHeight(),
+            DEFAULT_COLOR, DEFAULT_COLOR);
     }
 
     public static void setForeGroundColor(Color color) {
