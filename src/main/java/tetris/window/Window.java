@@ -1,12 +1,9 @@
 package tetris.window;
 
-import java.util.ArrayList;
-import java.util.List;
 import tetris.components.Component;
 import tetris.components.ComponentContainer;
-import tetris.console.Console;
 
-public class Window extends ComponentContainer {
+public class Window extends ComponentContainer<Component> {
 
     public Window(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -16,9 +13,10 @@ public class Window extends ComponentContainer {
         this(0, 0, width, height);
     }
 
-    public Window(int x, int y, int width, int height,  boolean borderOn) {
+    public Window(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
     }
+
     public Window(int x, int y, int width, int height, Spatial screen) {
         super(x, y, width, height);
         setParent(screen);

@@ -54,8 +54,8 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_shutdown (JNIEnv *env, jobjec
   endwin();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine (JNIEnv *env, jobject obj, jint x, jint y) {
-  move(y, 0);
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine (JNIEnv *env, jobject obj, jint x) {
+  move(x, 0);
   clrtoeol();
   endDraw();
 }

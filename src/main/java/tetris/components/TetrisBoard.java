@@ -2,7 +2,7 @@ package tetris.components;
 
 import java.util.List;
 
-public class TetrisBoard extends ComponentContainer {
+public class TetrisBoard extends ComponentContainer<Point> {
 
     public TetrisBoard(int x, int y, int width, int height, List<Point> filledPoints) {
         super(x, y, width, height, false, filledPoints);
@@ -13,8 +13,8 @@ public class TetrisBoard extends ComponentContainer {
     }
 
     public void printBlock(Tetromino block) {
-//        clear();
-        block.setParent(this);
+        clear();
+        block.init(this);
         block.update();
     }
 

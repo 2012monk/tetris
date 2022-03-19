@@ -8,7 +8,7 @@ public class Point extends ComponentImpl {
     private static final Color DEFAULT_FOREGROUND_COLOR = Color.BLACK;
     private static final int POINT_SIZE = 1;
     private static final char CELL = ' ';
-    private Color color;
+    private final Color color;
 
     public Point(int x, int y, Color color) {
         super(x, y, POINT_SIZE, POINT_SIZE, false);
@@ -17,11 +17,14 @@ public class Point extends ComponentImpl {
 
     @Override
     public void update() {
+        if (getInnerX() < 0 || getInnerY() < 0) {
+            return;
+        }
         clear();
         Console.drawChar(getInnerX(), getInnerY(), CELL, DEFAULT_FOREGROUND_COLOR, color);
     }
 
     public Point copy() {
-        return new Point(getInnerX(), getInnerY(), color);
+        return new Point(getRelativeX(), getRelativeY(), color);
     }
 }

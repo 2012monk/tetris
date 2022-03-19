@@ -8,10 +8,10 @@ public abstract class SpatialImpl implements Spatial {
     private static final String ERR_INVALID_SIZE = "잘못된 크기";
     protected Spatial parent;
     protected boolean borderOn;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
 
     public SpatialImpl(int x, int y, int width, int height) {
         this(x, y, width, height, true);
@@ -33,7 +33,7 @@ public abstract class SpatialImpl implements Spatial {
 
     private void verifyCoordinate() {
         if (y < 0 || x < 0) {
-            throw new IllegalArgumentException(ERR_ILLEGAL_COORDINATE);
+//            throw new IllegalArgumentException(ERR_ILLEGAL_COORDINATE);
         }
     }
 
@@ -45,9 +45,9 @@ public abstract class SpatialImpl implements Spatial {
         if (x + width > parent.getWidth() || y + height > parent.getHeight()) {
             String msg = ERR_INVALID_SIZE
                 + "\nmax width: " + parent.getWidth()
-                + " current: " + (x + width)
+                + " current x: " + x + " current width: " + width
                 + "\nmax height: " + parent.getHeight()
-                + " current : " + (y + height);
+                + " current y: " + y + " current height: " + height;
             throw new IllegalArgumentException(msg);
         }
     }
@@ -76,6 +76,16 @@ public abstract class SpatialImpl implements Spatial {
     @Override
     public int getInnerY() {
         return getAbsoluteY() + getBorderCalibration();
+    }
+
+    @Override
+    public int getRelativeX() {
+        return x;
+    }
+
+    @Override
+    public int getRelativeY() {
+        return y;
     }
 
     @Override
@@ -113,7 +123,7 @@ public abstract class SpatialImpl implements Spatial {
     @Override
     public void setParent(Spatial parent) {
         this.parent = parent;
-        verifySpace();
+//        verifySpace();
     }
 
     @Override

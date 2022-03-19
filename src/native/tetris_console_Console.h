@@ -76,10 +76,10 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea
 /*
  * Class:     tetris_console_Console
  * Method:    clearLine
- * Signature: (II)V
+ * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jint);
 
 /*
  * Class:     tetris_console_Console

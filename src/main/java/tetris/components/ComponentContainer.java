@@ -3,12 +3,12 @@ package tetris.components;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ComponentContainer extends ComponentImpl {
+public abstract class ComponentContainer<T extends Component> extends ComponentImpl {
 
-    protected List<Component> components = new ArrayList<>();
+    protected List<T> components = new ArrayList<>();
 
     public ComponentContainer(int x, int y, int width, int height, boolean borderOn,
-        List<? extends Component> components) {
+        List<T> components) {
         this(x, y, width, height, borderOn);
         this.components.addAll(components);
         components.forEach(c -> c.setParent(this));
@@ -22,13 +22,13 @@ public abstract class ComponentContainer extends ComponentImpl {
         super(x, y, width, height);
     }
 
-    public <T extends Component> void addComponent(T component) {
+    public void addComponent(T component) {
         this.components.add(component);
         component.setParent(this);
         update();
     }
 
-    public <T extends Component> void addComponents(List<T> components) {
+    public void addComponents(List<T> components) {
         this.components.addAll(components);
         components.forEach(c -> c.setParent(this));
         update(); // TODO 업데이트 순서와 refresh 순서 점검

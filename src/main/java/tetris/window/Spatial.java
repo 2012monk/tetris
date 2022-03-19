@@ -14,6 +14,10 @@ public interface Spatial {
 
     int getInnerHeight();
 
+    int getRelativeX();
+
+    int getRelativeY();
+
     int getWidth();
 
     int getHeight();

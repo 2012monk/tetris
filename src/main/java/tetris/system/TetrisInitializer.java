@@ -14,10 +14,10 @@ public class TetrisInitializer {
     public static void initTetrominos() {
         Tetromino S = getS();
         Tetromino I = new Tetromino(Color.RED, Shape.I, 4);
-        I.addPoint(0, 0);
-        I.addPoint(0, 1);
-        I.addPoint(0, 2);
-        I.addPoint(0, 3);
+        I.addPoint(1, 0);
+        I.addPoint(1, 1);
+        I.addPoint(1, 2);
+        I.addPoint(1, 3);
         Tetromino T = new Tetromino(Color.GREEN, Shape.T);
         T.addPoint(0, 1);
         T.addPoint(1, 0);
