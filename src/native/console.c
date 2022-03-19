@@ -2,6 +2,7 @@
 #include <ncurses.h>
 
 static int inAction = 0;
+int COLOR_COUNT = 8;
 
 void endDraw() {
   if (!inAction) {
@@ -28,7 +29,7 @@ void drawCorners(int x, int y, int width, int height) {
 }
 
 int setColorPair(int fg, int bg) {
-  int number = 1;
+  int number = fg + bg * COLOR_COUNT;
   init_pair(number, fg, bg);
   attron(COLOR_PAIR(number));
   return number;

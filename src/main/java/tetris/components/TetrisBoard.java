@@ -13,12 +13,13 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void printBlock(Tetromino block) {
-        clear();
+        update();
         block.init(this);
         block.update();
     }
 
     public void stackBlock(Tetromino block) {
-        addComponents(block.points());
+        block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
+            p.getRelativeY() + block.getRelativeY(), block.getColor())));
     }
 }

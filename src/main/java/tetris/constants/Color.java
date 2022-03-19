@@ -20,4 +20,8 @@ public enum Color {
     public int getNumber() {
         return this.number;
     }
+
+    public int countOfColors() {
+        return values().length;
+    }
 }

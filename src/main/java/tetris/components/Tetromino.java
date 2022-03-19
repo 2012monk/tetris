@@ -123,4 +123,7 @@ public class Tetromino extends ComponentContainer<Point> {
         return shape;
     }
 
+    public Color getColor() {
+        return color;
+    }
 }
