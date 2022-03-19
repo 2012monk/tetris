@@ -17,7 +17,7 @@ public class Point extends ComponentImpl {
 
     @Override
     public void update() {
-        if (getInnerX() < 0 || getInnerY() < 0) {
+        if (!isInsideSpace(getInnerX(), getInnerY())) {
             return;
         }
         clear();

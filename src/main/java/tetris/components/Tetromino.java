@@ -108,32 +108,6 @@ public class Tetromino extends ComponentContainer<Point> {
         this.y = (parent.getInnerWidth() / 2) - getWidth() / 2;
     }
 
-    @Override
-    public int getWidth() {
-        int minimumY = this.components.stream()
-            .mapToInt(Point::getAbsoluteY)
-            .min()
-            .orElseThrow(NoSuchElementException::new);
-        this.width = this.components.stream()
-            .mapToInt(Point::getAbsoluteY)
-            .max()
-            .orElseThrow(NoSuchElementException::new) + 1 - minimumY;
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        int minimumX = this.components.stream()
-            .mapToInt(Point::getAbsoluteX)
-            .min()
-            .orElseThrow(NoSuchElementException::new);
-        this.height = this.components.stream()
-            .mapToInt(SpatialImpl::getAbsoluteX)
-            .max()
-            .orElseThrow(NoSuchElementException::new) + 1 - minimumX;
-        return this.height;
-    }
-
     public Tetromino copy() {
         List<Point> copiedOriginalPoints = originalPoints.stream()
             .map(Point::copy)

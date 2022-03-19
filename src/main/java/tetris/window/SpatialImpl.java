@@ -131,6 +131,7 @@ public abstract class SpatialImpl implements Spatial {
         if (borderOn) {
             Console.drawBorder(this);
         }
+//        Console.clearArea(this);
         if (!hasParent()) {
             Console.clearArea(this);
             return;
@@ -142,6 +143,10 @@ public abstract class SpatialImpl implements Spatial {
         int possibleMaxY = Math.min(getInnerY() + getInnerHeight(),
             parent.getInnerY() + parent.getInnerHeight());
 
+        if (possibleX >= possibleMaxX || possibleY >= possibleMaxY) {
+            return;
+        }
+
         Console.clearArea(
             possibleX, possibleY,
             possibleMaxY - possibleY, possibleMaxX - possibleX
@@ -151,5 +156,15 @@ public abstract class SpatialImpl implements Spatial {
     @Override
     public boolean hasParent() {
         return parent != null;
+    }
+
+    @Override
+    public boolean isInsideSpace(int x, int y) {
+        boolean isInside = x >= getInnerX() && x < getInnerX() + getInnerWidth() &&
+            y >= getInnerY() && y < getInnerY() + getInnerHeight();
+        if (hasParent()) {
+            return parent.isInsideSpace(x, y) && isInside;
+        }
+        return isInside;
     }
 }

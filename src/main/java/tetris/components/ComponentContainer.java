@@ -25,13 +25,13 @@ public abstract class ComponentContainer<T extends Component> extends ComponentI
     public void addComponent(T component) {
         this.components.add(component);
         component.setParent(this);
-        update();
+//        update();
     }
 
     public void addComponents(List<T> components) {
         this.components.addAll(components);
         components.forEach(c -> c.setParent(this));
-        update(); // TODO 업데이트 순서와 refresh 순서 점검
+//        update(); // TODO 업데이트 순서와 refresh 순서 점검
     }
 
     @Override

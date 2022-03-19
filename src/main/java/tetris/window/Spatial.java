@@ -22,6 +22,8 @@ public interface Spatial {
 
     int getHeight();
 
+    boolean isInsideSpace(int x, int y);
+
     Spatial getParent();
 
     void setParent(Spatial parent);
