@@ -24,11 +24,11 @@ public class TetrisInitializer {
         T.addPoint(1, 1);
         T.addPoint(1, 2);
         Tetromino Z = new Tetromino(Color.YELLOW, Shape.Z);
-        Z.addPoint(0, 0);
-        Z.addPoint(1, 0);
+        Z.addPoint(0, 2);
+        Z.addPoint(0, 1);
         Z.addPoint(1, 1);
-        Z.addPoint(1, 2);
-        Tetromino O = new Tetromino(Color.CYAN, Shape.O);
+        Z.addPoint(1, 0);
+        Tetromino O = new Tetromino(Color.CYAN, Shape.O, 2);
         O.addPoint(0, 0);
         O.addPoint(0, 1);
         O.addPoint(1, 0);
@@ -39,10 +39,10 @@ public class TetrisInitializer {
         L.addPoint(2, 0);
         L.addPoint(2, 1);
         Tetromino J = new Tetromino(Color.MAGENTA, Shape.J);
-        J.addPoint(0, 0);
-        J.addPoint(0, 1);
         J.addPoint(0, 2);
         J.addPoint(1, 2);
+        J.addPoint(2, 2);
+        J.addPoint(2, 1);
 
         TetrominoRepository.addTetromino(I);
         TetrominoRepository.addTetromino(S);
