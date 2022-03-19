@@ -26,8 +26,8 @@ public class Tetromino extends ComponentContainer<Point> {
         this.blockSize = blockSize;
     }
 
-    private Tetromino(List<Point> points, Color color, Shape shape, int blockSize) {
-        this(0, 0, blockSize, color, shape);
+    private Tetromino(List<Point> points, Color color, Shape shape, int x, int y, int blockSize) {
+        this(x, y, blockSize, color, shape);
         points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
 
@@ -112,7 +112,7 @@ public class Tetromino extends ComponentContainer<Point> {
         List<Point> copiedOriginalPoints = originalPoints.stream()
             .map(Point::copy)
             .collect(Collectors.toList());
-        return new Tetromino(copiedOriginalPoints, color, shape, blockSize);
+        return new Tetromino(copiedOriginalPoints, color, shape, getRelativeX(), getRelativeY(), blockSize);
     }
 
     public List<Point> points() {
@@ -125,5 +125,14 @@ public class Tetromino extends ComponentContainer<Point> {
 
     public Color getColor() {
         return color;
+    }
+
+    @Override
+    public void clear() {
+        this.components.forEach(Point::clear);
+    }
+
+    public boolean isAllInsideParent() {
+        return this.components.stream().allMatch(Point::isInsideParent);
     }
 }

@@ -1,5 +1,7 @@
 package tetris.components;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,7 +10,7 @@ import tetris.constants.Shape;
 public class TetrominoRepository {
 
     private static final Map<Shape, Tetromino> tetrominos = new HashMap<>();
-    private static  Iterator<Tetromino> pool;
+    private static Iterator<Tetromino> pool;
 
     public static void addTetromino(Tetromino tetromino) {
         tetrominos.put(tetromino.getShape(), tetromino);

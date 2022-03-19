@@ -17,14 +17,30 @@ public class Point extends ComponentImpl {
 
     @Override
     public void update() {
-        if (!isInsideSpace(getInnerX(), getInnerY())) {
+        if (!isInsideParent()) {
             return;
         }
         clear();
         Console.drawChar(getInnerX(), getInnerY(), CELL, DEFAULT_FOREGROUND_COLOR, color);
     }
 
+    @Override
+    public void clear() {
+        if (!isInsideParent()) {
+            return;
+        }
+        super.clear();
+    }
+
+    public boolean isInsideParent() {
+        return isInsideSpace(getInnerX(), getInnerY());
+    }
+
     public Point copy() {
         return new Point(getRelativeX(), getRelativeY(), color);
+    }
+
+    public boolean isOverlapped(Point point) {
+        return getAbsoluteX() == point.getAbsoluteX() && getAbsoluteY() == point.getAbsoluteY();
     }
 }

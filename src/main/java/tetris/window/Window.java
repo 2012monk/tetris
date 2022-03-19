@@ -21,19 +21,4 @@ public class Window extends ComponentContainer<Component> {
         super(x, y, width, height);
         setParent(screen);
     }
-//
-//    public void addComponent(Component component) {
-//        components.add(component);
-//        component.setParent(this);
-//        refreshWindow();
-//    }
-//
-//    public void refreshWindow() {
-//        if (borderOn) {
-//            Console.drawBorder(this);
-//        }
-//        Console.clearArea(this);
-//        components.forEach(Component::update);
-//    }
-
 }
