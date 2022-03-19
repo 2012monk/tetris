@@ -40,10 +40,18 @@ public class Console {
         );
     }
 
+    public static void drawBorder(int x, int y, int width, int height) {
+        drawBorder(x, y, width, height, DEFAULT_COLOR, DEFAULT_COLOR);
+    }
+
     public static void clearArea(Spatial space) {
         clearArea(space.getInnerX(), space.getInnerY(),
             space.getInnerWidth(), space.getInnerHeight(),
             DEFAULT_COLOR, DEFAULT_COLOR);
+    }
+
+    public static void clearArea(int x, int y, int width, int height) {
+        clearArea(x, y, width, height, DEFAULT_COLOR, DEFAULT_COLOR);
     }
 
     public static void setForeGroundColor(Color color) {

@@ -101,11 +101,12 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jcla
 }
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
-  for (int i = x; i < x + height; i++) {
-    for (int j = y; j < y + width; j++) {
-      mvaddch(i, j, ' ');
-    }
+  int n = setColorPair(fg, bg);
+  // start inclusive, end inclusive
+  for (int i = x; i <= x + height; i++) {
+    mvhline(i, y, ' ', width + 1);
   }
+  unsetColorPair(n);
   endDraw();
 }
 
