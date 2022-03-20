@@ -1,11 +1,11 @@
 package tetris.components;
 
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
 import tetris.window.Spatial;
 
 public interface Component extends Spatial {
 
     void update();
 
-    void handleKey(KeyCode keyCode);
+    void handleKey(Char chr);
 }

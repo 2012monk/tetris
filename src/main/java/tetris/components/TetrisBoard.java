@@ -1,18 +1,16 @@
 package tetris.components;
 
-import java.util.List;
 import tetris.console.Console;
+import tetris.constants.Char;
 import tetris.constants.GameKey;
-import tetris.constants.KeyCode;
+import tetris.constants.SpecialKeyCode;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
+    private static final char PAUSE_KEY = 'q';
+    private boolean isRunning = false;
     private Tetromino currentBlock = null;
-
-    public TetrisBoard(int x, int y, int width, int height, List<Point> filledPoints) {
-        super(x, y, width, height, false, filledPoints);
-    }
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
@@ -37,6 +35,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void drop() {
+        if (!isRunning) {
+            return;
+        }
         update();
         if (this.currentBlock == null) {
             initBlock();
@@ -58,6 +59,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void move(GameKey key) {
+        if (!isRunning) {
+            return;
+        }
         if (key == GameKey.MOVE_DOWN) {
             drop();
             return;
@@ -87,7 +91,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .filter(Point::isInsideParent)
             .anyMatch(copiedPoint -> this.components.stream()
                 .anyMatch(parentPoint -> parentPoint.isOverlapped(copiedPoint)));
-        // TODO 버그 가능성! 내려가지 않았을때 좌우 이동 처리해야함
         boolean isInsideParent = block.points().stream()
             .filter(p -> p.getAbsoluteX() >= getInnerX())
             .allMatch(Point::isInsideParent);
@@ -101,14 +104,30 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     @Override
-    public void handleKey(KeyCode keyCode) {
-        if (!GameKey.hasKey(keyCode) || this.currentBlock == null) {
+    public void handleKey(Char chr) {
+        if (chr.is(PAUSE_KEY)) {
+            pause();
             return;
         }
-        move(GameKey.getGameKey(keyCode));
+        if (!isRunning && chr.is(SpecialKeyCode.KEY_SPACE)) {
+            start();
+            return;
+        }
+        if (!GameKey.hasKey(chr) || this.currentBlock == null) {
+            return;
+        }
+        move(GameKey.getGameKey(chr));
+    }
+
+    public void pause() {
+        isRunning = false;
     }
 
     public void start() {
+        isRunning = true;
+        if (this.currentBlock != null) {
+            return;
+        }
         initBlock();
     }
 }

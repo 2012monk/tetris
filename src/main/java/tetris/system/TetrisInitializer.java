@@ -1,14 +1,31 @@
 package tetris.system;
 
+import tetris.components.TetrisBoard;
 import tetris.components.Tetromino;
 import tetris.components.TetrominoRepository;
 import tetris.constants.Color;
 import tetris.constants.Shape;
+import tetris.window.Window;
+import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
-    public static void initWindows() {
+    static {
+        WindowPoolManager.init();
+    }
 
+    public static void initWindows() {
+        WindowPoolManager.addWindow(boardWindow());
+    }
+
+    private static Window boardWindow() {
+        int size = 20;
+        int centerX = WindowPoolManager.getScreen().getWidth() / 2;
+        int centerY = WindowPoolManager.getScreen().getHeight() / 2;
+        Window window = new Window(centerX - size / 2, centerY - size / 2, size, size);
+        TetrisBoard board = new TetrisBoard(0, 0, size, size);
+        window.addComponent(board);
+        return window;
     }
 
     public static void initTetrominos() {

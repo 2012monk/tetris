@@ -1,6 +1,6 @@
 package tetris.components;
 
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
 import tetris.window.SpatialImpl;
 
 public abstract class ComponentImpl extends SpatialImpl implements Component {
@@ -26,6 +26,6 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
     }
 
     @Override
-    public void handleKey(KeyCode keyCode) {
+    public void handleKey(Char chr) {
     }
 }

@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import tetris.components.AutoDropper;
 import tetris.console.Console;
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
+import tetris.constants.SpecialKeyCode;
 
 public class WindowPoolManager {
 
@@ -14,7 +15,7 @@ public class WindowPoolManager {
     private static final TaskManager taskManager = TaskManager.getInstance();
     private static Spatial screen;
 
-    private static Spatial getScreen() {
+    public static Spatial getScreen() {
         if (screen == null) {
             screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false);
         }
@@ -50,11 +51,11 @@ public class WindowPoolManager {
         Console.shutdown();
     }
 
-    public static void notifyKey(KeyCode keyCode) {
-        if (keyCode == KeyCode.KEY_ESC) {
+    public static void notifyKey(Char chr) {
+        if (chr.is(SpecialKeyCode.KEY_ESC)) {
             shutDown();
             return;
         }
-        windowPool.forEach(w -> TaskManager.addTask(() -> w.handleKey(keyCode)));
+        windowPool.forEach(w -> TaskManager.addTask(() -> w.handleKey(chr)));
     }
 }

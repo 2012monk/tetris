@@ -2,7 +2,6 @@ package tetris.window;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
-import tetris.console.Console;
 
 public class TaskManager implements Runnable {
 
@@ -40,7 +39,6 @@ public class TaskManager implements Runnable {
     }
 
     public static synchronized void addTask(Task task) {
-//        Console.drawString(52, 0, "add!"+taskQueue.size());
         taskQueue.add(task);
     }
 
@@ -52,7 +50,6 @@ public class TaskManager implements Runnable {
     public void run() {
         while (isRunning) {
             if (taskQueue.isEmpty()) {
-                Console.drawString(51, 0, "empty");
                 continue;
             }
             taskQueue.removeFirst().action();

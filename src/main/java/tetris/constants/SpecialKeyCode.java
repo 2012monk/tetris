@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public enum KeyCode {
+public enum SpecialKeyCode {
     KEY_LEFT(260),
     KEY_RIGHT(261),
     KEY_DOWN(258),
@@ -13,21 +13,25 @@ public enum KeyCode {
     KEY_SPACE(32),
     KEY_ESC(27);
 
-    private static final Map<Integer, KeyCode> codes;
+    private static final Map<Integer, SpecialKeyCode> codes;
 
     static {
-        codes = Arrays.stream(KeyCode.values())
-            .collect(Collectors.toMap(KeyCode::getNumber, Function.identity()));
+        codes = Arrays.stream(SpecialKeyCode.values())
+            .collect(Collectors.toMap(SpecialKeyCode::getNumber, Function.identity()));
     }
 
     private final int number;
 
-    KeyCode(int number) {
+    SpecialKeyCode(int number) {
         this.number = number;
     }
 
-    public static KeyCode getKeyCode(int number) {
+    public static SpecialKeyCode getKeyCode(int number) {
         return codes.get(number);
+    }
+
+    public static boolean hasKey(int number) {
+        return codes.containsKey(number);
     }
 
     public int getNumber() {

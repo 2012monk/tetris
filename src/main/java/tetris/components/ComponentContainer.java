@@ -3,7 +3,7 @@ package tetris.components;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
 
 public abstract class ComponentContainer<T extends Component> extends ComponentImpl {
 
@@ -27,13 +27,11 @@ public abstract class ComponentContainer<T extends Component> extends ComponentI
     public void addComponent(T component) {
         this.components.add(component);
         component.setParent(this);
-//        update();
     }
 
     public void addComponents(List<T> components) {
         this.components.addAll(components);
         components.forEach(c -> c.setParent(this));
-//        update(); // TODO 업데이트 순서와 refresh 순서 점검
     }
 
     @Override
@@ -43,7 +41,7 @@ public abstract class ComponentContainer<T extends Component> extends ComponentI
     }
 
     @Override
-    public void handleKey(KeyCode keyCode) {
-        this.components.forEach(c -> c.handleKey(keyCode));
+    public void handleKey(Char chr) {
+        this.components.forEach(c -> c.handleKey(chr));
     }
 }

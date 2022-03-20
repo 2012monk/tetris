@@ -1,11 +1,13 @@
 package tetris.components;
 
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
+import tetris.constants.SpecialKeyCode;
 import tetris.system.FrameCounter;
 import tetris.window.WindowPoolManager;
 
 public class AutoDropper implements Runnable {
 
+    private static final int DROP_RATE = 300;
     private static Thread thread;
     private static AutoDropper instance;
     private static boolean isRunning = false;
@@ -38,9 +40,8 @@ public class AutoDropper implements Runnable {
     @Override
     public void run() {
         while (isRunning) {
-//            WindowPoolManager.notifyKey(KeyCode.KEY_DOWN);
-            FrameCounter.wait(300);
-            WindowPoolManager.notifyKey(KeyCode.KEY_DOWN);
+            FrameCounter.wait(DROP_RATE);
+            WindowPoolManager.notifyKey(new Char(SpecialKeyCode.KEY_DOWN));
         }
     }
 }

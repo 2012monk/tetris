@@ -1,7 +1,7 @@
 package tetris.window;
 
 import tetris.console.Console;
-import tetris.constants.KeyCode;
+import tetris.constants.Char;
 
 public class WindowInputListener implements Runnable {
 
@@ -33,16 +33,22 @@ public class WindowInputListener implements Runnable {
         thread.interrupt();
     }
 
+    private void keyLog(int key) {
+        TaskManager.addTask(() -> {
+            Console.clearLine(50);
+            Console.clearLine(51);
+            Console.drawString(50, Console.getScreenWidth() - 10, String.valueOf((char) key));
+            Console.drawString(51, Console.getScreenWidth() - 10, String.valueOf(key));
+        });
+    }
+
     @Override
     public void run() {
         while (isRunning) {
             int input = Console.readBytes();
-            TaskManager.addTask(() -> {
-                Console.clearLine(50);
-                Console.drawString(50, Console.getScreenWidth() - 10, String.valueOf(input));
-            });
-            KeyCode key = KeyCode.getKeyCode(input);
-            WindowPoolManager.notifyKey(key);
+            Char chr = new Char(input);
+            keyLog(input);
+            WindowPoolManager.notifyKey(chr);
         }
     }
 
