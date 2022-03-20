@@ -1,10 +1,12 @@
 package tetris.components;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import tetris.constants.Shape;
 
 public class TetrominoRepository {
@@ -25,8 +27,21 @@ public class TetrominoRepository {
 
     public static Tetromino getNextTetromino() {
         if (pool == null || !pool.hasNext()) {
-            pool = tetrominos.values().iterator();
+            initPool();
         }
         return pool.next().copy();
+    }
+
+    private static void initPool() {
+        List<Tetromino> tmp = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            tmp.addAll(tetrominos.values()
+                .stream()
+                .map(Tetromino::copy)
+                .collect(Collectors.toList()));
+            Collections.shuffle(tmp);
+        }
+        Collections.shuffle(tmp);
+        pool = tmp.iterator();
     }
 }

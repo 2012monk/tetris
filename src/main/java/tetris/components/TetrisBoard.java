@@ -127,7 +127,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .filter(e -> !filledLines.contains(e.getKey()))
             .forEach(e -> {
                 int cali =
-                    filledLines.size() - Collections.binarySearch(filledLines, e.getKey()) - 1;
+                    filledLines.size() + Collections.binarySearch(filledLines, e.getKey()) + 1;
                 e.getValue().forEach(p -> addComponent(
                     new Point(p.getRelativeX() + cali, p.getRelativeY(), p.getColor()))
                 );
