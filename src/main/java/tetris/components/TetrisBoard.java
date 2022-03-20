@@ -7,6 +7,7 @@ import tetris.constants.KeyCode;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
+    private static final char EMPTY_SPACE = '.';
     private Tetromino currentBlock = null;
 
     public TetrisBoard(int x, int y, int width, int height, List<Point> filledPoints) {
@@ -15,6 +16,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
+        this.emptySpace = EMPTY_SPACE;
+        clear();
     }
 
     public void printBlock(Tetromino block) {
@@ -52,7 +55,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
             return;
         }
         block.moveDown();
-        block.update();
     }
 
     public void move(GameKey key) {
@@ -86,9 +88,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .anyMatch(copiedPoint -> this.components.stream()
                 .anyMatch(parentPoint -> parentPoint.isOverlapped(copiedPoint)));
         // TODO 버그 가능성! 내려가지 않았을때 좌우 이동 처리해야함
-//        if (block.getRelativeX() < 0) {
-//            return isOverlapped;
-//        }
         boolean isInsideParent = block.points().stream()
             .filter(p -> p.getAbsoluteX() >= getInnerX())
             .allMatch(Point::isInsideParent);

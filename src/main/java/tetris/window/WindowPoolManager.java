@@ -14,10 +14,6 @@ public class WindowPoolManager {
     private static final TaskManager taskManager = TaskManager.getInstance();
     private static Spatial screen;
 
-//    static {
-//        init();
-//    }
-
     private static Spatial getScreen() {
         if (screen == null) {
             screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false);
@@ -26,10 +22,7 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
-        TaskManager.addTask(() -> {
-            windowPool.forEach(Window::update);
-            Console.refresh();
-        });
+        TaskManager.addTask(() -> windowPool.forEach(Window::update));
     }
 
     public static void addWindow(int x, int y, int width, int height) {

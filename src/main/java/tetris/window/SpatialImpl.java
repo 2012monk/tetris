@@ -1,11 +1,16 @@
 package tetris.window;
 
 import tetris.console.Console;
+import tetris.constants.Color;
 
 public abstract class SpatialImpl implements Spatial {
 
     private static final String ERR_ILLEGAL_COORDINATE = "잘못된 좌표";
     private static final String ERR_INVALID_SIZE = "잘못된 크기";
+    private static final String ERR_INVALID_PARENT = "부모 공간이 존재해야합니다.";
+    protected Color bg = Color.BLACK;
+    protected Color fg = Color.WHITE;
+    protected char emptySpace = ' ';
     protected Spatial parent;
     protected boolean borderOn;
     protected int x;
@@ -29,6 +34,12 @@ public abstract class SpatialImpl implements Spatial {
         this.height = height;
         this.borderOn = borderOn;
         verifyCoordinate();
+    }
+
+    public SpatialImpl(Spatial parent) {
+        this(parent.getInnerX(), parent.getInnerY(), parent.getInnerWidth(),
+            parent.getInnerHeight(), true);
+        setParent(parent);
     }
 
     private void verifyCoordinate() {
@@ -100,12 +111,12 @@ public abstract class SpatialImpl implements Spatial {
 
     @Override
     public int getInnerWidth() {
-        return height - getBorderCalibration() * 2;
+        return width - getBorderCalibration() * 2;
     }
 
     @Override
     public int getInnerHeight() {
-        return width - getBorderCalibration() * 2;
+        return height - getBorderCalibration() * 2;
     }
 
     public int getBorderCalibration() {
@@ -130,6 +141,7 @@ public abstract class SpatialImpl implements Spatial {
     public void clear() {
         if (!hasParent()) {
             Console.clearArea(this);
+//            Console.clearArea(getInnerX(), getInnerY(), getInnerWidth(), getInnerHeight(), emptySpace, fg, bg);
             return;
         }
         if (borderOn) {
@@ -138,17 +150,18 @@ public abstract class SpatialImpl implements Spatial {
         int possibleX = Math.max(getInnerX(), parent.getInnerX());
         int possibleY = Math.max(getInnerY(), parent.getInnerY());
         int possibleMaxX = Math.min(getInnerX() + getInnerWidth(),
-            parent.getInnerX() + parent.getInnerWidth());
+            parent.getInnerX() + parent.getInnerHeight());
         int possibleMaxY = Math.min(getInnerY() + getInnerHeight(),
-            parent.getInnerY() + parent.getInnerHeight());
+            parent.getInnerY() + parent.getInnerWidth());
 
         if (possibleX >= possibleMaxX || possibleY >= possibleMaxY) {
             return;
         }
-
         Console.clearArea(
             possibleX, possibleY,
-            possibleMaxY - possibleY, possibleMaxX - possibleX
+            possibleMaxY - possibleY,
+            possibleMaxX - possibleX,
+            emptySpace, fg, bg
         );
     }
 
@@ -159,8 +172,8 @@ public abstract class SpatialImpl implements Spatial {
 
     @Override
     public boolean isInsideSpace(int x, int y) {
-        boolean isInside = x >= getInnerX() && x < getInnerX() + getInnerWidth() &&
-            y >= getInnerY() && y < getInnerY() + getInnerHeight();
+        boolean isInside = x >= getInnerX() && x < getInnerX() + getInnerHeight() &&
+            y >= getInnerY() && y < getInnerY() + getInnerWidth();
         if (hasParent()) {
             return parent.isInsideSpace(x, y) && isInside;
         }

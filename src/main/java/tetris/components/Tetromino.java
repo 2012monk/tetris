@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import tetris.constants.Color;
 import tetris.constants.Shape;
 import tetris.window.Spatial;
@@ -77,16 +76,25 @@ public class Tetromino extends ComponentContainer<Point> {
 
     public void moveDown() {
         this.x += VERTICAL_BASIS;
+        if (hasParent()) {
+            update();
+        }
     }
 
     public void moveLeft() {
         this.y -= HORIZONTAL_BASIS;
         this.y -= this.y % HORIZONTAL_BASIS;
+        if (hasParent()) {
+            update();
+        }
     }
 
     public void moveRight() {
         this.y += HORIZONTAL_BASIS;
         this.y -= this.y % HORIZONTAL_BASIS;
+        if (hasParent()) {
+            update();
+        }
     }
 
     public void addPoint(int x, int y) {
@@ -114,10 +122,7 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public Tetromino copy() {
-        List<Point> copiedOriginalPoints = originalPoints.stream()
-            .map(Point::copy)
-            .collect(Collectors.toList());
-        return new Tetromino(copiedOriginalPoints, color, shape, getRelativeX(), getRelativeY(),
+        return new Tetromino(originalPoints, color, shape, getRelativeX(), getRelativeY(),
             blockSize);
     }
 

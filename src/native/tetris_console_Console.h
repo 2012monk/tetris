@@ -7,6 +7,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef tetris_console_Console_DEFAULT_CLEAR_UNIT
+#define tetris_console_Console_DEFAULT_CLEAR_UNIT 32L
 #undef tetris_console_Console_DEFAULT_COLOR
 #define tetris_console_Console_DEFAULT_COLOR -1L
 /*
@@ -68,10 +70,10 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawString
 /*
  * Class:     tetris_console_Console
  * Method:    clearArea
- * Signature: (IIIIII)V
+ * Signature: (IIIICII)V
  */
 JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jint, jint, jint, jint, jchar, jint, jint);
 
 /*
  * Class:     tetris_console_Console

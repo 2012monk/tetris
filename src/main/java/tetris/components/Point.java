@@ -29,7 +29,7 @@ public class Point extends ComponentImpl {
         if (!isInsideParent()) {
             return;
         }
-        super.clear();
+        Console.drawChar(getInnerX(), getInnerY(), CELL);
     }
 
     public boolean isInsideParent() {

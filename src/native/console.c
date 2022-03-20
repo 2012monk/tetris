@@ -81,6 +81,8 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_refresh (JNIEnv *env, jclass 
 }
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
+  width--;
+  height--;
   drawHorizontalLine(x, y, width, height);
   drawVerticalLine(x, y, width, height);
   drawCorners(x, y, width, height);
@@ -101,16 +103,15 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jcla
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
-//  int n = setColorPair(fg, bg);
+JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jchar chr, jint fg, jint bg) {
+  int n = setColorPair(fg, bg);
   // start inclusive, end exclusive
   for (int i = x; i < x + height; i++) {
-//    mvhline(i, y, ' ', width + 1);
-    for (int j = y; j < y + width; j++) {
-      mvaddch(i, j, ' ');
+    for (int j = y; j < y + width ; j++) {
+      mvaddch(i, j, chr);
     }
   }
-//  unsetColorPair(n);
+  unsetColorPair(n);
   endDraw();
 }
 
