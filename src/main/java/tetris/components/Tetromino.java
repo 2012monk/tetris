@@ -13,6 +13,8 @@ import tetris.window.SpatialImpl;
 public class Tetromino extends ComponentContainer<Point> {
 
     private static final int DEFAULT_BLOCK_SIZE = 3;
+    private static final int HORIZONTAL_BASIS = 2;
+    private static final int VERTICAL_BASIS = 1;
     private final List<Point> originalPoints = Collections.synchronizedList(new ArrayList<>());
     private final int blockSize;
     private final Shape shape;
@@ -74,21 +76,24 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public void moveDown() {
-        this.x++;
+        this.x += VERTICAL_BASIS;
     }
 
     public void moveLeft() {
-        this.y--;
+        this.y -= HORIZONTAL_BASIS;
+        this.y -= this.y % HORIZONTAL_BASIS;
     }
 
     public void moveRight() {
-        this.y++;
+        this.y += HORIZONTAL_BASIS;
+        this.y -= this.y % HORIZONTAL_BASIS;
     }
 
     public void addPoint(int x, int y) {
         this.originalPoints.add(new Point(x, y, color));
-        addComponent(new Point(x, y * 2, color));
-        addComponent(new Point(x, y * 2 + 1, color));
+        for (int i = 0; i < HORIZONTAL_BASIS; i++) {
+            addComponent(new Point(x, y * HORIZONTAL_BASIS + i, color));
+        }
     }
 
     public void init(Spatial spatial) {
