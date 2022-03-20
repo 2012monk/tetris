@@ -10,22 +10,23 @@ import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
-    static {
+    public static void init() {
         WindowPoolManager.init();
+        initTetrominos();
+        boardWindow();
+        WindowPoolManager.refreshAll();
     }
 
-    public static void initWindows() {
-        WindowPoolManager.addWindow(boardWindow());
-    }
-
-    private static Window boardWindow() {
+    private static TetrisBoard boardWindow() {
         int size = 20;
-        int centerX = WindowPoolManager.getScreen().getWidth() / 2;
-        int centerY = WindowPoolManager.getScreen().getHeight() / 2;
+        int centerX = WindowPoolManager.getScreen().getHeight() / 2;
+        int centerY = WindowPoolManager.getScreen().getWidth() / 2;
+
         Window window = new Window(centerX - size / 2, centerY - size / 2, size, size);
+        WindowPoolManager.addWindow(window);
         TetrisBoard board = new TetrisBoard(0, 0, size, size);
         window.addComponent(board);
-        return window;
+        return board;
     }
 
     public static void initTetrominos() {

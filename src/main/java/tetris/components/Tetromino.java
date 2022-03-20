@@ -115,10 +115,11 @@ public class Tetromino extends ComponentContainer<Point> {
 
     private void moveToStartingPoint() {
         this.x = 1 - components.stream()
-            .mapToInt(SpatialImpl::getAbsoluteX)
+            .mapToInt(SpatialImpl::getRelativeX)
             .max()
             .orElseThrow(NoSuchElementException::new);
         this.y = (parent.getInnerWidth() / 2) - getWidth() / 2;
+        this.y -= this.y % HORIZONTAL_BASIS;
     }
 
     public Tetromino copy() {

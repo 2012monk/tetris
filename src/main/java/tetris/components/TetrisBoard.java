@@ -4,12 +4,15 @@ import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.GameKey;
 import tetris.constants.SpecialKeyCode;
+import tetris.system.FrameCounter;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
     private static final char PAUSE_KEY = 'q';
+    private static final char RESTART_KEY = 'r';
     private boolean isRunning = false;
+    private boolean isEnd = false;
     private Tetromino currentBlock = null;
 
     public TetrisBoard(int x, int y, int width, int height) {
@@ -75,6 +78,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     private void gameOver() {
+        isRunning = false;
+        isEnd = true;
         Console.clearScreen();
         Console.drawString(40, 40, "OVER");
     }
@@ -109,11 +114,15 @@ public class TetrisBoard extends ComponentContainer<Point> {
             pause();
             return;
         }
+        if (chr.is(RESTART_KEY)) {
+            restart();
+            return;
+        }
         if (!isRunning && chr.is(SpecialKeyCode.KEY_SPACE)) {
             start();
             return;
         }
-        if (!GameKey.hasKey(chr) || this.currentBlock == null) {
+        if (!isRunning || !GameKey.hasKey(chr) || this.currentBlock == null) {
             return;
         }
         move(GameKey.getGameKey(chr));
@@ -123,8 +132,20 @@ public class TetrisBoard extends ComponentContainer<Point> {
         isRunning = false;
     }
 
+    public void restart() {
+        isEnd = false;
+        this.components.clear();
+        this.currentBlock = null;
+        clear();
+        FrameCounter.wait(1500);
+        start();
+    }
+
     public void start() {
         isRunning = true;
+        if (isEnd) {
+            restart();
+        }
         if (this.currentBlock != null) {
             return;
         }
