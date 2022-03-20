@@ -128,13 +128,12 @@ public abstract class SpatialImpl implements Spatial {
 
     @Override
     public void clear() {
-        if (borderOn) {
-            Console.drawBorder(this);
-        }
-//        Console.clearArea(this);
         if (!hasParent()) {
             Console.clearArea(this);
             return;
+        }
+        if (borderOn) {
+            Console.drawBorder(this);
         }
         int possibleX = Math.max(getInnerX(), parent.getInnerX());
         int possibleY = Math.max(getInnerY(), parent.getInnerY());

@@ -1,11 +1,13 @@
 package tetris.components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import tetris.constants.KeyCode;
 
 public abstract class ComponentContainer<T extends Component> extends ComponentImpl {
 
-    protected List<T> components = new ArrayList<>();
+    protected List<T> components = Collections.synchronizedList(new ArrayList<>());
 
     public ComponentContainer(int x, int y, int width, int height, boolean borderOn,
         List<T> components) {
@@ -38,5 +40,10 @@ public abstract class ComponentContainer<T extends Component> extends ComponentI
     public void update() {
         clear();
         components.forEach(Component::update);
+    }
+
+    @Override
+    public void handleKey(KeyCode keyCode) {
+        this.components.forEach(c -> c.handleKey(keyCode));
     }
 }

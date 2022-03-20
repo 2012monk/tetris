@@ -3,6 +3,7 @@ package tetris.components;
 import java.util.List;
 import tetris.console.Console;
 import tetris.constants.GameKey;
+import tetris.constants.KeyCode;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
@@ -22,7 +23,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         block.update();
     }
 
-    public void initBlock() {
+    private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
         this.currentBlock.init(this);
         if (isCollide(this.currentBlock)) {
@@ -55,6 +56,10 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void move(GameKey key) {
+        if (key == GameKey.MOVE_DOWN) {
+            drop();
+            return;
+        }
         if (isCollide(simulateBlock(this.currentBlock, key))) {
             return;
         }
@@ -94,5 +99,17 @@ public class TetrisBoard extends ComponentContainer<Point> {
         block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
             p.getRelativeY() + block.getRelativeY(), block.getColor())));
         update();
+    }
+
+    @Override
+    public void handleKey(KeyCode keyCode) {
+        if (!GameKey.hasKey(keyCode) || this.currentBlock == null) {
+            return;
+        }
+        move(GameKey.getGameKey(keyCode));
+    }
+
+    public void start() {
+        initBlock();
     }
 }

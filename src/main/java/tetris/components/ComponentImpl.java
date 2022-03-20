@@ -1,5 +1,6 @@
 package tetris.components;
 
+import tetris.constants.KeyCode;
 import tetris.window.SpatialImpl;
 
 public abstract class ComponentImpl extends SpatialImpl implements Component {
@@ -22,5 +23,9 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
 
     protected ComponentImpl() {
         this(DEFAULT_COORDINATE, DEFAULT_COORDINATE, MINIMUM_SIZE, MINIMUM_SIZE);
+    }
+
+    @Override
+    public void handleKey(KeyCode keyCode) {
     }
 }

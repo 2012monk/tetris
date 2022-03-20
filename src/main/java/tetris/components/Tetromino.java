@@ -1,7 +1,7 @@
 package tetris.components;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import tetris.window.SpatialImpl;
 public class Tetromino extends ComponentContainer<Point> {
 
     private static final int DEFAULT_BLOCK_SIZE = 3;
-    private final ArrayDeque<Point> originalPoints = new ArrayDeque<>();
+    private final List<Point> originalPoints = Collections.synchronizedList(new ArrayList<>());
     private final int blockSize;
     private final Shape shape;
     private final Color color;
@@ -112,7 +112,8 @@ public class Tetromino extends ComponentContainer<Point> {
         List<Point> copiedOriginalPoints = originalPoints.stream()
             .map(Point::copy)
             .collect(Collectors.toList());
-        return new Tetromino(copiedOriginalPoints, color, shape, getRelativeX(), getRelativeY(), blockSize);
+        return new Tetromino(copiedOriginalPoints, color, shape, getRelativeX(), getRelativeY(),
+            blockSize);
     }
 
     public List<Point> points() {

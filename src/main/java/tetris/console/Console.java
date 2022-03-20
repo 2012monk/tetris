@@ -12,11 +12,6 @@ public class Console {
     private static final String ERR_NO_LIBRARY = "no library";
     private static final int DEFAULT_COLOR = -1;
 
-    static {
-        System.load(getLibraryPath());
-        init();
-    }
-
     public static String getLibraryPath() {
         try {
             String currentDir = new File(new File(".").getAbsolutePath()).getCanonicalPath();
@@ -78,21 +73,29 @@ public class Console {
         drawString(x, y, text, DEFAULT_COLOR, DEFAULT_COLOR);
     }
 
+    public static void initConsole() {
+        System.load(getLibraryPath());
+        init();
+        clearScreen();
+    }
+
     private static native int setColorPair(int foreGround, int backGround);
 
     public static native int getScreenWidth();
 
     public static native int getScreenHeight();
 
-    public static native int readBytes();
+    public static synchronized native int readBytes();
 
     private static native void drawChar(int x, int y, char chr, int fg, int bg);
 
-    private static native void drawBorder(int x, int y, int width, int height, int fg, int bg);
+    private static native void drawBorder(int x, int y, int width, int height, int fg,
+        int bg);
 
     private static native void drawString(int x, int y, String text, int fg, int bg);
 
-    private static native void clearArea(int x, int y, int width, int height, int fg, int bg);
+    private static native void clearArea(int x, int y, int width, int height, int fg,
+        int bg);
 
     public static native void clearLine(int x);
 
