@@ -43,4 +43,8 @@ public class Point extends ComponentImpl {
     public boolean isOverlapped(Point point) {
         return getAbsoluteX() == point.getAbsoluteX() && getAbsoluteY() == point.getAbsoluteY();
     }
+
+    public Color getColor() {
+        return this.color;
+    }
 }

@@ -24,7 +24,7 @@ public class TetrisInitializer {
 
         Window window = new Window(centerX - size / 2, centerY - size / 2, size, size);
         WindowPoolManager.addWindow(window);
-        TetrisBoard board = new TetrisBoard(0, 0, size, size);
+        TetrisBoard board = new TetrisBoard(0, 0, size - 2, size - 2);
         window.addComponent(board);
         return board;
     }

@@ -1,5 +1,10 @@
 package tetris.components;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.GameKey;
@@ -106,6 +111,37 @@ public class TetrisBoard extends ComponentContainer<Point> {
         block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
             p.getRelativeY() + block.getRelativeY(), block.getColor())));
         update();
+        popStack();
+    }
+
+    public void popStack() {
+        Map<Integer, List<Point>> lines = this.components.stream()
+            .collect(Collectors.groupingBy(Point::getAbsoluteX));
+
+        List<Integer> filledLines = getFilledLines(lines);
+        if (filledLines.isEmpty()) {
+            return;
+        }
+        this.components.clear();
+        lines.entrySet().stream()
+            .filter(e -> !filledLines.contains(e.getKey()))
+            .forEach(e -> {
+                int cali =
+                    filledLines.size() - Collections.binarySearch(filledLines, e.getKey()) - 1;
+                e.getValue().forEach(p -> addComponent(
+                    new Point(p.getRelativeX() + cali, p.getRelativeY(), p.getColor()))
+                );
+            });
+        update();
+    }
+
+    private List<Integer> getFilledLines(Map<Integer, List<Point>> lines) {
+        return lines.entrySet()
+            .stream()
+            .filter(e -> e.getValue().size() == getInnerWidth())
+            .map(Entry::getKey)
+            .sorted()
+            .collect(Collectors.toList());
     }
 
     @Override
