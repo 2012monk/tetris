@@ -4,16 +4,18 @@ import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
 import tetris.components.TetrisBoard;
 import tetris.components.Tetromino;
-import tetris.components.TetrominoRepository;
 import tetris.constants.Color;
 import tetris.constants.Shape;
+import tetris.helper.AutoDropper;
+import tetris.helper.GameKeyListener;
+import tetris.repository.TetrominoRepository;
 import tetris.window.Window;
 import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
     private static int xAlign;
-    private static int boardSize = 20;
+    private static final int boardSize = 20;
 
     public static void init() {
         WindowPoolManager.init();
@@ -42,6 +44,8 @@ public class TetrisInitializer {
         WindowPoolManager.addWindow(window);
         TetrisBoard board = new TetrisBoard(0, 0, boardSize - 2, boardSize - 2);
         window.addComponent(board);
+        window.addComponent(new GameKeyListener());
+        window.addComponent(new AutoDropper());
     }
 
     public static void initTetrominos() {

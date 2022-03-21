@@ -1,23 +1,31 @@
 package tetris.components;
 
+import static tetris.constants.GameStatus.END;
+import static tetris.constants.GameStatus.PAUSE;
+import static tetris.constants.GameStatus.RESTART;
+import static tetris.constants.GameStatus.RUNNING;
+import static tetris.constants.GameStatus.START;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import tetris.console.Console;
-import tetris.constants.Char;
 import tetris.constants.GameKey;
-import tetris.constants.SpecialKeyCode;
+import tetris.constants.GameStatus;
+import tetris.message.GameKeyMessage;
+import tetris.message.GameStatusMessage;
+import tetris.message.NextBlockAlert;
+import tetris.message.ScoreAlert;
+import tetris.repository.TetrominoRepository;
+import tetris.system.Post;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
-    private static final char PAUSE_KEY = 'q';
-    private static final char RESTART_KEY = 'r';
     private final TetrominoGuider guider;
-    private boolean isRunning = false;
-    private boolean isEnd = false;
+    private GameStatus status = END;
     private Tetromino currentBlock = null;
 
     public TetrisBoard(int x, int y, int width, int height) {
@@ -25,6 +33,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
         this.emptySpace = EMPTY_SPACE;
         clear();
         this.guider = new TetrominoGuider(this);
+        subscribe(GameStatusMessage.class);
+        subscribe(GameKeyMessage.class);
     }
 
     public void printBlock(Tetromino block) {
@@ -46,10 +56,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void drop() {
-        if (!isRunning) {
+        if (status != RUNNING) {
             return;
         }
-//        this.guider.clear();
         update();
         if (this.currentBlock == null) {
             initBlock();
@@ -72,7 +81,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     public void move(GameKey key) {
-        if (!isRunning) {
+        if (status != RUNNING) {
             return;
         }
         if (key == GameKey.KEY_SPACE) {
@@ -97,8 +106,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     private void gameOver() {
-        isRunning = false;
-        isEnd = true;
+        status = END;
+        publishMessage(new GameStatusMessage(END));
         Console.clearScreen();
         Console.drawString(Console.getScreenHeight() / 2, Console.getScreenWidth() / 2 - 5,
             "GAME OVER");
@@ -166,47 +175,47 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .collect(Collectors.toList());
     }
 
-    @Override
-    public void handleKey(Char chr) {
-        if (chr.is(PAUSE_KEY)) {
-            pause();
-            return;
-        }
-        if (chr.is(RESTART_KEY)) {
-            restart();
-            return;
-        }
-        if (!isRunning && chr.is(SpecialKeyCode.KEY_SPACE)) {
-            start();
-            return;
-        }
-        if (!isRunning || !GameKey.hasKey(chr) || this.currentBlock == null) {
-            return;
-        }
-        move(GameKey.getGameKey(chr));
-    }
-
     public void pause() {
-        isRunning = false;
+        this.status = PAUSE;
     }
 
     public void restart() {
-        isEnd = false;
-        isRunning = false;
+//        publishMessage(new GameStatusMessage(END));
         this.components.clear();
         this.currentBlock = null;
         clear();
+//        Counter.waitMill(2000);
         start();
     }
 
     public void start() {
-        isRunning = true;
-        if (isEnd) {
-            restart();
+        if (status == END) {
+            initBlock();
         }
-        if (this.currentBlock != null) {
+        status = RUNNING;
+        publishMessage(new GameStatusMessage(RUNNING));
+    }
+
+    @Override
+    public <T extends Post<?>> void onMessage(T post) {
+        if (post instanceof GameKeyMessage) {
+            move(((GameKeyMessage) post).getPayload());
             return;
         }
-        initBlock();
+        if (post instanceof GameStatusMessage) {
+            GameStatus gameStatus = ((GameStatusMessage) post).getPayload();
+            if (gameStatus == START) {
+                start();
+            }
+            if (gameStatus == RESTART) {
+                restart();
+            }
+            if (gameStatus == PAUSE) {
+                pause();
+            }
+            if (gameStatus == END) {
+                this.status = gameStatus;
+            }
+        }
     }
 }

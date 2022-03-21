@@ -1,5 +1,6 @@
-package tetris.components;
+package tetris.message;
 
+import tetris.components.Tetromino;
 import tetris.system.Post;
 
 public class NextBlockAlert extends Post<Tetromino> {

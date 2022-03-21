@@ -1,13 +1,13 @@
 package tetris.components;
 
-import tetris.system.MessageBroker;
+import tetris.message.NextBlockAlert;
 import tetris.system.Post;
 
 public class NextBlockBoard extends ComponentImpl {
 
     public NextBlockBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
-        MessageBroker.subscribe(NextBlockAlert.class, this);
+        subscribe(NextBlockAlert.class);
     }
 
     @Override

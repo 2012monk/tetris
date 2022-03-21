@@ -3,10 +3,10 @@ package tetris.window;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import tetris.components.AutoDropper;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.SpecialKeyCode;
+import tetris.helper.AutoDropper;
 import tetris.system.MessageBroker;
 
 public class WindowPoolManager {
@@ -45,7 +45,6 @@ public class WindowPoolManager {
         TaskManager.init();
         MessageBroker.init();
         WindowInputListener.init();
-        AutoDropper.init();
     }
 
     public synchronized static void shutDown() {

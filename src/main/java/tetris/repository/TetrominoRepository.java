@@ -1,4 +1,4 @@
-package tetris.components;
+package tetris.repository;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import tetris.components.Tetromino;
 import tetris.constants.Shape;
 
 public class TetrominoRepository {
@@ -50,5 +51,9 @@ public class TetrominoRepository {
             initPool();
         }
         return pool.getFirst().copy();
+    }
+
+    public static void shuffle() {
+        initPool();
     }
 }

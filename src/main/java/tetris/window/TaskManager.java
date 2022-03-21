@@ -42,17 +42,21 @@ public class TaskManager implements Runnable {
         taskQueue.add(task);
     }
 
-    public synchronized boolean removeTask(Task task) {
+    public static boolean removeTask(Task task) {
         return taskQueue.remove(task);
+    }
+
+    private static void task() {
+        if (taskQueue.isEmpty()) {
+            return;
+        }
+        taskQueue.removeFirst().action();
     }
 
     @Override
     public void run() {
         while (isRunning) {
-            if (taskQueue.isEmpty()) {
-                continue;
-            }
-            taskQueue.removeFirst().action();
+            task();
         }
     }
 }

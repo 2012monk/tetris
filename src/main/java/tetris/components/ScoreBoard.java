@@ -1,6 +1,6 @@
 package tetris.components;
 
-import tetris.system.MessageBroker;
+import tetris.message.ScoreAlert;
 import tetris.system.Post;
 
 public class ScoreBoard extends TextArea {
@@ -10,7 +10,7 @@ public class ScoreBoard extends TextArea {
 
     public ScoreBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
-        MessageBroker.subscribe(ScoreAlert.class, this);
+        subscribe(ScoreAlert.class);
         printScore();
     }
 

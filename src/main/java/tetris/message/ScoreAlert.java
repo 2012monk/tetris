@@ -1,4 +1,4 @@
-package tetris.components;
+package tetris.message;
 
 import tetris.system.Post;
 
