@@ -77,6 +77,22 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea
 
 /*
  * Class:     tetris_console_Console
+ * Method:    startDraw
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_tetris_console_Console_startDraw
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     tetris_console_Console
+ * Method:    endDraw
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_tetris_console_Console_endDraw
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     tetris_console_Console
  * Method:    clearLine
  * Signature: (I)V
  */

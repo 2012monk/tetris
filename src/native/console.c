@@ -11,6 +11,17 @@ void endDraw() {
   }
 }
 
+JNIEXPORT void JNICALL Java_tetris_console_Console_endDraw (JNIEnv *env, jclass clazz) {
+  if (inAction > 0) {
+    inAction--;
+  }
+  endDraw();
+}
+
+JNIEXPORT void JNICALL Java_tetris_console_Console_startDraw (JNIEnv *env, jclass clazz) {
+  inAction++;
+}
+
 void drawHorizontalLine(int x, int y, int width, int height) {
   mvhline(x, y, ACS_HLINE, width);
   mvhline(x + height, y, ACS_HLINE, width);

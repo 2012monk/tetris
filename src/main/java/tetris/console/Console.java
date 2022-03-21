@@ -103,6 +103,10 @@ public class Console {
     private static native void clearArea(int x, int y, int width, int height, char chr, int fg,
         int bg);
 
+    public static native void startDraw();
+
+    public static native void endDraw();
+
     public static native void clearLine(int x);
 
     public static native void clearScreen();

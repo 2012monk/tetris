@@ -56,6 +56,10 @@ public class WindowPoolManager {
             shutDown();
             return;
         }
-        windowPool.forEach(w -> TaskManager.addTask(() -> w.handleKey(chr)));
+        windowPool.forEach(w -> TaskManager.addTask(() -> {
+            Console.startDraw();
+            w.handleKey(chr);
+            Console.endDraw();
+        }));
     }
 }

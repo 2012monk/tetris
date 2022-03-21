@@ -60,3 +60,7 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - paint border
 - paint border with character
 - move window position
+
+## TODO
+
+- 키 입력시 escape 코드 출력되는 버그 해결
