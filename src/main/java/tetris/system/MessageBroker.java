@@ -33,7 +33,6 @@ public class MessageBroker implements Runnable {
 
     private static void sendMessage(Post<?> post) {
         if (!subscribers.containsKey(post.getClass())) {
-//            throw new IllegalArgumentException(post.getClass().getName() + post.getName());
             return;
         }
         subscribers.get(post.getClass()).forEach(c ->

@@ -10,5 +10,4 @@ public class FrameCounter {
             current = System.currentTimeMillis();
         }
     }
-
 }

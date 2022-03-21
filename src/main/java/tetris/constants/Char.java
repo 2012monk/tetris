@@ -8,6 +8,10 @@ public class Char {
         this.number = number;
     }
 
+    public Char(char chr) {
+        this.number = chr;
+    }
+
     public Char(SpecialKeyCode key) {
         this.number = key.getNumber();
     }
@@ -37,5 +41,24 @@ public class Char {
 
     public boolean is(char s) {
         return s == getChar();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Char aChar = (Char) o;
+
+        return number == aChar.number;
+    }
+
+    @Override
+    public int hashCode() {
+        return number;
     }
 }

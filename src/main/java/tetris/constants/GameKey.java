@@ -8,12 +8,16 @@ import java.util.stream.Collectors;
 import tetris.components.Tetromino;
 
 public enum GameKey {
-    MOVE_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::printDown),
-    MOVE_UP(SpecialKeyCode.KEY_UP, Tetromino::rotate270),
+    KEY_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::printDown),
+    KEY_UP(SpecialKeyCode.KEY_UP, Tetromino::rotate270),
     KEY_SPACE(SpecialKeyCode.KEY_SPACE, Tetromino::rotate270),
-    MOVE_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::printLeft),
-    MOVE_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::printRight);
-    private static Map<SpecialKeyCode, GameKey> keys;
+    KEY_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::printLeft),
+    KEY_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::printRight),
+    KET_H('h', Tetromino::printLeft),
+    KEY_L('l', Tetromino::printRight),
+    KEY_J('j', Tetromino::printDown),
+    KEY_K('k', Tetromino::rotate270);
+    private static final Map<Char, GameKey> keys;
 
     static {
         keys = Arrays.stream(GameKey.values())
@@ -21,25 +25,27 @@ public enum GameKey {
     }
 
     private final Consumer<Tetromino> action;
-    private final SpecialKeyCode trigger;
+    private final Char trigger;
 
     GameKey(SpecialKeyCode key, Consumer<Tetromino> action) {
         this.action = action;
-        this.trigger = key;
+        this.trigger = new Char(key);
+    }
+
+    GameKey(char key, Consumer<Tetromino> action) {
+        this.action = action;
+        this.trigger = new Char(key);
     }
 
     public static GameKey getGameKey(Char keyCode) {
-        return keys.get(keyCode.getSpecialKey());
+        return keys.get(keyCode);
     }
 
     public static boolean hasKey(Char keyCode) {
-        if (keyCode.isSpecialKey()) {
-            return keys.containsKey(keyCode.getSpecialKey());
-        }
-        return false;
+        return keys.containsKey(keyCode);
     }
 
-    private SpecialKeyCode getTrigger() {
+    private Char getTrigger() {
         return trigger;
     }
 

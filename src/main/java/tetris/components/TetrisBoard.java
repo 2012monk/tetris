@@ -64,7 +64,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         if (isCollide(block)) {
             gameOver();
         }
-        if (isCollide(simulateBlock(block, GameKey.MOVE_DOWN))) {
+        if (isCollide(simulateBlock(block, GameKey.KEY_DOWN))) {
             stackBlock(block);
             initBlock();
             return;
@@ -81,7 +81,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             hardDrop();
             return;
         }
-        if (key == GameKey.MOVE_DOWN) {
+        if (key == GameKey.KEY_DOWN) {
             drop();
             return;
         }

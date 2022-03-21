@@ -12,8 +12,6 @@ import tetris.system.MessageBroker;
 public class WindowPoolManager {
 
     private static final List<Window> windowPool = Collections.synchronizedList(new LinkedList<>());
-    private static final WindowInputListener inputListener = WindowInputListener.getInstance();
-    private static final TaskManager taskManager = TaskManager.getInstance();
     private static Spatial screen;
 
     public static Spatial getScreen() {
@@ -59,7 +57,7 @@ public class WindowPoolManager {
     }
 
     public static void notifyKey(Char chr) {
-        if (chr.is(SpecialKeyCode.KEY_ESC)) {
+        if (chr.is(SpecialKeyCode.KEY_ESC) || chr.is('q')) {
             shutDown();
             return;
         }
