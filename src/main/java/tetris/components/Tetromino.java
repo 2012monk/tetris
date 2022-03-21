@@ -16,8 +16,8 @@ public class Tetromino extends ComponentContainer<Point> {
     private static final int VERTICAL_BASIS = 1;
     private static final char DEFAULT_CELL = ' ';
     private static final char GUIDER_CELL = '.';
-    private final char cell;
     private final List<Point> originalPoints = Collections.synchronizedList(new ArrayList<>());
+    private final char cell;
     private final int blockSize;
     private final Shape shape;
     private boolean initialized = false;
@@ -74,18 +74,14 @@ public class Tetromino extends ComponentContainer<Point> {
         int x = point.getRelativeX();
         int y = point.getRelativeY();
         addPoint(blockSize - y - 1, x);
-        if (hasParent()) {
-            update();
-        }
+        updateInParent();
     }
 
     private void rotate90(Point point) {
         int x = point.getRelativeX();
         int y = point.getRelativeY();
         addPoint(y, blockSize - x - 1);
-        if (hasParent()) {
-            update();
-        }
+        updateInParent();
     }
 
     private List<Point> clearPoints() {
@@ -97,24 +93,18 @@ public class Tetromino extends ComponentContainer<Point> {
 
     public void printDown() {
         moveDown();
-        if (hasParent()) {
-            update();
-        }
+        updateInParent();
     }
 
     public void printLeft() {
         moveLeft();
-        if (hasParent()) {
-            update();
-        }
+        updateInParent();
     }
 
 
     public void printRight() {
         moveRight();
-        if (hasParent()) {
-            update();
-        }
+        updateInParent();
     }
 
     public void moveRight() {
@@ -142,7 +132,7 @@ public class Tetromino extends ComponentContainer<Point> {
         }
     }
 
-    public void init(Spatial spatial) {
+    public void initBlock(TetrisBoard spatial) {
         if (initialized && spatial.equals(this.parent)) {
             return;
         }
@@ -165,8 +155,9 @@ public class Tetromino extends ComponentContainer<Point> {
             blockSize);
     }
 
-    public Tetromino getGuiderBlock() {
-        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(), getRelativeY(),
+    public Tetromino getGuideBlock() {
+        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(),
+            getRelativeY(),
             blockSize, GUIDER_CELL, getParent());
     }
 
@@ -187,7 +178,9 @@ public class Tetromino extends ComponentContainer<Point> {
         this.components.forEach(Point::clear);
     }
 
-    public boolean isAllInsideParent() {
-        return this.components.stream().allMatch(Point::isInsideParent);
+    public void updateInParent() {
+        if (hasParent()) {
+            update();
+        }
     }
 }

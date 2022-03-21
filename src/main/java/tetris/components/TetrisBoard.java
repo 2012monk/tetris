@@ -30,13 +30,13 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     public void printBlock(Tetromino block) {
         update();
-        block.init(this);
+        block.initBlock(this);
         block.update();
     }
 
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
-        this.currentBlock.init(this);
+        this.currentBlock.initBlock(this);
         if (isCollide(this.currentBlock)) {
             gameOver();
             return;
@@ -75,6 +75,10 @@ public class TetrisBoard extends ComponentContainer<Point> {
         if (!isRunning) {
             return;
         }
+        if (key == GameKey.KEY_SPACE) {
+            hardDrop();
+            return;
+        }
         if (key == GameKey.MOVE_DOWN) {
             drop();
             return;
@@ -85,6 +89,11 @@ public class TetrisBoard extends ComponentContainer<Point> {
         update();
         key.move(this.currentBlock);
         this.guider.guideBlock(currentBlock);
+    }
+
+    private void hardDrop() {
+        stackBlock(guider.getGuideBlock());
+        initBlock();
     }
 
     private void gameOver() {
@@ -191,5 +200,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
             return;
         }
         initBlock();
+    }
+
+    public List<Point> points() {
+        return this.components;
     }
 }

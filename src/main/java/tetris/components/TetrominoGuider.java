@@ -1,5 +1,7 @@
 package tetris.components;
 
+import java.util.NoSuchElementException;
+
 public class TetrominoGuider extends ComponentContainer<Tetromino> {
 
     private TetrisBoard board;
@@ -12,7 +14,7 @@ public class TetrominoGuider extends ComponentContainer<Tetromino> {
     }
 
     public void guideBlock(Tetromino block) {
-        Tetromino tmp = block.getGuiderBlock();
+        Tetromino tmp = block.getGuideBlock();
         while (!board.isCollide(tmp)) {
             tmp.moveDown();
         }
@@ -29,6 +31,10 @@ public class TetrominoGuider extends ComponentContainer<Tetromino> {
     @Override
     public void clear() {
         this.components.forEach(Component::clear);
+    }
+
+    public Tetromino getGuideBlock() {
+        return this.components.stream().findFirst().orElseThrow(NoSuchElementException::new);
     }
 }
 
