@@ -33,7 +33,7 @@ public class NextBlockBoard extends ComponentImpl {
             return;
         }
         nextBlock.setParent(this);
-        alignBlock(nextBlock );
+        alignBlock(nextBlock);
         nextBlock.update();
     }
 }

@@ -5,18 +5,23 @@ import tetris.system.Post;
 
 public class ScoreBoard extends TextArea {
 
+    private static final String MESSAGE = "SCORE\n";
     private int score = 0;
 
     public ScoreBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
         MessageBroker.subscribe(ScoreAlert.class, this);
-        writeString("score\n" + this.score);
+        printScore();
+    }
+
+    private void printScore() {
+        clearString();
+        writeString(MESSAGE + this.score);
     }
 
     private void updateScore(int score) {
         this.score += score;
-        clearString();
-        writeString("score\n" + this.score);
+        printScore();
     }
 
     @Override

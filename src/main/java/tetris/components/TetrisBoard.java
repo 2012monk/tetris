@@ -9,8 +9,6 @@ import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.GameKey;
 import tetris.constants.SpecialKeyCode;
-import tetris.system.FrameCounter;
-import tetris.system.MessageBroker;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
@@ -37,7 +35,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
-        MessageBroker.publish(new NextBlockAlert(this.currentBlock.copy()));
+        publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
         this.currentBlock.initBlock(this);
         if (isCollide(this.currentBlock)) {
             gameOver();
@@ -102,7 +100,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
         isRunning = false;
         isEnd = true;
         Console.clearScreen();
-        Console.drawString(40, 40, "OVER");
+        Console.drawString(Console.getScreenHeight() / 2, Console.getScreenWidth() / 2 - 5,
+            "GAME OVER");
     }
 
     public Tetromino simulateBlock(Tetromino block, GameKey key) {
@@ -155,7 +154,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     private void printScore(int score) {
         int mul = 1000;
-        MessageBroker.publish(new ScoreAlert(score * mul));
+        publishMessage(new ScoreAlert(score * mul));
     }
 
     private List<Integer> getFilledLines(Map<Integer, List<Point>> lines) {
@@ -197,7 +196,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
         this.components.clear();
         this.currentBlock = null;
         clear();
-        FrameCounter.wait(1500);
         start();
     }
 

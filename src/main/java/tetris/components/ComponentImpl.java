@@ -1,6 +1,7 @@
 package tetris.components;
 
 import tetris.constants.Char;
+import tetris.system.MessageBroker;
 import tetris.system.Post;
 import tetris.window.SpatialImpl;
 
@@ -24,6 +25,10 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
 
     protected ComponentImpl() {
         this(DEFAULT_COORDINATE, DEFAULT_COORDINATE, MINIMUM_SIZE, MINIMUM_SIZE);
+    }
+
+    protected void publishMessage(Post<?> post) {
+        MessageBroker.publish(post);
     }
 
     @Override

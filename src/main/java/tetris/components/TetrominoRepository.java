@@ -1,9 +1,9 @@
 package tetris.components;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,7 +12,7 @@ import tetris.constants.Shape;
 public class TetrominoRepository {
 
     private static final Map<Shape, Tetromino> tetrominos = new HashMap<>();
-    private static Iterator<Tetromino> pool;
+    private static final ArrayDeque<Tetromino> pool = new ArrayDeque<>();
 
     public static void addTetromino(Tetromino tetromino) {
         tetrominos.put(tetromino.getShape(), tetromino);
@@ -26,10 +26,10 @@ public class TetrominoRepository {
     }
 
     public static Tetromino getNextTetromino() {
-        if (pool == null || !pool.hasNext()) {
+        if (pool.isEmpty()) {
             initPool();
         }
-        return pool.next().copy();
+        return pool.removeFirst().copy();
     }
 
     private static void initPool() {
@@ -42,6 +42,13 @@ public class TetrominoRepository {
             Collections.shuffle(tmp);
         }
         Collections.shuffle(tmp);
-        pool = tmp.iterator();
+        pool.addAll(tmp);
+    }
+
+    public static Tetromino peekNextTetromino() {
+        if (pool.isEmpty()) {
+            initPool();
+        }
+        return pool.getFirst().copy();
     }
 }

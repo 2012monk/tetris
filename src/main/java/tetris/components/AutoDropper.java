@@ -1,47 +1,46 @@
 package tetris.components;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import tetris.constants.Char;
 import tetris.constants.SpecialKeyCode;
-import tetris.system.FrameCounter;
 import tetris.window.WindowPoolManager;
 
-public class AutoDropper implements Runnable {
+public class AutoDropper {
 
     private static final int DROP_RATE = 300;
-    private static Thread thread;
-    private static AutoDropper instance;
+    private static final Timer timer = new Timer();
     private static boolean isRunning = false;
 
     private AutoDropper() {
     }
 
-    public static AutoDropper getInstance() {
-        if (instance == null) {
-            instance = new AutoDropper();
-        }
-        return instance;
-    }
-
     public static void init() {
-        if (thread != null) {
-            return;
-        }
         isRunning = true;
-        thread = new Thread(getInstance());
-        thread.start();
+        timer.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE);
     }
 
     public static void shutDown() {
         isRunning = false;
-        thread.interrupt();
-        thread = null;
+        timer.cancel();
     }
 
-    @Override
-    public void run() {
-        while (isRunning) {
-            FrameCounter.wait(DROP_RATE);
-            WindowPoolManager.notifyKey(new Char(SpecialKeyCode.KEY_DOWN));
-        }
+    public static TimerTask wrap(Runnable r) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                r.run();
+            }
+        };
     }
+
+    public static Runnable task() {
+        return () -> {
+            WindowPoolManager.notifyKey(new Char(SpecialKeyCode.KEY_DOWN));
+            if (!isRunning) {
+                timer.cancel();
+            }
+        };
+    }
+
 }
