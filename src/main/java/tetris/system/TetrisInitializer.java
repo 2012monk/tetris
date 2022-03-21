@@ -1,5 +1,7 @@
 package tetris.system;
 
+import tetris.components.NextBlockBoard;
+import tetris.components.ScoreBoard;
 import tetris.components.TetrisBoard;
 import tetris.components.Tetromino;
 import tetris.components.TetrominoRepository;
@@ -10,23 +12,36 @@ import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
+    private static int xAlign;
+    private static int boardSize = 20;
+
     public static void init() {
         WindowPoolManager.init();
+        xAlign = WindowPoolManager.getScreen().getHeight() / 2 - boardSize / 2;
         initTetrominos();
         boardWindow();
+        presentWindow();
         WindowPoolManager.refreshAll();
     }
 
-    private static TetrisBoard boardWindow() {
-        int size = 20;
-        int centerX = WindowPoolManager.getScreen().getHeight() / 2;
+    private static void presentWindow() {
+        int h = 15;
+        int w = 18;
+        int scoreH = 3;
+        int screenWidth = WindowPoolManager.getScreen().getWidth();
+        Window window = new Window(xAlign, screenWidth - screenWidth / 4 - w, w, h);
+        window.addComponent(new ScoreBoard(0, 0, w - 2, scoreH));
+        window.addComponent(new NextBlockBoard(scoreH + 1, w / 2 - 4, 6, 4));
+        WindowPoolManager.addWindow(window);
+    }
+
+    private static void boardWindow() {
         int centerY = WindowPoolManager.getScreen().getWidth() / 2;
 
-        Window window = new Window(centerX - size / 2, centerY - size / 2, size, size);
+        Window window = new Window(xAlign, centerY - boardSize / 2, boardSize, boardSize);
         WindowPoolManager.addWindow(window);
-        TetrisBoard board = new TetrisBoard(0, 0, size - 2, size - 2);
+        TetrisBoard board = new TetrisBoard(0, 0, boardSize - 2, boardSize - 2);
         window.addComponent(board);
-        return board;
     }
 
     public static void initTetrominos() {

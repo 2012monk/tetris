@@ -10,24 +10,42 @@ public class TextArea extends ComponentImpl {
     private TextAlign textAlign = TextAlign.CENTER;
     private StringBuilder stringBuilder = new StringBuilder();
 
-    public void writeString(String str) {
-        this.stringBuilder.append(str);
+    public TextArea(int x, int y, int width, int height, boolean borderOn) {
+        super(x, y, width, height, borderOn);
     }
 
-    public void print() {
+    public void writeString(String str) {
+        this.stringBuilder.append(str);
+        update();
+    }
+
+    private void print() {
         String str = stringBuilder.toString();
-        if (!str.contains("\r") && !str.contains("\n") && str.length() <= getWidth()) {
-            printLine(getHorizontalPadding(str), 0, str);
+        if (!str.contains("\r") && !str.contains("\n") && str.length() <= getInnerWidth()) {
+            printLine(getVerticalPadding(1), str);
             return;
         }
         List<String> clippedString = clipString(str, getWidth());
         for (int i = 0; i < clippedString.size(); i++) {
-            printLine(getHorizontalPadding(clippedString.get(i)), i, clippedString.get(i));
+            printLine(i + getVerticalPadding(clippedString.size()), clippedString.get(i));
         }
     }
 
+    private int getVerticalPadding(int number) {
+        if (textAlign == TextAlign.START || number >= getInnerHeight()) {
+            return 0;
+        }
+        if (textAlign == TextAlign.CENTER) {
+            return (getInnerHeight() - number) / 2;
+        }
+        if (textAlign == TextAlign.END) {
+            return getInnerHeight() - number;
+        }
+        return 0;
+    }
+
     private int getHorizontalPadding(String str) {
-        int maxWidth = getWidth();
+        int maxWidth = getInnerWidth();
         if (textAlign == TextAlign.START || str.length() >= maxWidth) {
             return 0;
         }
@@ -62,22 +80,35 @@ public class TextArea extends ComponentImpl {
         return result;
     }
 
-    private void printLine(int x, int y, String str) {
-        int startX = x + getAbsoluteX();
-        int startY = y + getAbsoluteY();
-        if (str.length() > x + getWidth()) {
-            str = str.substring(0, x + getWidth());
-        }
 
+    protected void clearString() {
+        this.stringBuilder = new StringBuilder();
+    }
+
+    private void printLine(int x, String str) {
+        if (x > getInnerHeight()) {
+            return;
+        }
+        int startX = x + getInnerX();
+        int startY = getHorizontalPadding(str) + getInnerY();
+        if (str.length() > getInnerWidth()) {
+            str = str.substring(0, getInnerWidth());
+        }
         Console.drawString(startX, startY, str);
     }
 
     @Override
     public void update() {
-        if (stringBuilder.length() == EMPTY) {
+        if (!hasParent() || stringBuilder.length() == EMPTY) {
             return;
         }
+        clear();
         print();
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
     }
 
     public enum TextAlign {

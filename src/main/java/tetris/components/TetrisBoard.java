@@ -10,16 +10,17 @@ import tetris.constants.Char;
 import tetris.constants.GameKey;
 import tetris.constants.SpecialKeyCode;
 import tetris.system.FrameCounter;
+import tetris.system.MessageBroker;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
     private static final char PAUSE_KEY = 'q';
     private static final char RESTART_KEY = 'r';
+    private final TetrominoGuider guider;
     private boolean isRunning = false;
     private boolean isEnd = false;
     private Tetromino currentBlock = null;
-    private TetrominoGuider guider;
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
@@ -36,6 +37,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
+        MessageBroker.publish(new NextBlockAlert(this.currentBlock.copy()));
         this.currentBlock.initBlock(this);
         if (isCollide(this.currentBlock)) {
             gameOver();
@@ -133,6 +135,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .collect(Collectors.groupingBy(Point::getAbsoluteX));
 
         List<Integer> filledLines = getFilledLines(lines);
+        int score = filledLines.size();
         if (filledLines.isEmpty()) {
             return;
         }
@@ -147,6 +150,12 @@ public class TetrisBoard extends ComponentContainer<Point> {
                 );
             });
         update();
+        printScore(score);
+    }
+
+    private void printScore(int score) {
+        int mul = 1000;
+        MessageBroker.publish(new ScoreAlert(score * mul));
     }
 
     private List<Integer> getFilledLines(Map<Integer, List<Point>> lines) {
@@ -184,6 +193,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     public void restart() {
         isEnd = false;
+        isRunning = false;
         this.components.clear();
         this.currentBlock = null;
         clear();
@@ -200,9 +210,5 @@ public class TetrisBoard extends ComponentContainer<Point> {
             return;
         }
         initBlock();
-    }
-
-    public List<Point> points() {
-        return this.components;
     }
 }

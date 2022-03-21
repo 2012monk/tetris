@@ -1,11 +1,12 @@
 package tetris.components;
 
 import tetris.constants.Char;
+import tetris.system.Post;
 import tetris.window.SpatialImpl;
 
 public abstract class ComponentImpl extends SpatialImpl implements Component {
 
-    private static final int MINIMUM_SIZE = 1;
+    private static final int MINIMUM_SIZE = 0;
     private static final int DEFAULT_COORDINATE = 0;
 
     public ComponentImpl(int x, int y, int width, int height) {
@@ -27,5 +28,10 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
 
     @Override
     public void handleKey(Char chr) {
+    }
+
+    @Override
+    public <T extends Post<?>> void onMessage(T post) {
+
     }
 }

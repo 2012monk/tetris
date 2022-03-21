@@ -132,7 +132,7 @@ public class Tetromino extends ComponentContainer<Point> {
         }
     }
 
-    public void initBlock(TetrisBoard spatial) {
+    public void initBlock(Spatial spatial) {
         if (initialized && spatial.equals(this.parent)) {
             return;
         }
@@ -146,6 +146,10 @@ public class Tetromino extends ComponentContainer<Point> {
             .mapToInt(SpatialImpl::getRelativeX)
             .max()
             .orElseThrow(NoSuchElementException::new);
+        alignCenter();
+    }
+
+    public void alignCenter() {
         this.y = (parent.getInnerWidth() / 2) - getWidth() / 2;
         this.y -= this.y % HORIZONTAL_BASIS;
     }
@@ -182,5 +186,15 @@ public class Tetromino extends ComponentContainer<Point> {
         if (hasParent()) {
             update();
         }
+    }
+
+    public int getBlockSize() {
+        return this.blockSize;
+    }
+
+    public int getActualWidth() {
+        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeY).min().orElse(0);
+        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeY).max().orElse(0);
+        return max - min + 1;
     }
 }

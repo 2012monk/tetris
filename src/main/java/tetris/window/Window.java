@@ -9,10 +9,6 @@ public class Window extends ComponentContainer<Component> {
         super(x, y, width, height);
     }
 
-    public Window(int width, int height) {
-        this(0, 0, width, height);
-    }
-
     public Window(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
     }

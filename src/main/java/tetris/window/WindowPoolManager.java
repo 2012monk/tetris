@@ -7,6 +7,7 @@ import tetris.components.AutoDropper;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.SpecialKeyCode;
+import tetris.system.MessageBroker;
 
 public class WindowPoolManager {
 
@@ -23,7 +24,11 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
-        TaskManager.addTask(() -> windowPool.forEach(Window::update));
+        windowPool.forEach(w -> TaskManager.addTask(() -> {
+            Console.startDraw();
+            w.update();
+            Console.endDraw();
+        }));
     }
 
     public static void addWindow(int x, int y, int width, int height) {
@@ -40,12 +45,14 @@ public class WindowPoolManager {
     public synchronized static void init() {
         Console.initConsole();
         TaskManager.init();
+        MessageBroker.init();
         WindowInputListener.init();
         AutoDropper.init();
     }
 
     public synchronized static void shutDown() {
         WindowInputListener.shutDown();
+        MessageBroker.shutDown();
         TaskManager.shutDown();
         AutoDropper.shutDown();
         Console.shutdown();

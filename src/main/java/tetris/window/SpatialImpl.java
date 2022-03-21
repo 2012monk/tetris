@@ -149,9 +149,9 @@ public abstract class SpatialImpl implements Spatial {
         }
         int possibleX = Math.max(getInnerX(), parent.getInnerX());
         int possibleY = Math.max(getInnerY(), parent.getInnerY());
-        int possibleMaxX = Math.min(getInnerX() + getInnerWidth(),
+        int possibleMaxX = Math.min(getInnerX() + getInnerHeight(),
             parent.getInnerX() + parent.getInnerHeight());
-        int possibleMaxY = Math.min(getInnerY() + getInnerHeight(),
+        int possibleMaxY = Math.min(getInnerY() + getInnerWidth(),
             parent.getInnerY() + parent.getInnerWidth());
 
         if (possibleX >= possibleMaxX || possibleY >= possibleMaxY) {
