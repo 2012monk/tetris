@@ -179,4 +179,16 @@ public abstract class SpatialImpl implements Spatial {
         }
         return isInside;
     }
+
+    public void setEmptySpace(char emptySpace) {
+        this.emptySpace = emptySpace;
+    }
+
+    public void setBg(Color bg) {
+        this.bg = bg;
+    }
+
+    public void setFg(Color fg) {
+        this.fg = fg;
+    }
 }

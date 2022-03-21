@@ -5,14 +5,21 @@ import tetris.constants.Color;
 
 public class Point extends ComponentImpl {
 
-    private static final Color DEFAULT_FOREGROUND_COLOR = Color.BLACK;
     private static final int POINT_SIZE = 1;
     private static final char CELL = ' ';
-    private final Color color;
+    private final char cell;
 
     public Point(int x, int y, Color color) {
         super(x, y, POINT_SIZE, POINT_SIZE, false);
-        this.color = color;
+        setBg(color);
+        this.cell = CELL;
+    }
+
+    public Point(int x, int y, Color fg, Color bg, char cell) {
+        super(x, y, POINT_SIZE, POINT_SIZE, false);
+        setFg(fg);
+        setBg(bg);
+        this.cell = cell;
     }
 
     @Override
@@ -21,7 +28,7 @@ public class Point extends ComponentImpl {
             return;
         }
         clear();
-        Console.drawChar(getInnerX(), getInnerY(), CELL, DEFAULT_FOREGROUND_COLOR, color);
+        Console.drawChar(getInnerX(), getInnerY(), cell, this.fg, this.bg);
     }
 
     @Override
@@ -37,7 +44,7 @@ public class Point extends ComponentImpl {
     }
 
     public Point copy() {
-        return new Point(getRelativeX(), getRelativeY(), color);
+        return new Point(getRelativeX(), getRelativeY(), bg);
     }
 
     public boolean isOverlapped(Point point) {
@@ -45,6 +52,6 @@ public class Point extends ComponentImpl {
     }
 
     public Color getColor() {
-        return this.color;
+        return this.bg;
     }
 }

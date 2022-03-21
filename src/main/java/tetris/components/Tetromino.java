@@ -14,30 +14,45 @@ public class Tetromino extends ComponentContainer<Point> {
     private static final int DEFAULT_BLOCK_SIZE = 3;
     private static final int HORIZONTAL_BASIS = 2;
     private static final int VERTICAL_BASIS = 1;
+    private static final char DEFAULT_CELL = ' ';
+    private static final char GUIDER_CELL = '.';
+    private final char cell;
     private final List<Point> originalPoints = Collections.synchronizedList(new ArrayList<>());
     private final int blockSize;
     private final Shape shape;
-    private final Color color;
     private boolean initialized = false;
 
-    private Tetromino(int x, int y, int blockSize, Color color, Shape shape) {
+    private Tetromino(int x, int y, int blockSize, Color bg, Shape shape) {
         super(x, y, blockSize * 2, blockSize, false);
-        this.color = color;
+        setBg(bg);
         this.shape = shape;
         this.blockSize = blockSize;
+        this.cell = DEFAULT_CELL;
     }
 
-    private Tetromino(List<Point> points, Color color, Shape shape, int x, int y, int blockSize) {
-        this(x, y, blockSize, color, shape);
+    private Tetromino(List<Point> points, Color fg, Color bg, Shape shape, int x, int y,
+        int blockSize, char cell, Spatial parent) {
+        super(x, y, blockSize * 2, blockSize, false);
+        this.shape = shape;
+        this.blockSize = blockSize;
+        this.cell = cell;
+        setFg(fg);
+        setBg(bg);
+        setParent(parent);
         points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
 
-    public Tetromino(Color color, Shape shape, int blockSize) {
-        this(0, 0, blockSize, color, shape);
+    private Tetromino(List<Point> points, Color bg, Shape shape, int x, int y, int blockSize) {
+        this(x, y, blockSize, bg, shape);
+        points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
 
-    public Tetromino(Color color, Shape shape) {
-        this(color, shape, DEFAULT_BLOCK_SIZE);
+    public Tetromino(Color bg, Shape shape, int blockSize) {
+        this(0, 0, blockSize, bg, shape);
+    }
+
+    public Tetromino(Color bg, Shape shape) {
+        this(bg, shape, DEFAULT_BLOCK_SIZE);
     }
 
     /*
@@ -59,12 +74,18 @@ public class Tetromino extends ComponentContainer<Point> {
         int x = point.getRelativeX();
         int y = point.getRelativeY();
         addPoint(blockSize - y - 1, x);
+        if (hasParent()) {
+            update();
+        }
     }
 
     private void rotate90(Point point) {
         int x = point.getRelativeX();
         int y = point.getRelativeY();
         addPoint(y, blockSize - x - 1);
+        if (hasParent()) {
+            update();
+        }
     }
 
     private List<Point> clearPoints() {
@@ -74,16 +95,23 @@ public class Tetromino extends ComponentContainer<Point> {
         return tmp;
     }
 
-    public void moveDown() {
-        this.x += VERTICAL_BASIS;
+    public void printDown() {
+        moveDown();
         if (hasParent()) {
             update();
         }
     }
 
-    public void moveLeft() {
-        this.y -= HORIZONTAL_BASIS;
-        this.y -= this.y % HORIZONTAL_BASIS;
+    public void printLeft() {
+        moveLeft();
+        if (hasParent()) {
+            update();
+        }
+    }
+
+
+    public void printRight() {
+        moveRight();
         if (hasParent()) {
             update();
         }
@@ -92,15 +120,25 @@ public class Tetromino extends ComponentContainer<Point> {
     public void moveRight() {
         this.y += HORIZONTAL_BASIS;
         this.y -= this.y % HORIZONTAL_BASIS;
-        if (hasParent()) {
-            update();
-        }
+    }
+
+    public void moveLeft() {
+        this.y -= HORIZONTAL_BASIS;
+        this.y -= this.y % HORIZONTAL_BASIS;
+    }
+
+    public void moveDown() {
+        this.x += VERTICAL_BASIS;
+    }
+
+    public void moveUp() {
+        this.x -= VERTICAL_BASIS;
     }
 
     public void addPoint(int x, int y) {
-        this.originalPoints.add(new Point(x, y, color));
+        this.originalPoints.add(new Point(x, y, fg, bg, cell));
         for (int i = 0; i < HORIZONTAL_BASIS; i++) {
-            addComponent(new Point(x, y * HORIZONTAL_BASIS + i, color));
+            addComponent(new Point(x, y * HORIZONTAL_BASIS + i, fg, bg, cell));
         }
     }
 
@@ -123,8 +161,13 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public Tetromino copy() {
-        return new Tetromino(originalPoints, color, shape, getRelativeX(), getRelativeY(),
+        return new Tetromino(originalPoints, bg, shape, getRelativeX(), getRelativeY(),
             blockSize);
+    }
+
+    public Tetromino getGuiderBlock() {
+        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(), getRelativeY(),
+            blockSize, GUIDER_CELL, getParent());
     }
 
     public List<Point> points() {
@@ -136,7 +179,7 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public Color getColor() {
-        return color;
+        return this.bg;
     }
 
     @Override

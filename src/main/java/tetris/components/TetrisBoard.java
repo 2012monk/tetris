@@ -19,11 +19,13 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private boolean isRunning = false;
     private boolean isEnd = false;
     private Tetromino currentBlock = null;
+    private TetrominoGuider guider;
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
         this.emptySpace = EMPTY_SPACE;
         clear();
+        this.guider = new TetrominoGuider(this);
     }
 
     public void printBlock(Tetromino block) {
@@ -39,6 +41,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             gameOver();
             return;
         }
+        guider.guideBlock(this.currentBlock);
         this.currentBlock.update();
     }
 
@@ -46,6 +49,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         if (!isRunning) {
             return;
         }
+//        this.guider.clear();
         update();
         if (this.currentBlock == null) {
             initBlock();
@@ -63,7 +67,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
             initBlock();
             return;
         }
-        block.moveDown();
+        block.printDown();
+        guider.update();
     }
 
     public void move(GameKey key) {
@@ -79,7 +84,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         }
         update();
         key.move(this.currentBlock);
-        this.currentBlock.update();
+        this.guider.guideBlock(currentBlock);
     }
 
     private void gameOver() {

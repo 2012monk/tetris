@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import tetris.components.Tetromino;
 
 public enum GameKey {
-    MOVE_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::moveDown),
+    MOVE_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::printDown),
     MOVE_UP(SpecialKeyCode.KEY_UP, Tetromino::rotate270),
     KEY_SPACE(SpecialKeyCode.KEY_SPACE, Tetromino::rotate270),
-    MOVE_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::moveLeft),
-    MOVE_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::moveRight);
+    MOVE_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::printLeft),
+    MOVE_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::printRight);
     private static Map<SpecialKeyCode, GameKey> keys;
 
     static {
