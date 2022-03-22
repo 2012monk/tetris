@@ -51,7 +51,7 @@ void unsetColorPair(int number) {
 }
 
 JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes (JNIEnv *env, jclass clazz) {
-  return getch();
+  return wgetch(stdscr);
 }
 
 JNIEXPORT jint JNICALL Java_tetris_console_Console_getScreenWidth (JNIEnv *env, jobject obj) {
@@ -78,11 +78,11 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject ob
   keypad(stdscr, TRUE);
   cbreak();
   noecho();
+  nodelay(stdscr, TRUE);
   if (has_colors()) {
     use_default_colors();
     start_color();
   }
-  attron(A_BOLD|A_DIM|A_BLINK);
   clear();
   refresh();
 }

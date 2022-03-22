@@ -14,8 +14,8 @@ import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
-    private static int xAlign;
     private static final int boardSize = 20;
+    private static int xAlign;
 
     public static void init() {
         WindowPoolManager.init();
@@ -27,13 +27,17 @@ public class TetrisInitializer {
     }
 
     private static void presentWindow() {
-        int h = 15;
+        int h = 6;
         int w = 18;
         int scoreH = 3;
         int screenWidth = WindowPoolManager.getScreen().getWidth();
         Window window = new Window(xAlign, screenWidth - screenWidth / 4 - w, w, h);
         window.addComponent(new ScoreBoard(0, 0, w - 2, scoreH));
-        window.addComponent(new NextBlockBoard(scoreH + 1, w / 2 - 4, 6, 4));
+        WindowPoolManager.addWindow(window);
+        window = new Window(xAlign + h, screenWidth - screenWidth / 4 - w, w, h);
+        window.addComponent(
+            new NextBlockBoard(window.getInnerHeight() / 2 - 1, window.getInnerWidth() / 2 - 3, 6,
+                4));
         WindowPoolManager.addWindow(window);
     }
 

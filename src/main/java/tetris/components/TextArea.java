@@ -106,11 +106,6 @@ public class TextArea extends ComponentImpl {
         print();
     }
 
-    @Override
-    public void clear() {
-        super.clear();
-    }
-
     public enum TextAlign {
         START, END, CENTER
     }

@@ -3,11 +3,13 @@ package tetris.window;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import tetris.components.ComponentContainer;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.SpecialKeyCode;
 import tetris.helper.AutoDropper;
 import tetris.system.MessageBroker;
+import tetris.system.TaskManager;
 
 public class WindowPoolManager {
 
@@ -22,11 +24,7 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
-        windowPool.forEach(w -> TaskManager.addTask(() -> {
-            Console.startDraw();
-            w.update();
-            Console.endDraw();
-        }));
+        windowPool.forEach(ComponentContainer::update);
     }
 
     public static void addWindow(int x, int y, int width, int height) {
@@ -60,10 +58,6 @@ public class WindowPoolManager {
             shutDown();
             return;
         }
-        windowPool.forEach(w -> TaskManager.addTask(() -> {
-            Console.startDraw();
-            w.handleKey(chr);
-            Console.endDraw();
-        }));
+        windowPool.forEach(w -> w.handleKey(chr));
     }
 }

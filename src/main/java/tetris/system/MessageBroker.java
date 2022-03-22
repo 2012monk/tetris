@@ -7,7 +7,6 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.components.Component;
-import tetris.window.TaskManager;
 
 public class MessageBroker implements Runnable {
 
@@ -36,8 +35,7 @@ public class MessageBroker implements Runnable {
             return;
         }
         subscribers.get(post.getClass()).forEach(c ->
-            TaskManager.addTask(() ->
-                c.onMessage(post)));
+            TaskManager.addTask(() -> c.onMessage(post)));
     }
 
     public static MessageBroker getInstance() {

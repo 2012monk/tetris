@@ -82,7 +82,6 @@ public class Console {
     public static void initConsole() {
         System.load(getLibraryPath());
         init();
-        clearScreen();
     }
 
     private static native int setColorPair(int foreGround, int backGround);

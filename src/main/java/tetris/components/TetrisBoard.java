@@ -37,12 +37,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
         subscribe(GameKeyMessage.class);
     }
 
-    public void printBlock(Tetromino block) {
-        update();
-        block.initBlock(this);
-        block.update();
-    }
-
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
         publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
@@ -70,6 +64,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
     public void dropBlock(Tetromino block) {
         if (isCollide(block)) {
             gameOver();
+            return;
         }
         if (isCollide(simulateBlock(block, GameKey.KEY_DOWN))) {
             stackBlock(block);
@@ -134,7 +129,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
     public void stackBlock(Tetromino block) {
         block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
             p.getRelativeY() + block.getRelativeY(), block.getColor())));
-        update();
         popStack();
     }
 
@@ -145,6 +139,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         List<Integer> filledLines = getFilledLines(lines);
         int score = filledLines.size();
         if (filledLines.isEmpty()) {
+            update();
             return;
         }
         this.components.clear();
@@ -184,7 +179,6 @@ public class TetrisBoard extends ComponentContainer<Point> {
         this.components.clear();
         this.currentBlock = null;
         clear();
-//        Counter.waitMill(2000);
         start();
     }
 

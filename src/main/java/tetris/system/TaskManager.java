@@ -1,7 +1,8 @@
-package tetris.window;
+package tetris.system;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import tetris.window.Task;
 
 public class TaskManager implements Runnable {
 

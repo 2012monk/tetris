@@ -5,6 +5,8 @@ import tetris.system.Post;
 
 public class NextBlockBoard extends ComponentImpl {
 
+    private Tetromino nextBlock;
+
     public NextBlockBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
         subscribe(NextBlockAlert.class);
@@ -13,6 +15,9 @@ public class NextBlockBoard extends ComponentImpl {
     @Override
     public void update() {
         clear();
+        if (nextBlock != null) {
+            nextBlock.update();
+        }
     }
 
     public void alignBlock(Tetromino tetromino) {
@@ -34,6 +39,7 @@ public class NextBlockBoard extends ComponentImpl {
         }
         nextBlock.setParent(this);
         alignBlock(nextBlock);
-        nextBlock.update();
+        this.nextBlock = nextBlock;
+        update();
     }
 }

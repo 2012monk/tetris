@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import tetris.console.Console;
 import tetris.constants.Char;
+import tetris.system.TaskManager;
 
 public class WindowInputListener {
 
@@ -29,7 +30,7 @@ public class WindowInputListener {
         return () -> {
             int input = Console.readBytes();
             Char chr = new Char(input);
-            keyLog(input);
+//            keyLog(input);
             WindowPoolManager.notifyKey(chr);
             if (!isRunning) {
                 timer.cancel();
