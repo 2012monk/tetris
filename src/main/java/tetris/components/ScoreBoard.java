@@ -1,5 +1,7 @@
 package tetris.components;
 
+import tetris.constants.GameStatus;
+import tetris.message.GameStatusMessage;
 import tetris.message.ScoreAlert;
 import tetris.system.Post;
 
@@ -11,6 +13,7 @@ public class ScoreBoard extends TextArea {
     public ScoreBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
         subscribe(ScoreAlert.class);
+        subscribe(GameStatusMessage.class);
         printScore();
     }
 
@@ -26,9 +29,21 @@ public class ScoreBoard extends TextArea {
 
     @Override
     public <T extends Post<?>> void onMessage(T post) {
-        if (!(post instanceof ScoreAlert)) {
+        if (post instanceof ScoreAlert) {
+            updateScore(((ScoreAlert) post).getPayload());
             return;
         }
-        updateScore(((ScoreAlert) post).getPayload());
+        if (post instanceof GameStatusMessage) {
+            GameStatus status = (GameStatus) post.getPayload();
+            if (status == GameStatus.PAUSE || status == GameStatus.RESUME) {
+                return;
+            }
+            initScore();
+        }
+    }
+
+    private void initScore() {
+        this.score = 0;
+        printScore();
     }
 }

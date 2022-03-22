@@ -7,7 +7,7 @@ import static tetris.constants.GameKey.KEY_UP;
 import static tetris.constants.GameStatus.END;
 import static tetris.constants.GameStatus.PAUSE;
 import static tetris.constants.GameStatus.RESTART;
-import static tetris.constants.GameStatus.RUNNING;
+import static tetris.constants.GameStatus.RESUME;
 import static tetris.constants.GameStatus.START;
 
 import java.util.Collections;
@@ -64,6 +64,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
             if (gameStatus == END) {
                 this.status = gameStatus;
             }
+            if (gameStatus == RESUME) {
+                this.status = START;
+            }
         }
     }
 
@@ -71,8 +74,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         if (status == END) {
             initBlock();
         }
-        status = RUNNING;
-        publishMessage(new GameStatusMessage(RUNNING));
+        status = START;
     }
 
     private void pause() {
@@ -88,7 +90,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     private void move(GameKey key) {
-        if (status != RUNNING) {
+        if (status != START) {
             return;
         }
         if (key == KEY_SPACE) {

@@ -3,7 +3,7 @@ package tetris.helper;
 import static tetris.constants.GameStatus.END;
 import static tetris.constants.GameStatus.PAUSE;
 import static tetris.constants.GameStatus.RESTART;
-import static tetris.constants.GameStatus.RUNNING;
+import static tetris.constants.GameStatus.RESUME;
 import static tetris.constants.GameStatus.START;
 
 import java.util.HashMap;
@@ -42,11 +42,14 @@ public class GameKeyListener extends ComponentImpl {
             return;
         }
         this.status = ((GameStatusMessage) post).getPayload();
+        if (status == RESUME) {
+            status = START;
+        }
     }
 
     @Override
     public void handleKey(Char chr) {
-        if (status != RUNNING) {
+        if (status != START) {
             statusOrder(chr);
             return;
         }
@@ -58,6 +61,10 @@ public class GameKeyListener extends ComponentImpl {
     }
 
     private void statusOrder(Char chr) {
+        if (this.status == PAUSE && chr.is(SpecialKeyCode.KEY_SPACE)) {
+            publishMessage(new GameStatusMessage(RESUME));
+            return;
+        }
         if (gameStatusOrder.containsKey(chr)) {
             publishMessage(gameStatusOrder.get(chr));
         }
