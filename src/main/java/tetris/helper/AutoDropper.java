@@ -12,7 +12,7 @@ import tetris.system.Post;
 public class AutoDropper extends ComponentImpl {
 
     private static final int DROP_RATE = 300;
-    private static final Timer timer = new Timer();
+    private static Timer timer;
     private static GameStatus status = GameStatus.END;
 
     public AutoDropper() {
@@ -26,6 +26,7 @@ public class AutoDropper extends ComponentImpl {
 
     private void init() {
         status = GameStatus.RUNNING;
+        timer = new Timer();
         timer.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE);
     }
 

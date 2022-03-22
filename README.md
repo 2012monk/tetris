@@ -46,7 +46,7 @@ tetris implemented with java
 - [x] drop a block at a specified speed
 - [x] move block left, right
 - [x] rotate block
-- [ ] wall kick
+- [x] wall kick
 - [x] collision detection
 - [ ] complete row effect
 - [x] game end condition check
@@ -68,3 +68,4 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - 화면 갱신 순서 sync
 - decoupling
 - 상속구조 리팩터링
+- 재시작 안되는 버그 수정

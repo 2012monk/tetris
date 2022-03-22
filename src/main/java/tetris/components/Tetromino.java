@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import tetris.constants.Color;
+import tetris.constants.GameKey;
 import tetris.constants.Shape;
+import tetris.constants.TetrominoPosition;
+import tetris.repository.PositionRepository;
 import tetris.window.Spatial;
 import tetris.window.SpatialImpl;
 
@@ -20,6 +23,7 @@ public class Tetromino extends ComponentContainer<Point> {
     private final char cell;
     private final int blockSize;
     private final Shape shape;
+    private TetrominoPosition position;
     private boolean initialized = false;
 
     private Tetromino(int x, int y, int blockSize, Color bg, Shape shape) {
@@ -28,22 +32,27 @@ public class Tetromino extends ComponentContainer<Point> {
         this.shape = shape;
         this.blockSize = blockSize;
         this.cell = DEFAULT_CELL;
+        this.position = PositionRepository.getInitialPosition();
     }
 
     private Tetromino(List<Point> points, Color fg, Color bg, Shape shape, int x, int y,
-        int blockSize, char cell, Spatial parent) {
+        int blockSize, char cell, Spatial parent, TetrominoPosition position) {
         super(x, y, blockSize * 2, blockSize, false);
         this.shape = shape;
         this.blockSize = blockSize;
         this.cell = cell;
+        this.position = position;
         setFg(fg);
         setBg(bg);
         setParent(parent);
         points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
 
-    private Tetromino(List<Point> points, Color bg, Shape shape, int x, int y, int blockSize) {
+    private Tetromino(Spatial parent, List<Point> points, Color bg, Shape shape, int x, int y,
+        int blockSize, TetrominoPosition position) {
         this(x, y, blockSize, bg, shape);
+        this.position = position;
+        setParent(parent);
         points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
 
@@ -56,32 +65,41 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     /*
-     * 270 degree rotate x,y => -y, x
-     * TODO 선형변환 로직 분리
+     * 270 degree rotate x,y => -y + centerCorrection, x
      */
-    public void rotate270() {
-        clearPoints().forEach(this::rotate270);
+    public void rotateLeft() {
+        clearPoints().forEach(this::rotateLeft);
+        this.position = position.getLeftPosition();
+    }
+
+    public void printRotateLeft() {
+        rotateLeft();
+        updateInParent();
     }
 
     /**
      * 90 degree rotate
      */
-    public void rotate90() {
-        clearPoints().forEach(this::rotate90);
+    public void rotateRight() {
+        clearPoints().forEach(this::rotateRight);
+        this.position = position.getRightPosition();
     }
 
-    private void rotate270(Point point) {
-        int x = point.getRelativeX();
-        int y = point.getRelativeY();
-        addPoint(blockSize - y - 1, x);
+    public void printRotateRight() {
+        rotateRight();
         updateInParent();
     }
 
-    private void rotate90(Point point) {
-        int x = point.getRelativeX();
-        int y = point.getRelativeY();
-        addPoint(y, blockSize - x - 1);
-        updateInParent();
+    private void rotateLeft(Point point) {
+        int rotatedY = point.getRelativeX();
+        int rotatedX = blockSize - 1 - point.getRelativeY();
+        addPoint(rotatedX, rotatedY);
+    }
+
+    private void rotateRight(Point point) {
+        int rotatedX = point.getRelativeY();
+        int rotatedY = blockSize - 1 - point.getRelativeX();
+        addPoint(rotatedX, rotatedY);
     }
 
     private List<Point> clearPoints() {
@@ -142,7 +160,7 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     private void moveToStartingPoint() {
-        this.x = 1 - components.stream()
+        this.x = -components.stream()
             .mapToInt(SpatialImpl::getRelativeX)
             .max()
             .orElseThrow(NoSuchElementException::new);
@@ -155,14 +173,37 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public Tetromino copy() {
-        return new Tetromino(originalPoints, bg, shape, getRelativeX(), getRelativeY(),
-            blockSize);
+        return new Tetromino(getParent(), originalPoints, bg, shape, getRelativeX(), getRelativeY(),
+            blockSize, position);
     }
 
     public Tetromino getGuideBlock() {
         return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(),
             getRelativeY(),
-            blockSize, GUIDER_CELL, getParent());
+            blockSize, GUIDER_CELL, getParent(), position);
+    }
+
+    @Override
+    public void clear() {
+        this.components.forEach(Point::clear);
+    }
+
+    public void updateInParent() {
+        if (hasParent()) {
+            update();
+        }
+    }
+
+    public int getActualWidth() {
+        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeY).min().orElse(0);
+        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeY).max().orElse(0);
+        return max - min + 1;
+    }
+
+    public int getActualHeight() {
+        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeX).min().orElse(0);
+        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeX).max().orElse(0);
+        return max - min + 1;
     }
 
     public List<Point> points() {
@@ -177,24 +218,17 @@ public class Tetromino extends ComponentContainer<Point> {
         return this.bg;
     }
 
-    @Override
-    public void clear() {
-        this.components.forEach(Point::clear);
+    public Tetromino simulate(GameKey key) {
+        Tetromino copied = copy();
+        key.simulate(copied);
+        return copied;
     }
 
-    public void updateInParent() {
-        if (hasParent()) {
-            update();
-        }
+    public boolean isCollide() {
+        return false;
     }
 
-    public int getBlockSize() {
-        return this.blockSize;
-    }
-
-    public int getActualWidth() {
-        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeY).min().orElse(0);
-        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeY).max().orElse(0);
-        return max - min + 1;
+    public TetrominoPosition getPosition() {
+        return this.position;
     }
 }

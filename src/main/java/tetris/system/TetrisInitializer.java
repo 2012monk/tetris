@@ -1,14 +1,25 @@
 package tetris.system;
 
+import static tetris.constants.TetrominoStatus.INVERSE;
+import static tetris.constants.TetrominoStatus.LEFT;
+import static tetris.constants.TetrominoStatus.RIGHT;
+import static tetris.constants.TetrominoStatus.SPAWN_STATE;
+
+import java.util.Arrays;
+import java.util.List;
 import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
 import tetris.components.TetrisBoard;
 import tetris.components.Tetromino;
 import tetris.constants.Color;
 import tetris.constants.Shape;
+import tetris.constants.TetrominoPosition;
+import tetris.constants.WallKickCorrectionValue;
 import tetris.helper.AutoDropper;
 import tetris.helper.GameKeyListener;
+import tetris.repository.PositionRepository;
 import tetris.repository.TetrominoRepository;
+import tetris.repository.WallKickDataRepository;
 import tetris.window.Window;
 import tetris.window.WindowPoolManager;
 
@@ -52,7 +63,65 @@ public class TetrisInitializer {
         window.addComponent(new AutoDropper());
     }
 
+    private static void initWallKickData() {
+        WallKickDataRepository.addData(SPAWN_STATE, RIGHT,
+            getWallKickData(0, 0, -1, 0, -1, +1, 0, -2, -1, -2));
+        WallKickDataRepository.addData(RIGHT, SPAWN_STATE,
+            getWallKickData(0, 0, +1, 0, +1, -1, 0, +2, +1, +2));
+        WallKickDataRepository.addData(RIGHT, INVERSE,
+            getWallKickData(0, 0, +1, 0, +1, -1, 0, +2, +1, +2));
+        WallKickDataRepository.addData(INVERSE, RIGHT,
+            getWallKickData(0, 0, -1, 0, -1, +1, 0, -2, -1, -2));
+        WallKickDataRepository.addData(INVERSE, LEFT,
+            getWallKickData(0, 0, +1, 0, +1, +1, 0, -2, +1, -2));
+        WallKickDataRepository.addData(LEFT, INVERSE,
+            getWallKickData(0, 0, -1, 0, -1, -1, 0, +2, -1, +2));
+        WallKickDataRepository.addData(LEFT, SPAWN_STATE,
+            getWallKickData(0, 0, -1, 0, -1, -1, 0, +2, -1, +2));
+        WallKickDataRepository.addData(SPAWN_STATE, LEFT,
+            getWallKickData(0, 0, +1, 0, +1, +1, 0, -2, +1, -2));
+
+        WallKickDataRepository.addIData(SPAWN_STATE, RIGHT,
+            getWallKickData(0, 0, -2, 0, +1, 0, -2, -1, +1, +2));
+        WallKickDataRepository.addIData(RIGHT, SPAWN_STATE,
+            getWallKickData(0, 0, +2, 0, -1, 0, +2, +1, -1, -2));
+        WallKickDataRepository.addIData(RIGHT, INVERSE,
+            getWallKickData(0, 0, -1, 0, +2, 0, -1, +2, +2, -1));
+        WallKickDataRepository.addIData(INVERSE, RIGHT,
+            getWallKickData(0, 0, +1, 0, -2, 0, +1, -2, -2, +1));
+        WallKickDataRepository.addIData(INVERSE, LEFT,
+            getWallKickData(0, 0, +2, 0, -1, 0, +2, +1, -1, -2));
+        WallKickDataRepository.addIData(LEFT, INVERSE,
+            getWallKickData(0, 0, -2, 0, +1, 0, -2, -1, +1, +2));
+        WallKickDataRepository.addIData(LEFT, SPAWN_STATE,
+            getWallKickData(0, 0, +1, 0, -2, 0, +1, -2, -2, +1));
+        WallKickDataRepository.addIData(SPAWN_STATE, LEFT,
+            getWallKickData(0, 0, -1, 0, +2, 0, -1, +2, +2, -1));
+
+    }
+
+    public static void initPosition() {
+        TetrominoPosition spawn = new TetrominoPosition(SPAWN_STATE);
+        TetrominoPosition right = new TetrominoPosition(RIGHT);
+        TetrominoPosition left = new TetrominoPosition(LEFT);
+        TetrominoPosition inv = new TetrominoPosition(INVERSE);
+        spawn.setRightPosition(right);
+        spawn.setLeftPosition(left);
+        right.setRightPosition(inv);
+        right.setLeftPosition(spawn);
+        left.setRightPosition(spawn);
+        left.setLeftPosition(inv);
+        inv.setRightPosition(left);
+        inv.setLeftPosition(right);
+        PositionRepository.addPosition(spawn);
+        PositionRepository.addPosition(right);
+        PositionRepository.addPosition(inv);
+        PositionRepository.addPosition(left);
+    }
+
     public static void initTetrominos() {
+        initWallKickData();
+        initPosition();
         Tetromino S = getS();
         Tetromino I = new Tetromino(Color.RED, Shape.I, 4);
         I.addPoint(1, 0);
@@ -101,5 +170,21 @@ public class TetrisInitializer {
         S.addPoint(1, 1);
         S.addPoint(1, 2);
         return S;
+    }
+
+    private static List<WallKickCorrectionValue> getWallKickData(
+        int y1, int x1,
+        int y2, int x2,
+        int y3, int x3,
+        int y4, int x4,
+        int y5, int x5
+    ) {
+        return Arrays.asList(
+            new WallKickCorrectionValue(x1, y1),
+            new WallKickCorrectionValue(x2, y2),
+            new WallKickCorrectionValue(x3, y3),
+            new WallKickCorrectionValue(x4, y4),
+            new WallKickCorrectionValue(x5, y5)
+        );
     }
 }

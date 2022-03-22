@@ -1,5 +1,9 @@
 package tetris.components;
 
+import static tetris.constants.GameKey.KEY_DOWN;
+import static tetris.constants.GameKey.KEY_K;
+import static tetris.constants.GameKey.KEY_SPACE;
+import static tetris.constants.GameKey.KEY_UP;
 import static tetris.constants.GameStatus.END;
 import static tetris.constants.GameStatus.PAUSE;
 import static tetris.constants.GameStatus.RESTART;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 import tetris.console.Console;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
+import tetris.helper.TetrominoController;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
 import tetris.message.NextBlockAlert;
@@ -27,64 +32,75 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private final TetrominoGuider guider;
     private GameStatus status = END;
     private Tetromino currentBlock = null;
+    private TetrominoController controller;
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, false);
         this.emptySpace = EMPTY_SPACE;
         clear();
         this.guider = new TetrominoGuider(this);
+        this.controller = new TetrominoController(this);
         subscribe(GameStatusMessage.class);
         subscribe(GameKeyMessage.class);
     }
 
-    private void initBlock() {
-        this.currentBlock = TetrominoRepository.getNextTetromino();
-        publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
-        this.currentBlock.initBlock(this);
-        if (isCollide(this.currentBlock)) {
-            gameOver();
+    @Override
+    public <T extends Post<?>> void onMessage(T post) {
+        if (post instanceof GameKeyMessage) {
+            move(((GameKeyMessage) post).getPayload());
             return;
         }
-        guider.guideBlock(this.currentBlock);
-        this.currentBlock.update();
+        if (post instanceof GameStatusMessage) {
+            GameStatus gameStatus = ((GameStatusMessage) post).getPayload();
+            if (gameStatus == START) {
+                start();
+            }
+            if (gameStatus == RESTART) {
+                restart();
+            }
+            if (gameStatus == PAUSE) {
+                pause();
+            }
+            if (gameStatus == END) {
+                this.status = gameStatus;
+            }
+        }
     }
 
-    public void drop() {
+    private void start() {
+        if (status == END) {
+            initBlock();
+        }
+        status = RUNNING;
+        publishMessage(new GameStatusMessage(RUNNING));
+    }
+
+    private void pause() {
+        this.status = PAUSE;
+    }
+
+    private void restart() {
+        publishMessage(new GameStatusMessage(END));
+        this.components.clear();
+        this.currentBlock = null;
+        clear();
+        start();
+    }
+
+    private void move(GameKey key) {
         if (status != RUNNING) {
             return;
         }
-        update();
-        if (this.currentBlock == null) {
-            initBlock();
-            return;
-        }
-        dropBlock(this.currentBlock);
-    }
-
-    public void dropBlock(Tetromino block) {
-        if (isCollide(block)) {
-            gameOver();
-            return;
-        }
-        if (isCollide(simulateBlock(block, GameKey.KEY_DOWN))) {
-            stackBlock(block);
-            initBlock();
-            return;
-        }
-        block.printDown();
-        guider.update();
-    }
-
-    public void move(GameKey key) {
-        if (status != RUNNING) {
-            return;
-        }
-        if (key == GameKey.KEY_SPACE) {
+        if (key == KEY_SPACE) {
             hardDrop();
             return;
         }
-        if (key == GameKey.KEY_DOWN) {
+        if (key == KEY_DOWN) {
             drop();
+            return;
+        }
+        if (key == KEY_K || key == KEY_UP) {
+            rotate(key);
             return;
         }
         if (isCollide(simulateBlock(this.currentBlock, key))) {
@@ -95,24 +111,36 @@ public class TetrisBoard extends ComponentContainer<Point> {
         this.guider.guideBlock(currentBlock);
     }
 
+    private void rotate(GameKey key) {
+        update();
+        this.currentBlock = controller.rotateLeft(currentBlock);
+        currentBlock.update();
+        guider.guideBlock(currentBlock);
+    }
+
+    private void drop() {
+        update();
+        if (isCollide(currentBlock)) {
+            gameOver();
+            return;
+        }
+        if (isCollide(simulateBlock(currentBlock, KEY_DOWN))) {
+            stackBlock(currentBlock);
+            initBlock();
+            return;
+        }
+        currentBlock.printDown();
+        guider.update();
+    }
+
     private void hardDrop() {
         stackBlock(guider.getGuideBlock());
         initBlock();
     }
 
-    private void gameOver() {
-        status = END;
-        publishMessage(new GameStatusMessage(END));
-        Console.clearScreen();
-        Console.drawString(Console.getScreenHeight() / 2, Console.getScreenWidth() / 2 - 5,
-            "GAME OVER");
-    }
 
-    public Tetromino simulateBlock(Tetromino block, GameKey key) {
-        Tetromino copied = block.copy();
-        key.move(copied);
-        copied.setParent(this);
-        return copied;
+    private Tetromino simulateBlock(Tetromino block, GameKey key) {
+        return block.simulate(key);
     }
 
     public boolean isCollide(Tetromino block) {
@@ -121,18 +149,18 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .anyMatch(copiedPoint -> this.components.stream()
                 .anyMatch(parentPoint -> parentPoint.isOverlapped(copiedPoint)));
         boolean isInsideParent = block.points().stream()
-            .filter(p -> p.getAbsoluteX() >= getInnerX())
+            .filter(p -> block.getRelativeX() + p.getRelativeX() >= 0)
             .allMatch(Point::isInsideParent);
         return !isInsideParent || isOverlapped;
     }
 
-    public void stackBlock(Tetromino block) {
+    private void stackBlock(Tetromino block) {
         block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
             p.getRelativeY() + block.getRelativeY(), block.getColor())));
         popStack();
     }
 
-    public void popStack() {
+    private void popStack() {
         Map<Integer, List<Point>> lines = this.components.stream()
             .collect(Collectors.groupingBy(Point::getAbsoluteX));
 
@@ -170,46 +198,24 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .collect(Collectors.toList());
     }
 
-    public void pause() {
-        this.status = PAUSE;
+    private void gameOver() {
+        status = END;
+        publishMessage(new GameStatusMessage(END));
+        Console.clearScreen();
+        Console.drawString(Console.getScreenHeight() / 2, Console.getScreenWidth() / 2 - 5,
+            "GAME OVER");
     }
 
-    public void restart() {
-//        publishMessage(new GameStatusMessage(END));
-        this.components.clear();
-        this.currentBlock = null;
-        clear();
-        start();
-    }
-
-    public void start() {
-        if (status == END) {
-            initBlock();
-        }
-        status = RUNNING;
-        publishMessage(new GameStatusMessage(RUNNING));
-    }
-
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameKeyMessage) {
-            move(((GameKeyMessage) post).getPayload());
+    private void initBlock() {
+        this.currentBlock = TetrominoRepository.getNextTetromino();
+        publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
+        this.currentBlock.initBlock(this);
+        if (isCollide(this.currentBlock)) {
+            gameOver();
             return;
         }
-        if (post instanceof GameStatusMessage) {
-            GameStatus gameStatus = ((GameStatusMessage) post).getPayload();
-            if (gameStatus == START) {
-                start();
-            }
-            if (gameStatus == RESTART) {
-                restart();
-            }
-            if (gameStatus == PAUSE) {
-                pause();
-            }
-            if (gameStatus == END) {
-                this.status = gameStatus;
-            }
-        }
+        guider.guideBlock(this.currentBlock);
+        this.currentBlock.update();
     }
+
 }
