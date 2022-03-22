@@ -1,5 +1,8 @@
 package tetris.helper;
 
+import static tetris.constants.GameStatus.END;
+import static tetris.constants.GameStatus.PAUSE;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import tetris.components.ComponentImpl;
@@ -13,7 +16,7 @@ public class AutoDropper extends ComponentImpl {
 
     private static final int DROP_RATE = 300;
     private static Timer timer;
-    private static GameStatus status = GameStatus.END;
+    private static GameStatus status = END;
 
     public AutoDropper() {
         super(0, 0, 0, 0, false);
@@ -22,6 +25,7 @@ public class AutoDropper extends ComponentImpl {
 
     public static void shutDown() {
         timer.cancel();
+        status = END;
     }
 
     private void init() {
@@ -41,7 +45,7 @@ public class AutoDropper extends ComponentImpl {
 
     public Runnable task() {
         return () -> {
-            if (status == GameStatus.END) {
+            if (status != GameStatus.RUNNING) {
                 shutDown();
             }
             publishMessage(new GameKeyMessage(GameKey.KEY_DOWN));
@@ -54,12 +58,15 @@ public class AutoDropper extends ComponentImpl {
             status = ((GameStatusMessage) post).getPayload();
             if (status == GameStatus.START) {
                 init();
+                return;
+            }
+            if (status == END || status == PAUSE) {
+                timer.cancel();
             }
         }
     }
 
     @Override
     public void update() {
-
     }
 }

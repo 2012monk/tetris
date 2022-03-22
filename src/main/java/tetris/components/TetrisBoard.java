@@ -84,7 +84,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         this.components.clear();
         this.currentBlock = null;
         clear();
-        start();
+        publishMessage(new GameStatusMessage(START));
     }
 
     private void move(GameKey key) {
