@@ -68,3 +68,4 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - 화면 갱신 순서 sync
 - decoupling
 - 상속구조 리팩터링
+- UI 로직 분리

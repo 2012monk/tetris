@@ -11,7 +11,7 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
     private static final int DEFAULT_COORDINATE = 0;
 
     public ComponentImpl(int x, int y, int width, int height) {
-        super(x, y, width, height);
+        super(x, y, width, height, false);
     }
 
     public ComponentImpl(int x, int y, int width, int height, boolean borderOn) {

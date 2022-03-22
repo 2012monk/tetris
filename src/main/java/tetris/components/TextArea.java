@@ -7,7 +7,8 @@ import tetris.console.Console;
 public class TextArea extends ComponentImpl {
 
     private static final int EMPTY = 0;
-    private TextAlign textAlign = TextAlign.CENTER;
+    private TextAlign verticalAlign = TextAlign.START;
+    private TextAlign horizontalAlign = TextAlign.CENTER;
     private StringBuilder stringBuilder = new StringBuilder();
 
     public TextArea(int x, int y, int width, int height, boolean borderOn) {
@@ -19,26 +20,35 @@ public class TextArea extends ComponentImpl {
         update();
     }
 
+    protected void setVerticalAlign(TextAlign align) {
+        this.verticalAlign = align;
+    }
+
+    protected void setHorizontalAlign(TextAlign align) {
+        this.horizontalAlign = align;
+    }
+
     private void print() {
         String str = stringBuilder.toString();
-        if (!str.contains("\r") && !str.contains("\n") && str.length() <= getInnerWidth()) {
-            printLine(getVerticalPadding(1), str);
-            return;
-        }
-        List<String> clippedString = clipString(str, getWidth());
+        printClippedString(clipString(str, getInnerWidth()));
+    }
+
+    private void printClippedString(List<String> clippedString) {
         for (int i = 0; i < clippedString.size(); i++) {
-            printLine(i + getVerticalPadding(clippedString.size()), clippedString.get(i));
+            int x = i + getVerticalPadding(i);
+            int y = getHorizontalPadding(clippedString.get(i));
+            printLine(x, y, clippedString.get(i));
         }
     }
 
     private int getVerticalPadding(int number) {
-        if (textAlign == TextAlign.START || number >= getInnerHeight()) {
+        if (verticalAlign == TextAlign.START || number >= getInnerHeight()) {
             return 0;
         }
-        if (textAlign == TextAlign.CENTER) {
+        if (verticalAlign == TextAlign.CENTER) {
             return (getInnerHeight() - number) / 2;
         }
-        if (textAlign == TextAlign.END) {
+        if (verticalAlign == TextAlign.END) {
             return getInnerHeight() - number;
         }
         return 0;
@@ -46,13 +56,13 @@ public class TextArea extends ComponentImpl {
 
     private int getHorizontalPadding(String str) {
         int maxWidth = getInnerWidth();
-        if (textAlign == TextAlign.START || str.length() >= maxWidth) {
+        if (horizontalAlign == TextAlign.START || str.length() >= maxWidth) {
             return 0;
         }
-        if (textAlign == TextAlign.CENTER) {
+        if (horizontalAlign == TextAlign.CENTER) {
             return (maxWidth - str.length()) / 2;
         }
-        if (textAlign == TextAlign.END) {
+        if (horizontalAlign == TextAlign.END) {
             return maxWidth - str.length();
         }
         return 0;
@@ -83,6 +93,19 @@ public class TextArea extends ComponentImpl {
 
     protected void clearString() {
         this.stringBuilder = new StringBuilder();
+    }
+
+    private void printLine(int x, int y, String str) {
+        if (!isInsideBox(x, y, str)) {
+            return;
+        }
+        Console.drawString(x + getInnerX(), y + getInnerY(), str);
+    }
+
+    public boolean isInsideBox(int x, int y, String str) {
+        boolean vertical = x >= 0 && x <= getInnerHeight();
+        boolean horizontal = y >= 0 && y + str.length() <= getInnerWidth();
+        return vertical && horizontal;
     }
 
     private void printLine(int x, String str) {
