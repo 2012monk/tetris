@@ -16,12 +16,18 @@ public class TetrominoController {
     public Tetromino rotateLeft(Tetromino block) {
         Tetromino copied = block.copy();
         copied.rotateLeft();
+        if (board.isCollide(copied)) {
+            return block;
+        }
         return rotate(copied, WallKickDataRepository.getLeftRotateData(block));
     }
 
     public Tetromino rotateRight(Tetromino block) {
         Tetromino copied = block.copy();
         copied.rotateRight();
+        if (board.isCollide(copied)) {
+            return block;
+        }
         return rotate(copied, WallKickDataRepository.getRightRotateData(block));
     }
 
@@ -34,11 +40,5 @@ public class TetrominoController {
             data.reversePosition(copied);
         }
         return rotate(copied, data.next());
-    }
-
-    public void update() {
-//        if (this.block == null) {
-//            return;
-//        }
     }
 }

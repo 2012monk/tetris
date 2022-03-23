@@ -72,4 +72,4 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - 과도한 리소스 사용 수정
 - UI 로직 분리
 - 회전 로직시 깜빡임
-- game end detect 로직 버그 수정
+- ascii key code 크로스 플랫폼 체크
