@@ -166,7 +166,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             .collect(Collectors.groupingBy(Point::getAbsoluteX));
 
         List<Integer> filledLines = getFilledLines(lines);
-        int score = filledLines.size();
+        int lineCount = filledLines.size();
         if (filledLines.isEmpty()) {
             update();
             return;
@@ -182,12 +182,11 @@ public class TetrisBoard extends ComponentContainer<Point> {
                 );
             });
         update();
-        printScore(score);
+        sendPopLineCount(lineCount);
     }
 
-    private void printScore(int score) {
-        int mul = 1000;
-        publishMessage(new ScoreAlert(score * mul));
+    private void sendPopLineCount(int score) {
+        publishMessage(new ScoreAlert(score));
     }
 
     private List<Integer> getFilledLines(Map<Integer, List<Point>> lines) {

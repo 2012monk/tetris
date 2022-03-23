@@ -41,13 +41,24 @@ public class ScoreBoard extends TextArea {
         update();
     }
 
-    private void updateScore(int score) {
-        this.score += score;
+    private void updateScore(int lineCount) {
+        this.score += calculateScore(lineCount);
         printScore();
     }
 
     private void initScore() {
         this.score = 0;
         printScore();
+    }
+
+    private int calculateScore(int lineCount) {
+        int mul = 1000;
+        if (lineCount > 2) {
+            mul += 500;
+        }
+        if (lineCount > 3) {
+            mul += 1000;
+        }
+        return lineCount * mul;
     }
 }
