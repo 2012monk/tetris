@@ -11,20 +11,13 @@ public class ScoreBoard extends TextArea {
     private int score = 0;
 
     public ScoreBoard(int x, int y, int width, int height) {
-        super(x, y, width, height, false);
+        this(x, y, width, height, false);
+    }
+
+    public ScoreBoard(int x, int y, int width, int height, boolean borderOn) {
+        super(x, y, width, height, borderOn);
         subscribe(ScoreAlert.class);
         subscribe(GameStatusMessage.class);
-        printScore();
-    }
-
-    private void printScore() {
-        clearString();
-        writeString(MESSAGE + this.score);
-    }
-
-    private void updateScore(int score) {
-        this.score += score;
-        printScore();
     }
 
     @Override
@@ -40,6 +33,17 @@ public class ScoreBoard extends TextArea {
             }
             initScore();
         }
+    }
+
+    private void printScore() {
+        clearString();
+        writeString(MESSAGE + this.score);
+        update();
+    }
+
+    private void updateScore(int score) {
+        this.score += score;
+        printScore();
     }
 
     private void initScore() {

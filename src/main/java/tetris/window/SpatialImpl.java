@@ -43,9 +43,9 @@ public abstract class SpatialImpl implements Spatial {
     }
 
     private void verifyCoordinate() {
-        if (y < 0 || x < 0) {
+//        if (y < 0 || x < 0) {
 //            throw new IllegalArgumentException(ERR_ILLEGAL_COORDINATE);
-        }
+//        }
     }
 
     // 상대좌표로 이동된 테두리를 포함한 공간이 부모 공간을 침범하지 않는지 테스트
@@ -141,7 +141,6 @@ public abstract class SpatialImpl implements Spatial {
     public void clear() {
         if (!hasParent()) {
             Console.clearArea(this);
-//            Console.clearArea(getInnerX(), getInnerY(), getInnerWidth(), getInnerHeight(), emptySpace, fg, bg);
             return;
         }
         if (borderOn) {

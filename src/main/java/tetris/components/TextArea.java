@@ -17,7 +17,6 @@ public class TextArea extends ComponentImpl {
 
     public void writeString(String str) {
         this.stringBuilder.append(str);
-        update();
     }
 
     protected void setVerticalAlign(TextAlign align) {

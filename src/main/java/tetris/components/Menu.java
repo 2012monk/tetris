@@ -1,5 +1,6 @@
 package tetris.components;
 
+import java.util.NoSuchElementException;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.Color;
@@ -24,7 +25,6 @@ public class Menu extends ComponentContainer<MenuItem> {
 
     @Override
     public void handleKey(Char chr) {
-
         if (chr.is(SpecialKeyCode.KEY_ENTER)) {
             components.get(selected).action();
             return;
@@ -35,7 +35,12 @@ public class Menu extends ComponentContainer<MenuItem> {
         if (chr.is(SpecialKeyCode.KEY_DOWN)) {
             selectNext();
         }
-        update();
+    }
+
+    public MenuItem getItemByName(String name) {
+        return components.stream().filter(m -> m.getName().equals(name))
+            .findAny()
+            .orElseThrow(NoSuchElementException::new);
     }
 
     public void addMenu(String name, Task task) {
@@ -48,20 +53,24 @@ public class Menu extends ComponentContainer<MenuItem> {
             return;
         }
         int x = getInnerX() + (selected * getItemMaxHeight());
-        Console.drawChar(x, getInnerY(), DEFAULT_POINTER, DEFAULT_POINTER_COLOR, bg);
+        int y = getInnerY();
+        if (!isInsideSpace(x, y)) {
+            return;
+        }
+        Console.drawChar(x, y, DEFAULT_POINTER, DEFAULT_POINTER_COLOR, bg);
     }
 
     private void selectNext() {
         this.selected = (this.selected + 1) % components.size();
+        update();
     }
 
     private void selectPrevious() {
-        if (this.selected == 0) {
-            selected = components.size();
-            return;
+        selected = (this.selected - 1) % components.size();
+        if (this.selected < 0) {
+            selected = components.size() - 1;
         }
-        this.selected = (this.selected - 1) % components.size();
-
+        update();
     }
 
     private void align() {

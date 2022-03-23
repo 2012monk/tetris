@@ -26,11 +26,16 @@ public class AutoDropper extends ComponentImpl {
     }
 
     public static void shutDown() {
+        if (timer == null) {
+            return;
+        }
         timer.cancel();
+        timer = null;
         status = END;
     }
 
     private void start() {
+        shutDown();
         status = START;
         timer = new Timer();
         timer.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE);

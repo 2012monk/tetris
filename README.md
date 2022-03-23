@@ -17,14 +17,15 @@ tetris implemented with java
 - [x] next block notification
 - [ ] timer
 - [ ] game over screen
+- [ ] leader board
 
 ## function list
 
 ### menu select
 
--[ ] play
+-[x] play
 -[ ] score board
--[ ] quit
+-[x] quit
 
 ### user input
 
@@ -68,4 +69,7 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - 화면 갱신 순서 sync
 - decoupling
 - 상속구조 리팩터링
+- 과도한 리소스 사용 수정
 - UI 로직 분리
+- 회전 로직시 깜빡임
+- game end detect 로직 버그 수정

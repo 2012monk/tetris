@@ -8,22 +8,28 @@ import tetris.system.TaskManager;
 
 public class WindowInputListener {
 
-    private static final Timer timer = new Timer();
     private static final int DELAY = 0;
     private static final int RATE = 20;
+    private static Timer timer;
     private static boolean isRunning = false;
 
     private WindowInputListener() {
     }
 
     public static void init() {
+        shutDown();
         isRunning = true;
+        timer = new Timer();
         timer.schedule(wrap(task()), DELAY, RATE);
     }
 
     public static void shutDown() {
+        if (timer == null) {
+            return;
+        }
         isRunning = false;
         timer.cancel();
+        timer = null;
     }
 
     private static Runnable task() {
@@ -33,7 +39,7 @@ public class WindowInputListener {
 //            keyLog(input);
             WindowPoolManager.notifyKey(chr);
             if (!isRunning) {
-                timer.cancel();
+                shutDown();
             }
         };
     }

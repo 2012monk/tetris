@@ -168,7 +168,7 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public void alignCenter() {
-        this.y = (parent.getInnerWidth() / 2) - getWidth() / 2;
+        this.y = (parent.getInnerWidth() - getActualWidth()) / 2;
         this.y -= this.y % HORIZONTAL_BASIS;
     }
 
@@ -230,5 +230,9 @@ public class Tetromino extends ComponentContainer<Point> {
 
     public TetrominoPosition getPosition() {
         return this.position;
+    }
+
+    public int getBlockSize() {
+        return blockSize;
     }
 }

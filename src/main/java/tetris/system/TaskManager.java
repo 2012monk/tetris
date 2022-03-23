@@ -47,17 +47,13 @@ public class TaskManager implements Runnable {
         return taskQueue.remove(task);
     }
 
-    private static void task() {
-        if (taskQueue.isEmpty()) {
-            return;
-        }
-        taskQueue.removeFirst().action();
-    }
-
     @Override
     public void run() {
         while (isRunning) {
-            task();
+            if (taskQueue.isEmpty()) {
+                continue;
+            }
+            taskQueue.removeFirst().action();
         }
     }
 }

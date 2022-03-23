@@ -8,7 +8,11 @@ public class NextBlockBoard extends ComponentImpl {
     private Tetromino nextBlock;
 
     public NextBlockBoard(int x, int y, int width, int height) {
-        super(x, y, width, height, false);
+        this(x, y, width, height, false);
+    }
+
+    public NextBlockBoard(int x, int y, int width, int height, boolean borderOn) {
+        super(x, y, width, height, borderOn);
         subscribe(NextBlockAlert.class);
     }
 
@@ -21,8 +25,12 @@ public class NextBlockBoard extends ComponentImpl {
     }
 
     public void alignBlock(Tetromino tetromino) {
-        if (tetromino.getActualWidth() == 2) {
+        tetromino.alignCenter();
+        if (tetromino.getBlockSize() % 2 == 0) {
             tetromino.moveRight();
+        }
+        if (tetromino.getActualHeight() < 3) {
+            tetromino.moveDown();
         }
     }
 

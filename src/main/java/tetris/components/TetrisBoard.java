@@ -35,9 +35,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private TetrominoController controller;
 
     public TetrisBoard(int x, int y, int width, int height) {
-        super(x, y, width, height, false);
+        super(x, y, width, height, true);
         this.emptySpace = EMPTY_SPACE;
-        clear();
         this.guider = new TetrominoGuider(this);
         this.controller = new TetrominoController(this);
         subscribe(GameStatusMessage.class);

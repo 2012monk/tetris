@@ -7,6 +7,7 @@ import static tetris.constants.TetrominoStatus.SPAWN_STATE;
 
 import java.util.Arrays;
 import java.util.List;
+import tetris.components.GameTitle;
 import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
 import tetris.components.TetrisBoard;
@@ -25,39 +26,34 @@ import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
-    private static final int boardSize = 20;
+    private static final int BOARD_SIZE = 20;
     private static int xAlign;
+    private static Window window;
 
     public static void init() {
-        WindowPoolManager.init();
-        xAlign = WindowPoolManager.getScreen().getHeight() / 2 - boardSize / 2;
+        window = WindowPoolManager.addWindow();
+        GameTitle title = new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
+            false);
+        xAlign = GameTitle.getTitleHeight() + 1;
+        window.addComponent(title);
         initTetrominos();
         boardWindow();
         presentWindow();
-        WindowPoolManager.refreshAll();
     }
 
     private static void presentWindow() {
-        int h = 6;
-        int w = 18;
-        int scoreH = 3;
-        int screenWidth = WindowPoolManager.getScreen().getWidth();
-        Window window = new Window(xAlign, screenWidth - screenWidth / 4 - w, w, h);
-        window.addComponent(new ScoreBoard(0, 0, w - 2, scoreH));
-        WindowPoolManager.addWindow(window);
-        window = new Window(xAlign + h, screenWidth - screenWidth / 4 - w, w, h);
+        int w = 16;
+        int scoreH = 5;
+        int boardHeight = 6;
+        int y = (window.getInnerWidth() / 4) * 3 - w / 2;
+        window.addComponent(new ScoreBoard(xAlign, y, w, scoreH, true));
         window.addComponent(
-            new NextBlockBoard(window.getInnerHeight() / 2 - 1, window.getInnerWidth() / 2 - 3, 6,
-                4));
-        WindowPoolManager.addWindow(window);
+            new NextBlockBoard(xAlign + scoreH, y, w, boardHeight, true));
     }
 
     private static void boardWindow() {
-        int centerY = WindowPoolManager.getScreen().getWidth() / 2;
-
-        Window window = new Window(xAlign, centerY - boardSize / 2, boardSize, boardSize);
-        WindowPoolManager.addWindow(window);
-        TetrisBoard board = new TetrisBoard(0, 0, boardSize - 2, boardSize - 2);
+        int y = (window.getInnerWidth() - BOARD_SIZE) / 2;
+        TetrisBoard board = new TetrisBoard(xAlign, y, BOARD_SIZE, BOARD_SIZE);
         window.addComponent(board);
         window.addComponent(new GameKeyListener());
         window.addComponent(new AutoDropper());

@@ -13,6 +13,10 @@ public class MenuItem extends ComponentImpl {
         this.task = task;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void resize(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -22,6 +26,9 @@ public class MenuItem extends ComponentImpl {
 
     @Override
     public void update() {
+        if (!hasParent()) {
+            return;
+        }
         clear();
         Console.drawString(getInnerX(), (getInnerWidth() - name.length()) / 2 + getInnerY(), name);
     }
