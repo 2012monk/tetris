@@ -19,9 +19,9 @@ import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;
 import tetris.message.GameKeyMessage;
+import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
 import tetris.message.NextBlockAlert;
-import tetris.message.ScoreAlert;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MenuSelector;
 import tetris.system.Post;
@@ -30,9 +30,10 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
     private final TetrominoGuider guider;
+    private final GameScore score = new GameScore();
     private GameStatus status = END;
     private Tetromino currentBlock = null;
-    private TetrominoController controller;
+    private final TetrominoController controller;
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, true);
@@ -79,6 +80,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
         if (status == END) {
             initBlock();
         }
+        score.resetScore();
         status = START;
     }
 
@@ -195,8 +197,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
         sendPopLineCount(lineCount);
     }
 
-    private void sendPopLineCount(int score) {
-        publishMessage(new ScoreAlert(score));
+    private void sendPopLineCount(int lineCount) {
+        publishMessage(new GameScoreMessage(this.score.updateScore(lineCount)));
     }
 
     private List<Integer> getFilledLines(Map<Integer, List<Point>> lines) {

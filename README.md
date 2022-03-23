@@ -16,15 +16,15 @@ tetris implemented with java
 - [x] score board
 - [x] next block notification
 - [x] timer
-- [ ] game over screen
-- [ ] leader board
+- [x] game over screen
+- [x] leader board
 
 ## function list
 
 ### menu select
 
 -[x] play
--[ ] score board
+-[x] score board
 -[x] quit
 
 ### user input

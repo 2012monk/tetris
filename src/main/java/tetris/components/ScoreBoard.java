@@ -1,14 +1,13 @@
 package tetris.components;
 
 import tetris.constants.GameStatus;
+import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
-import tetris.message.ScoreAlert;
 import tetris.system.Post;
 
 public class ScoreBoard extends TextArea {
 
     private static final String MESSAGE = "SCORE\n";
-    private int score = 0;
 
     public ScoreBoard(int x, int y, int width, int height) {
         this(x, y, width, height, false);
@@ -16,14 +15,15 @@ public class ScoreBoard extends TextArea {
 
     public ScoreBoard(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
-        subscribe(ScoreAlert.class);
+        subscribe(GameScoreMessage.class);
         subscribe(GameStatusMessage.class);
+        writeString(MESSAGE + 0);
     }
 
     @Override
     public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof ScoreAlert) {
-            updateScore(((ScoreAlert) post).getPayload());
+        if (post instanceof GameScoreMessage) {
+            printScore(((GameScoreMessage) post).getPayload().getScore());
             return;
         }
         if (post instanceof GameStatusMessage) {
@@ -31,34 +31,13 @@ public class ScoreBoard extends TextArea {
             if (status == GameStatus.PAUSE || status == GameStatus.RESUME) {
                 return;
             }
-            initScore();
+            update();
         }
     }
 
-    private void printScore() {
+    private void printScore(int score) {
         clearString();
-        writeString(MESSAGE + this.score);
+        writeString(MESSAGE + score);
         update();
-    }
-
-    private void updateScore(int lineCount) {
-        this.score += calculateScore(lineCount);
-        printScore();
-    }
-
-    private void initScore() {
-        this.score = 0;
-        printScore();
-    }
-
-    private int calculateScore(int lineCount) {
-        int mul = 1000;
-        if (lineCount > 2) {
-            mul += 500;
-        }
-        if (lineCount > 3) {
-            mul += 1000;
-        }
-        return lineCount * mul;
     }
 }

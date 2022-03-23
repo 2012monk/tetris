@@ -3,11 +3,15 @@ package tetris.components;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.SpecialKeyCode;
+import tetris.helper.LeaderBoardManager;
+import tetris.message.GameScoreMessage;
 import tetris.system.MenuSelector;
+import tetris.system.Post;
 
 public class LeaderInputBoard extends ComponentImpl {
 
     private static final String MESSAGE = "Game Over Enter Name";
+    private GameScore currentScore;
     private StringBuilder name = new StringBuilder();
 
 
@@ -17,6 +21,7 @@ public class LeaderInputBoard extends ComponentImpl {
 
     public LeaderInputBoard(int x, int y, int width, int height) {
         super(x, y, width, height, true);
+        subscribe(GameScoreMessage.class);
     }
 
     @Override
@@ -35,9 +40,11 @@ public class LeaderInputBoard extends ComponentImpl {
     }
 
     private void end() {
-        // save high score
-        // back to main menu
-//        WindowPoolManager.shutDown();
+        int score = 0;
+        if (currentScore != null) {
+            score = currentScore.getScore();
+        }
+        LeaderBoardManager.saveScore(name.toString(), score);
         name = new StringBuilder();
         MenuSelector.mainMenu();
     }
@@ -55,6 +62,13 @@ public class LeaderInputBoard extends ComponentImpl {
             name.deleteCharAt(name.length() - 1);
         }
         update();
+    }
+
+    @Override
+    public <T extends Post<?>> void onMessage(T post) {
+        if (post instanceof GameScoreMessage) {
+            currentScore = (GameScore) post.getPayload();
+        }
     }
 
     @Override

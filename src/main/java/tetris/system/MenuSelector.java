@@ -11,11 +11,13 @@ public class MenuSelector {
     private static Window mainMenu;
     private static Window game;
     private static Window nameInputBoard;
+    private static Window leaderboardWindow;
 
     public static void init() {
         mainMenu = MenuInitializer.getMenuWindow();
         game = TetrisInitializer.getGameWindow();
         nameInputBoard = getLeaderBoardInput();
+        leaderboardWindow = MenuInitializer.getLeaderBoardWindow();
         mainMenu();
     }
 
@@ -34,6 +36,10 @@ public class MenuSelector {
 
     public static void quit() {
         WindowPoolManager.shutDown();
+    }
+
+    public static void leaderBoard() {
+        WindowPoolManager.focus(leaderboardWindow);
     }
 
     private static Window getLeaderBoardInput() {
