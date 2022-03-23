@@ -3,11 +3,11 @@ package tetris.message;
 import tetris.components.Tetromino;
 import tetris.system.Post;
 
-public class NextBlockAlert extends Post<Tetromino> {
+public class NextBlockMessage extends Post<Tetromino> {
 
     private static final String NAME = "next block alert";
 
-    public NextBlockAlert(Tetromino payload) {
+    public NextBlockMessage(Tetromino payload) {
         super(NAME, payload);
     }
 }

@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;
+import tetris.message.CurrentBlockMessage;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
-import tetris.message.NextBlockAlert;
+import tetris.message.NextBlockMessage;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MenuSelector;
 import tetris.system.Post;
@@ -31,9 +32,9 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private static final char EMPTY_SPACE = '.';
     private final TetrominoGuider guider;
     private final GameScore score = new GameScore();
+    private final TetrominoController controller;
     private GameStatus status = END;
     private Tetromino currentBlock = null;
-    private final TetrominoController controller;
 
     public TetrisBoard(int x, int y, int width, int height) {
         super(x, y, width, height, true);
@@ -218,7 +219,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
 
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
-        publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
+        publishMessage(new CurrentBlockMessage(currentBlock));
+        publishMessage(new NextBlockMessage(TetrominoRepository.peekNextTetromino()));
         this.currentBlock.initBlock(this);
         guider.guideBlock(this.currentBlock);
         this.currentBlock.update();

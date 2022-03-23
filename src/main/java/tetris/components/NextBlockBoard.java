@@ -1,6 +1,6 @@
 package tetris.components;
 
-import tetris.message.NextBlockAlert;
+import tetris.message.NextBlockMessage;
 import tetris.system.Post;
 
 public class NextBlockBoard extends ComponentImpl {
@@ -13,7 +13,7 @@ public class NextBlockBoard extends ComponentImpl {
 
     public NextBlockBoard(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
-        subscribe(NextBlockAlert.class);
+        subscribe(NextBlockMessage.class);
     }
 
     @Override
@@ -29,14 +29,11 @@ public class NextBlockBoard extends ComponentImpl {
         if (tetromino.getBlockSize() % 2 == 0) {
             tetromino.moveRight();
         }
-        if (tetromino.getActualHeight() < 3) {
-            tetromino.moveDown();
-        }
     }
 
     @Override
     public <T extends Post<?>> void onMessage(T post) {
-        if (!(post instanceof NextBlockAlert)) {
+        if (!(post instanceof NextBlockMessage)) {
             return;
         }
         clear();

@@ -50,7 +50,7 @@ public class HelpMessage extends TextArea {
             .stream()
             .mapToInt(s -> s[0].length())
             .max().orElse(0) / 2;
-        return width - leftAlign;
+        return width - leftAlign + 1;
     }
 
     private int getRightPadding() {
@@ -59,6 +59,6 @@ public class HelpMessage extends TextArea {
             .stream()
             .mapToInt(s -> s[1].length())
             .max().orElse(0) / 2;
-        return width - rightAlign + getInnerWidth() / 2;
+        return width - rightAlign + getInnerWidth() / 2 + 2;
     }
 }
