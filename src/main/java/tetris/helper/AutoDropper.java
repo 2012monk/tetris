@@ -16,7 +16,7 @@ import tetris.system.Post;
 
 public class AutoDropper extends ComponentImpl {
 
-    private static final int DROP_RATE = 300;
+    private static final int DROP_RATE = 450;
     private static Timer timer;
     private static GameStatus status = END;
 

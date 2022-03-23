@@ -49,7 +49,7 @@ public class LeaderBoard extends TextArea {
     private void writeScores() {
         load();
         clearString();
-        writeString(TITLE);
+        printTitle();
         for (int i = 0; i < loadedScore.size(); i++) {
             String line = (i + 1) + ". " + loadedScore.get(i).format();
             writeString(line + "\n");
@@ -57,6 +57,13 @@ public class LeaderBoard extends TextArea {
         if (loadedScore.size() == 0) {
             writeString("Nothing");
         }
+    }
+
+    private void printTitle() {
+        for (int i = 0; i < ((getInnerWidth() - TITLE.length()) / 2); i++) {
+            writeString(" ");
+        }
+        writeString(TITLE + "\n");
     }
 
     static class Score {

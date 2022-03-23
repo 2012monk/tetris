@@ -46,7 +46,7 @@ public class WallKickData {
         return this;
     }
 
-    public void init() {
+    private void init() {
         this.queue.clear();
         this.queue.addAll(values);
     }

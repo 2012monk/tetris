@@ -1,5 +1,7 @@
 package tetris.window;
 
+import tetris.constants.Color;
+
 public interface Spatial {
 
     int getAbsoluteX();
@@ -31,4 +33,8 @@ public interface Spatial {
     void clear();
 
     boolean hasParent();
+
+    Color getFg();
+
+    Color getBg();
 }

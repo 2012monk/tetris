@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import tetris.components.GameClock;
 import tetris.components.GameTitle;
+import tetris.components.HelpMessage;
 import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
 import tetris.components.TetrisBoard;
@@ -53,11 +54,12 @@ public class TetrisInitializer {
         int w = 17;
         int scoreH = 5;
         int boardHeight = 6;
-        int y = (window.getInnerWidth() / 4) * 3 - w / 2;
+        int y = (window.getInnerWidth() - BOARD_SIZE) / 2 + BOARD_SIZE + 2;
         window.addComponent(new ScoreBoard(xAlign, y, w, scoreH, true));
         window.addComponent(
             new NextBlockBoard(xAlign + scoreH, y, w, boardHeight, true));
         window.addComponent(new GameClock(xAlign + scoreH + boardHeight, y, w, 3, true));
+        window.addComponent(new HelpMessage(xAlign, y - (BOARD_SIZE * 2) - 2, 18, 10, true));
     }
 
     private static void boardWindow() {
@@ -68,6 +70,9 @@ public class TetrisInitializer {
         window.addComponent(new AutoDropper());
     }
 
+    /*
+     * Super Rotation System WallKick Data
+     */
     private static void initWallKickData() {
         WallKickDataRepository.addData(SPAWN_STATE, RIGHT,
             getWallKickData(0, 0, -1, 0, -1, +1, 0, -2, -1, -2));
@@ -149,15 +154,15 @@ public class TetrisInitializer {
         O.addPoint(1, 0);
         O.addPoint(1, 1);
         Tetromino L = new Tetromino(Color.WHITE, Shape.L);
-        L.addPoint(0, 0);
         L.addPoint(1, 0);
-        L.addPoint(2, 0);
-        L.addPoint(2, 1);
+        L.addPoint(1, 1);
+        L.addPoint(1, 2);
+        L.addPoint(0, 2);
         Tetromino J = new Tetromino(Color.MAGENTA, Shape.J);
-        J.addPoint(0, 2);
+        J.addPoint(1, 0);
+        J.addPoint(1, 1);
         J.addPoint(1, 2);
-        J.addPoint(2, 2);
-        J.addPoint(2, 1);
+        J.addPoint(0, 0);
 
         TetrominoRepository.addTetromino(I);
         TetrominoRepository.addTetromino(S);

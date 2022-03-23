@@ -183,8 +183,18 @@ public abstract class SpatialImpl implements Spatial {
         this.emptySpace = emptySpace;
     }
 
+    @Override
+    public Color getBg() {
+        return bg;
+    }
+
     public void setBg(Color bg) {
         this.bg = bg;
+    }
+
+    @Override
+    public Color getFg() {
+        return fg;
     }
 
     public void setFg(Color fg) {

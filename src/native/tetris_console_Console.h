@@ -9,8 +9,6 @@ extern "C" {
 #endif
 #undef tetris_console_Console_DEFAULT_CLEAR_UNIT
 #define tetris_console_Console_DEFAULT_CLEAR_UNIT 32L
-#undef tetris_console_Console_DEFAULT_COLOR
-#define tetris_console_Console_DEFAULT_COLOR -1L
 /*
  * Class:     tetris_console_Console
  * Method:    setColorPair

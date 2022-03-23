@@ -19,12 +19,13 @@ public class TextArea extends ComponentImpl {
         this.stringBuilder.append(str);
     }
 
-    protected void setVerticalAlign(TextAlign align) {
-        this.verticalAlign = align;
-    }
-
-    protected void setHorizontalAlign(TextAlign align) {
-        this.horizontalAlign = align;
+    @Override
+    public void update() {
+        if (!hasParent() || stringBuilder.length() == EMPTY) {
+            return;
+        }
+        clear();
+        print();
     }
 
     private void print() {
@@ -34,45 +35,18 @@ public class TextArea extends ComponentImpl {
 
     private void printClippedString(List<String> clippedString) {
         for (int i = 0; i < clippedString.size(); i++) {
-            int x = i + getVerticalPadding(i);
+            int x = i + getVerticalPadding(clippedString.size());
             int y = getHorizontalPadding(clippedString.get(i));
             printLine(x, y, clippedString.get(i));
         }
     }
 
-    private int getVerticalPadding(int number) {
-        if (verticalAlign == TextAlign.START || number >= getInnerHeight()) {
-            return 0;
-        }
-        if (verticalAlign == TextAlign.CENTER) {
-            return (getInnerHeight() - number) / 2;
-        }
-        if (verticalAlign == TextAlign.END) {
-            return getInnerHeight() - number;
-        }
-        return 0;
-    }
-
-    private int getHorizontalPadding(String str) {
-        int maxWidth = getInnerWidth();
-        if (horizontalAlign == TextAlign.START || str.length() >= maxWidth) {
-            return 0;
-        }
-        if (horizontalAlign == TextAlign.CENTER) {
-            return (maxWidth - str.length()) / 2;
-        }
-        if (horizontalAlign == TextAlign.END) {
-            return maxWidth - str.length();
-        }
-        return 0;
-    }
 
     private List<String> clipString(String str, int maxLength) {
         List<String> listString = new ArrayList<>();
-
         String[] brokeString = str.replaceAll("\r", "").split("\n");
         for (String s : brokeString) {
-            if (s.length() <= maxLength) {
+            if (s.length() < maxLength) {
                 listString.add(s);
                 continue;
             }
@@ -83,8 +57,8 @@ public class TextArea extends ComponentImpl {
 
     private List<String> splitByLength(String str, int maxLength) {
         List<String> result = new ArrayList<>();
-        for (int i = 0; i < str.length(); i += maxLength) {
-            result.add(str.substring(i, maxLength));
+        for (int i = 0; i < str.length() - maxLength - 1; i += maxLength) {
+            result.add(str.substring(i, i + maxLength));
         }
         return result;
     }
@@ -102,31 +76,45 @@ public class TextArea extends ComponentImpl {
     }
 
     public boolean isInsideBox(int x, int y, String str) {
-        boolean vertical = x >= 0 && x <= getInnerHeight();
-        boolean horizontal = y >= 0 && y + str.length() <= getInnerWidth();
-        return vertical && horizontal;
+        return true;
+//        return isInsideSpace(x, y) && isInsideSpace(x, y + str.length() - 1);
     }
 
-    private void printLine(int x, String str) {
-        if (x > getInnerHeight()) {
-            return;
+    private int getVerticalPadding(int number) {
+        if (verticalAlign == TextAlign.START || number >= getInnerHeight()) {
+            return 0;
         }
-        int startX = x + getInnerX();
-        int startY = getHorizontalPadding(str) + getInnerY();
-        if (str.length() > getInnerWidth()) {
-            str = str.substring(0, getInnerWidth());
+        if (verticalAlign == TextAlign.CENTER) {
+            return Math.max(0, (getInnerHeight() - number) / 2);
         }
-        Console.drawString(startX, startY, str);
+        if (verticalAlign == TextAlign.END) {
+            return Math.max(0, (getInnerHeight() - number));
+        }
+        return 0;
     }
 
-    @Override
-    public void update() {
-        if (!hasParent() || stringBuilder.length() == EMPTY) {
-            return;
+    private int getHorizontalPadding(String str) {
+        int maxWidth = getInnerWidth();
+        if (horizontalAlign == TextAlign.START || str.length() >= maxWidth) {
+            return 0;
         }
-        clear();
-        print();
+        if (horizontalAlign == TextAlign.CENTER) {
+            return Math.max(0, (maxWidth - str.length()) / 2);
+        }
+        if (horizontalAlign == TextAlign.END) {
+            return Math.max(0, maxWidth - str.length());
+        }
+        return 0;
     }
+
+    protected void setVerticalAlign(TextAlign align) {
+        this.verticalAlign = align;
+    }
+
+    protected void setHorizontalAlign(TextAlign align) {
+        this.horizontalAlign = align;
+    }
+
 
     public enum TextAlign {
         START, END, CENTER

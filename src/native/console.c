@@ -83,6 +83,7 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject ob
     use_default_colors();
     start_color();
   }
+  attron(A_BOLD);
   clear();
   refresh();
 }
@@ -109,8 +110,10 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar (JNIEnv *env, jclass
 
 JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jclass clazz, jint x, jint y, jstring str, jint fg, jint bg) {
   const char *cString = (*env)->GetStringUTFChars(env, str, NULL);
+  int n = setColorPair(fg, bg);
   mvaddstr(x, y, cString);
   (*env)->ReleaseStringUTFChars(env, str, cString);
+  unsetColorPair(n);
   endDraw();
 }
 

@@ -28,10 +28,9 @@ public class ScoreBoard extends TextArea {
         }
         if (post instanceof GameStatusMessage) {
             GameStatus status = (GameStatus) post.getPayload();
-            if (status == GameStatus.PAUSE || status == GameStatus.RESUME) {
-                return;
+            if (status == GameStatus.START) {
+                update();
             }
-            update();
         }
     }
 

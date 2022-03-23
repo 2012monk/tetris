@@ -58,6 +58,7 @@ public class MenuInitializer {
         }
         int x = GameTitle.getTitleHeight();
         int y = (leaderBoardWindow.getInnerWidth() - w) / 2;
+        leaderBoardWindow.addComponent(getTitleBoard());
         leaderBoardWindow.addComponent(new LeaderBoard(x, y, w, h, true));
     }
 

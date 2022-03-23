@@ -2,6 +2,7 @@ package tetris.components;
 
 import tetris.console.Console;
 import tetris.constants.Char;
+import tetris.constants.Color;
 import tetris.constants.SpecialKeyCode;
 import tetris.helper.LeaderBoardManager;
 import tetris.message.GameScoreMessage;
@@ -10,7 +11,10 @@ import tetris.system.Post;
 
 public class LeaderInputBoard extends ComponentImpl {
 
-    private static final String MESSAGE = "Game Over Enter Name";
+    private static final String GAME_OVER_MESSAGE = "GAME OVER";
+    private static final String HELP_MESSAGE = "Enter your name";
+
+    private static final Color GAME_OVER_COLOR = Color.MAGENTA;
     private GameScore currentScore;
     private StringBuilder name = new StringBuilder();
 
@@ -46,7 +50,7 @@ public class LeaderInputBoard extends ComponentImpl {
         }
         LeaderBoardManager.saveScore(name.toString(), score);
         name = new StringBuilder();
-        MenuSelector.mainMenu();
+        MenuSelector.leaderBoard();
     }
 
     private void insert(char chr) {
@@ -76,9 +80,10 @@ public class LeaderInputBoard extends ComponentImpl {
         if (!hasParent()) {
             return;
         }
-
         clear();
-        Console.drawString(getInnerX(), getStartY(MESSAGE), MESSAGE);
+        Console.drawString(getInnerX(), getStartY(GAME_OVER_MESSAGE), GAME_OVER_MESSAGE,
+            GAME_OVER_COLOR, getBg());
+        Console.drawString(getInnerX() + 1, getStartY(HELP_MESSAGE), HELP_MESSAGE);
         if (name.length() > 0) {
             Console.drawString(getPointerX(), getStartY(name.toString()), name.toString());
         }
@@ -94,6 +99,6 @@ public class LeaderInputBoard extends ComponentImpl {
     }
 
     private int getPointerX() {
-        return getInnerX() + 1;
+        return getInnerX() + 2;
     }
 }

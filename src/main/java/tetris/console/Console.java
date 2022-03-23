@@ -10,8 +10,9 @@ public class Console {
 
     private static final String LIBRARY_NAME = "libConsole";
     private static final String ERR_NO_LIBRARY = "no library";
+    private static final Color DEFAULT_FG = Color.WHITE;
+    private static final Color DEFAULT_BG = Color.BLACK;
     private static final char DEFAULT_CLEAR_UNIT = ' ';
-    private static final int DEFAULT_COLOR = -1;
 
     public static String getLibraryPath() {
         try {
@@ -32,22 +33,14 @@ public class Console {
 
     public static void drawBorder(Spatial space) {
         drawBorder(space.getAbsoluteX(), space.getAbsoluteY(), space.getWidth(), space.getHeight(),
-            DEFAULT_COLOR, DEFAULT_COLOR
+            space.getFg().getNumber(), space.getBg().getNumber()
         );
-    }
-
-    public static void drawBorder(int x, int y, int width, int height) {
-        drawBorder(x, y, width, height, DEFAULT_COLOR, DEFAULT_COLOR);
     }
 
     public static void clearArea(Spatial space) {
         clearArea(space.getInnerX(), space.getInnerY(),
             space.getInnerWidth(), space.getInnerHeight(), DEFAULT_CLEAR_UNIT,
-            DEFAULT_COLOR, DEFAULT_COLOR);
-    }
-
-    public static void clearArea(int x, int y, int width, int height) {
-        clearArea(x, y, width, height, DEFAULT_CLEAR_UNIT, DEFAULT_COLOR, DEFAULT_COLOR);
+            space.getFg(), space.getBg());
     }
 
     public static void clearArea(int x, int y, int width, int height, char chr, Color fg,
@@ -72,11 +65,15 @@ public class Console {
     }
 
     public static void drawChar(int x, int y, char chr) {
-        drawChar(x, y, chr, DEFAULT_COLOR, DEFAULT_COLOR);
+        drawChar(x, y, chr, DEFAULT_FG, DEFAULT_BG);
     }
 
     public static void drawString(int x, int y, String text) {
-        drawString(x, y, text, DEFAULT_COLOR, DEFAULT_COLOR);
+        drawString(x, y, text, DEFAULT_FG.getNumber(), DEFAULT_BG.getNumber());
+    }
+
+    public static void drawString(int x, int y, String str, Color fg, Color bg) {
+        drawString(x, y, str, fg.getNumber(), bg.getNumber());
     }
 
     public static void initConsole() {
