@@ -43,7 +43,7 @@ public class Menu extends ComponentContainer<MenuItem> {
             .orElseThrow(NoSuchElementException::new);
     }
 
-    public void addMenu(String name, Task task) {
+    public void addMenuItem(String name, Task task) {
         addComponent(new MenuItem(name, task));
         align();
     }

@@ -20,24 +20,18 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
+//        windowPool.forEach(ComponentContainer::update);
         windowPool.forEach(w -> TaskManager.addTask(() -> {
             Console.startDraw();
             w.update();
             Console.endDraw();
         }));
-//        windowPool.forEach(Window::update);
-//        Console.endDraw();
-    }
-
-    public static void addWindow(int x, int y, int width, int height) {
-        windowPool.push(new Window(x, y, width, height, getScreen()));
-//        refreshAll();
     }
 
     public static void addWindow(Window window) {
+        windowPool.removeIf(w -> w.equals(window));
         windowPool.addFirst(window);
         window.setParent(getScreen());
-//        refreshAll();
     }
 
     public static Window addWindow() {
@@ -66,7 +60,7 @@ public class WindowPoolManager {
         if (windowPool.isEmpty()) {
             return;
         }
-        windowPool.getLast().handleKey(chr);
+        getFocusedWindow().handleKey(chr);
     }
 
     public static void unFocus(Window window) {
@@ -81,6 +75,7 @@ public class WindowPoolManager {
         if (!getFocusedWindow().equals(window)) {
             addFocusedWindow(window);
         }
+        window.update();
     }
 
     private static void addFocusedWindow(Window window) {

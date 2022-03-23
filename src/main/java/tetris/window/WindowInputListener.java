@@ -4,7 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import tetris.console.Console;
 import tetris.constants.Char;
-import tetris.system.TaskManager;
 
 public class WindowInputListener {
 
@@ -12,6 +11,7 @@ public class WindowInputListener {
     private static final int RATE = 20;
     private static Timer timer;
     private static boolean isRunning = false;
+    private static Spatial keyLogSpace;
 
     private WindowInputListener() {
     }
@@ -36,6 +36,9 @@ public class WindowInputListener {
         return () -> {
             int input = Console.readBytes();
             Char chr = new Char(input);
+            if (input < 0) {
+                return;
+            }
 //            keyLog(input);
             WindowPoolManager.notifyKey(chr);
             if (!isRunning) {
@@ -54,12 +57,16 @@ public class WindowInputListener {
     }
 
     private static void keyLog(int key) {
-        TaskManager.addTask(() -> {
-            Console.clearLine(50);
-            Console.clearLine(51);
-            Console.drawString(50, Console.getScreenWidth() - 10, String.valueOf((char) key));
-            Console.drawString(51, Console.getScreenWidth() - 10, String.valueOf(key));
-        });
+        getSpace().clear();
+        Console.drawString(50, Console.getScreenWidth() - 10, String.valueOf((char) key));
+        Console.drawString(51, Console.getScreenWidth() - 10, String.valueOf(key));
+    }
+
+    private static Spatial getSpace() {
+        if (keyLogSpace == null) {
+            keyLogSpace = new Space(50, Console.getScreenWidth() - 10, 5, 2, false);
+        }
+        return keyLogSpace;
     }
 
     public boolean isRunning() {

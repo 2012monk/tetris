@@ -15,8 +15,8 @@ import tetris.constants.GameStatus;
 import tetris.constants.SpecialKeyCode;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
+import tetris.system.MenuSelector;
 import tetris.system.Post;
-import tetris.window.WindowPoolManager;
 
 public class GameKeyListener extends ComponentImpl {
 
@@ -26,6 +26,7 @@ public class GameKeyListener extends ComponentImpl {
     public GameKeyListener() {
         super(0, 0, 0, 0, false);
         gameStatusOrder.put(new Char('q'), new GameStatusMessage(END));
+        gameStatusOrder.put(new Char(SpecialKeyCode.KEY_ESC), new GameStatusMessage(END));
         gameStatusOrder.put(new Char(SpecialKeyCode.KEY_SPACE), new GameStatusMessage(START));
         gameStatusOrder.put(new Char('p'), new GameStatusMessage(PAUSE));
         gameStatusOrder.put(new Char('s'), new GameStatusMessage(START));
@@ -66,11 +67,11 @@ public class GameKeyListener extends ComponentImpl {
             publishMessage(new GameStatusMessage(RESUME));
             return;
         }
+        if (status == END) {
+            MenuSelector.mainMenu();
+        }
         if (gameStatusOrder.containsKey(chr)) {
             publishMessage(gameStatusOrder.get(chr));
-        }
-        if (status == END) {
-            WindowPoolManager.shutDown();
         }
     }
 }

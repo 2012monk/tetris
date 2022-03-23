@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import tetris.console.Console;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;
@@ -24,6 +23,7 @@ import tetris.message.GameStatusMessage;
 import tetris.message.NextBlockAlert;
 import tetris.message.ScoreAlert;
 import tetris.repository.TetrominoRepository;
+import tetris.system.MenuSelector;
 import tetris.system.Post;
 
 public class TetrisBoard extends ComponentContainer<Point> {
@@ -61,7 +61,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
                 pause();
             }
             if (gameStatus == END) {
-                this.status = gameStatus;
+                endGame();
             }
             if (gameStatus == RESUME) {
                 this.status = START;
@@ -69,11 +69,21 @@ public class TetrisBoard extends ComponentContainer<Point> {
         }
     }
 
+    private void endGame() {
+        clearBoard();
+        this.currentBlock = null;
+        this.status = END;
+    }
+
     private void start() {
         if (status == END) {
             initBlock();
         }
         status = START;
+    }
+
+    private void clearBoard() {
+        components.clear();
     }
 
     private void pause() {
@@ -171,7 +181,7 @@ public class TetrisBoard extends ComponentContainer<Point> {
             update();
             return;
         }
-        this.components.clear();
+        clearBoard();
         lines.entrySet().stream()
             .filter(e -> !filledLines.contains(e.getKey()))
             .forEach(e -> {
@@ -201,19 +211,13 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private void gameOver() {
         status = END;
         publishMessage(new GameStatusMessage(END));
-        Console.clearScreen();
-        Console.drawString(Console.getScreenHeight() / 2, Console.getScreenWidth() / 2 - 5,
-            "GAME OVER");
+        MenuSelector.leaderBoardInput();
     }
 
     private void initBlock() {
         this.currentBlock = TetrominoRepository.getNextTetromino();
         publishMessage(new NextBlockAlert(TetrominoRepository.peekNextTetromino()));
         this.currentBlock.initBlock(this);
-        if (isCollide(this.currentBlock)) {
-            gameOver();
-            return;
-        }
         guider.guideBlock(this.currentBlock);
         this.currentBlock.update();
     }

@@ -13,7 +13,7 @@ import tetris.system.TaskManager;
 public class GameClock extends ComponentImpl {
 
     private ScheduledExecutorService service;
-    private int tick = 1;
+    private int tick = 0;
 
     public GameClock(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);

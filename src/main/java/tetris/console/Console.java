@@ -115,5 +115,4 @@ public class Console {
     public static native void shutdown();
 
     public static native void refresh();
-
 }

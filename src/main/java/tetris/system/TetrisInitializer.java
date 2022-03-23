@@ -31,7 +31,14 @@ public class TetrisInitializer {
     private static int xAlign;
     private static Window window;
 
-    public static void init() {
+    public static Window getGameWindow() {
+        if (window == null) {
+            init();
+        }
+        return window;
+    }
+
+    private static void init() {
         window = WindowPoolManager.addWindow();
         GameTitle title = new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
             false);

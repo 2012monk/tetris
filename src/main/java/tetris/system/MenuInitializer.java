@@ -2,8 +2,6 @@ package tetris.system;
 
 import tetris.components.GameTitle;
 import tetris.components.Menu;
-import tetris.constants.GameStatus;
-import tetris.message.GameStatusMessage;
 import tetris.window.Window;
 import tetris.window.WindowPoolManager;
 
@@ -11,7 +9,14 @@ public class MenuInitializer {
 
     private static Window window;
 
-    public static void init() {
+    public static Window getMenuWindow() {
+        if (window == null) {
+            init();
+        }
+        return window;
+    }
+
+    private static void init() {
         getWindow().addComponent(getTitleBoard());
         getWindow().addComponent(getMenu());
     }
@@ -22,13 +27,9 @@ public class MenuInitializer {
         int x = GameTitle.getTitleHeight() + 1;
         int y = (window.getInnerWidth() - w) / 2;
         Menu menu = new Menu(x, y, w, h);
-        menu.addMenu("start", () -> {
-            MessageBroker.publish(new GameStatusMessage(GameStatus.START));
-            WindowPoolManager.unFocus(window);
-        });
-        menu.addMenu("leader board", () -> {
-        });
-        menu.addMenu("quit", WindowPoolManager::shutDown);
+        menu.addMenuItem("start", MenuSelector::gameStart);
+        menu.addMenuItem("leader board", MenuSelector::leaderBoardInput);
+        menu.addMenuItem("quit", MenuSelector::quit);
         return menu;
     }
 

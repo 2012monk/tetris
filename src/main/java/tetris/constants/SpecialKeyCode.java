@@ -12,7 +12,8 @@ public enum SpecialKeyCode {
     KEY_UP(259),
     KEY_SPACE(32),
     KEY_ESC(27),
-    KEY_ENTER(10);
+    KEY_ENTER(10),
+    KEY_BACK_SPACE(127);
 
     private static final Map<Integer, SpecialKeyCode> codes;
 
