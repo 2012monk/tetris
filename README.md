@@ -15,7 +15,7 @@ tetris implemented with java
 - [x] game board
 - [x] score board
 - [x] next block notification
-- [ ] timer
+- [x] timer
 - [ ] game over screen
 - [ ] leader board
 

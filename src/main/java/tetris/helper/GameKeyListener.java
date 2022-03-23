@@ -16,6 +16,7 @@ import tetris.constants.SpecialKeyCode;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
 import tetris.system.Post;
+import tetris.window.WindowPoolManager;
 
 public class GameKeyListener extends ComponentImpl {
 
@@ -67,6 +68,9 @@ public class GameKeyListener extends ComponentImpl {
         }
         if (gameStatusOrder.containsKey(chr)) {
             publishMessage(gameStatusOrder.get(chr));
+        }
+        if (status == END) {
+            WindowPoolManager.shutDown();
         }
     }
 }

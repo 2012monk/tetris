@@ -7,6 +7,7 @@ import static tetris.constants.TetrominoStatus.SPAWN_STATE;
 
 import java.util.Arrays;
 import java.util.List;
+import tetris.components.GameClock;
 import tetris.components.GameTitle;
 import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
@@ -42,13 +43,14 @@ public class TetrisInitializer {
     }
 
     private static void presentWindow() {
-        int w = 16;
+        int w = 17;
         int scoreH = 5;
         int boardHeight = 6;
         int y = (window.getInnerWidth() / 4) * 3 - w / 2;
         window.addComponent(new ScoreBoard(xAlign, y, w, scoreH, true));
         window.addComponent(
             new NextBlockBoard(xAlign + scoreH, y, w, boardHeight, true));
+        window.addComponent(new GameClock(xAlign + scoreH + boardHeight, y, w, 3, true));
     }
 
     private static void boardWindow() {

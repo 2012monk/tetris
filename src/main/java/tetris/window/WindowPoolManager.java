@@ -63,10 +63,6 @@ public class WindowPoolManager {
     }
 
     public static void notifyKey(Char chr) {
-        if (chr.is('q')) {
-            shutDown();
-            return;
-        }
         if (windowPool.isEmpty()) {
             return;
         }
