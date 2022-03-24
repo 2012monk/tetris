@@ -9,8 +9,8 @@ import tetris.console.Console;
 import tetris.constants.Color;
 import tetris.constants.Shape;
 import tetris.message.CurrentBlockMessage;
+import tetris.message.Post;
 import tetris.repository.TetrominoRepository;
-import tetris.system.Post;
 
 public class BlockCounter extends ComponentImpl {
 

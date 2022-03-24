@@ -18,6 +18,7 @@ tetris implemented with java
 - [x] timer
 - [x] game over screen
 - [x] leader board
+- [x] block counter
 
 ## function list
 
@@ -64,11 +65,10 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 
 ## TODO
 
-- 키 입력시 escape 코드 출력되는 버그 수정
+- 화면 갱신 작업 단위
 - 화면이 가끔씩 밀려서 갱신되는 버그 수정
 - decoupling
 - 상속구조 리팩터링
-- 과도한 리소스 사용 수정
 - UI 로직 분리
 - ascii key code 크로스 플랫폼 체크
-- 재시작시 업데이트 버그 수정
+- 블록이 쌓이기 전 가이드와 겹치는 이슈

@@ -2,17 +2,18 @@ package tetris.system;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import tetris.console.Console;
 import tetris.window.Task;
 
 public class TaskManager implements Runnable {
 
+    private static final long DEFAULT_TIMEOUT = 2000;
     private static final BlockingDeque<Task> taskQueue = new LinkedBlockingDeque<>();
     private static TaskManager instance;
     private static Thread thread;
     private static boolean isRunning;
 
     private TaskManager() {
-
     }
 
     public static TaskManager getInstance() {
@@ -39,8 +40,9 @@ public class TaskManager implements Runnable {
         }
     }
 
-    public static synchronized void addTask(Task task) {
+    public static void addTask(Task task) {
         taskQueue.add(task);
+        thread.interrupt();
     }
 
     public static boolean removeTask(Task task) {
@@ -51,9 +53,15 @@ public class TaskManager implements Runnable {
     public void run() {
         while (isRunning) {
             if (taskQueue.isEmpty()) {
+                try {
+                    Thread.sleep(DEFAULT_TIMEOUT);
+                } catch (InterruptedException ignore) {
+                }
                 continue;
             }
+            Console.startDraw();
             taskQueue.removeFirst().action();
+            Console.endDraw();
         }
     }
 }

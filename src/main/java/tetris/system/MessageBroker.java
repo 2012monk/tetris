@@ -7,11 +7,13 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.components.Component;
+import tetris.message.Post;
 
 public class MessageBroker implements Runnable {
 
     private static final Map<Class<? extends Post<?>>, List<Component>> subscribers = new ConcurrentHashMap<>();
     private static final BlockingDeque<Post<?>> messageQueue = new LinkedBlockingDeque<>();
+    private static final long DEFAULT_TIMEOUT = 5000;
     private static MessageBroker instance;
     private static Thread thread;
     private static boolean isRunning;
@@ -21,6 +23,7 @@ public class MessageBroker implements Runnable {
 
     public static void publish(Post<?> post) {
         messageQueue.add(post);
+        thread.interrupt();
     }
 
     public static void subscribe(Class<? extends Post<?>> post, Component subscriber) {
@@ -56,7 +59,7 @@ public class MessageBroker implements Runnable {
     public static synchronized void shutDown() {
         isRunning = false;
         messageQueue.clear();
-        if (thread != null) {
+        if (thread != null && thread.isAlive()) {
             thread.interrupt();
             thread = null;
         }
@@ -66,6 +69,10 @@ public class MessageBroker implements Runnable {
     public void run() {
         while (isRunning) {
             if (messageQueue.isEmpty()) {
+                try {
+                    Thread.sleep(DEFAULT_TIMEOUT);
+                } catch (InterruptedException ignore) {
+                }
                 continue;
             }
             sendMessage(messageQueue.removeFirst());

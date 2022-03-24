@@ -1,15 +1,18 @@
 package tetris.window;
 
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import tetris.console.Console;
 import tetris.constants.Char;
 
 public class WindowInputListener {
 
-    private static final int DELAY = 0;
-    private static final int RATE = 20;
-    private static Timer timer;
+    private static final long DELAY = 0;
+    private static final long RATE = 10;
+    private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
+    private static ScheduledExecutorService service;
     private static boolean isRunning = false;
     private static Spatial keyLogSpace;
 
@@ -19,17 +22,17 @@ public class WindowInputListener {
     public static void init() {
         shutDown();
         isRunning = true;
-        timer = new Timer();
-        timer.schedule(wrap(task()), DELAY, RATE);
+        service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(wrap(task()), DELAY, RATE, TIME_UNIT);
     }
 
     public static void shutDown() {
-        if (timer == null) {
+        if (service == null) {
             return;
         }
         isRunning = false;
-        timer.cancel();
-        timer = null;
+        service.shutdown();
+        service = null;
     }
 
     private static Runnable task() {
@@ -39,7 +42,6 @@ public class WindowInputListener {
             if (input < 0) {
                 return;
             }
-//            keyLog(input);
             WindowPoolManager.notifyKey(chr);
             if (!isRunning) {
                 shutDown();
@@ -57,9 +59,10 @@ public class WindowInputListener {
     }
 
     private static void keyLog(int key) {
-        getSpace().clear();
-        Console.drawString(50, Console.getScreenWidth() - 10, String.valueOf((char) key));
-        Console.drawString(51, Console.getScreenWidth() - 10, String.valueOf(key));
+        Console.drawString(Console.getScreenHeight() - 2, Console.getScreenWidth() - 10,
+            String.valueOf((char) key));
+        Console.drawString(Console.getScreenHeight() - 1, Console.getScreenWidth() - 10,
+            String.valueOf(key));
     }
 
     private static Spatial getSpace() {

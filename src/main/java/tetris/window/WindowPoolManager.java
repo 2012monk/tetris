@@ -3,7 +3,6 @@ package tetris.window;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.console.Console;
 import tetris.constants.Char;
-import tetris.helper.AutoDropper;
 import tetris.system.MessageBroker;
 import tetris.system.TaskManager;
 
@@ -20,12 +19,7 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
-//        windowPool.forEach(ComponentContainer::update);
-        windowPool.forEach(w -> TaskManager.addTask(() -> {
-            Console.startDraw();
-            w.update();
-            Console.endDraw();
-        }));
+        windowPool.forEach(w -> TaskManager.addTask(w::update));
     }
 
     public static void addWindow(Window window) {
@@ -50,9 +44,8 @@ public class WindowPoolManager {
 
     public synchronized static void shutDown() {
         WindowInputListener.shutDown();
-        MessageBroker.shutDown();
         TaskManager.shutDown();
-        AutoDropper.shutDown();
+        MessageBroker.shutDown();
         Console.shutdown();
     }
 
@@ -60,7 +53,7 @@ public class WindowPoolManager {
         if (windowPool.isEmpty()) {
             return;
         }
-        getFocusedWindow().handleKey(chr);
+        TaskManager.addTask(() -> getFocusedWindow().handleKey(chr));
     }
 
     public static void unFocus(Window window) {

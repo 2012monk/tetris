@@ -3,7 +3,7 @@ package tetris.components;
 import tetris.constants.GameStatus;
 import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
-import tetris.system.Post;
+import tetris.message.Post;
 
 public class ScoreBoard extends TextArea {
 

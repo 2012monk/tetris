@@ -33,8 +33,6 @@ public class LeaderBoard extends TextArea {
     private void load() {
         loadedScore.clear();
         LeaderBoardManager.loadScores()
-            .stream()
-            .filter(s -> s.contains(":"))
             .forEach(this::addScore);
         loadedScore.sort(Comparator.comparingInt(s -> -s.score));
     }
@@ -50,7 +48,7 @@ public class LeaderBoard extends TextArea {
         load();
         clearString();
         printTitle();
-        for (int i = 0; i < loadedScore.size(); i++) {
+        for (int i = 0; i < Math.min(10, loadedScore.size()); i++) {
             String line = (i + 1) + ". " + loadedScore.get(i).format();
             writeString(line + "\n");
         }
@@ -60,7 +58,8 @@ public class LeaderBoard extends TextArea {
     }
 
     private void printTitle() {
-        for (int i = 0; i < ((getInnerWidth() - TITLE.length()) / 2); i++) {
+        int padding = (getInnerWidth() - TITLE.length()) / 2;
+        for (int i = 0; i < padding; i++) {
             writeString(" ");
         }
         writeString(TITLE + "\n");
@@ -72,9 +71,9 @@ public class LeaderBoard extends TextArea {
         String name;
 
         public Score(String raw) {
-            String[] splitted = raw.split(":");
-            name = splitted[0];
-            score = Integer.parseInt(splitted[1]);
+            String[] split = raw.split(":");
+            name = split[0];
+            score = Integer.parseInt(split[1]);
         }
 
         public String format() {

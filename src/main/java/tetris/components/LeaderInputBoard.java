@@ -6,8 +6,8 @@ import tetris.constants.Color;
 import tetris.constants.SpecialKeyCode;
 import tetris.helper.LeaderBoardManager;
 import tetris.message.GameScoreMessage;
+import tetris.message.Post;
 import tetris.system.MenuSelector;
-import tetris.system.Post;
 
 public class LeaderInputBoard extends ComponentImpl {
 

@@ -1,8 +1,8 @@
 package tetris.components;
 
 import tetris.constants.Char;
+import tetris.message.Post;
 import tetris.system.MessageBroker;
-import tetris.system.Post;
 import tetris.window.SpatialImpl;
 
 public abstract class ComponentImpl extends SpatialImpl implements Component {

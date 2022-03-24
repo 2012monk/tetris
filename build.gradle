@@ -1,3 +1,5 @@
+import org.gradle.internal.jvm.Jvm
+
 plugins {
     id 'java'
     id 'application'
@@ -13,13 +15,13 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 
 application {
-    mainClass = 'tetris.Tetris'
+    mainClass = 'tetris.Application'
     applicationDefaultJvmArgs = ['-Djava.library.path=./lib']
 }
 
@@ -46,9 +48,10 @@ build.dependsOn 'jniHeader'
 
 jar {
     manifest {
-        attributes 'Main-Class': 'tetris.Tetris'
+        attributes(
+                'Main-Class': 'tetris.Application'
+        )
     }
-
     from("$buildDir/libs") {
         include "**/*.dylib"
         eachFile {
@@ -87,8 +90,8 @@ model {
         Console(NativeLibrarySpec) {
             targetPlatform "x64"
             binaries.all {
-                cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                cCompiler.args '-I', "${Jvm.current().javaHome}/include"
+                cCompiler.args '-I', "${Jvm.current().javaHome}/include/darwin"
                 linker.args '-lncurses'
             }
             sources {

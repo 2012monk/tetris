@@ -16,7 +16,7 @@ public class LeaderBoardManager {
     public static void saveScore(String name, int score) {
         File file = loadFile();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-            bw.write(name + ":" + score + "\n");
+            bw.write(name.trim() + ":" + score + "\n");
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class LeaderBoardManager {
     private static File loadFile() {
         try {
             File tmp = new File(DEFAULT_LOCATION);
-            if (!tmp.exists()) {
+            if (tmp.exists()) {
                 return tmp;
             }
             if (tmp.createNewFile()) {

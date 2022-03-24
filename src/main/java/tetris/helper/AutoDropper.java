@@ -5,19 +5,22 @@ import static tetris.constants.GameStatus.PAUSE;
 import static tetris.constants.GameStatus.RESUME;
 import static tetris.constants.GameStatus.START;
 
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import tetris.components.ComponentImpl;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
-import tetris.system.Post;
+import tetris.message.Post;
 
 public class AutoDropper extends ComponentImpl {
 
     private static final int DROP_RATE = 450;
-    private static Timer timer;
+    private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
+    private static ScheduledExecutorService service;
     private static GameStatus status = END;
 
     public AutoDropper() {
@@ -26,19 +29,19 @@ public class AutoDropper extends ComponentImpl {
     }
 
     public static void shutDown() {
-        if (timer == null) {
+        if (service == null) {
             return;
         }
-        timer.cancel();
-        timer = null;
+        service.shutdown();
+        service = null;
         status = END;
     }
 
     private void start() {
         shutDown();
         status = START;
-        timer = new Timer();
-        timer.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE);
+        service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE, TIME_UNIT);
     }
 
     public TimerTask wrap(Runnable r) {
@@ -68,7 +71,7 @@ public class AutoDropper extends ComponentImpl {
                 return;
             }
             if (status == END || status == PAUSE) {
-                timer.cancel();
+                shutDown();
             }
         }
     }

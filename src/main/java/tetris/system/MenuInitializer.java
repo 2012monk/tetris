@@ -51,8 +51,8 @@ public class MenuInitializer {
     }
 
     public static void getLeaderBoard() {
-        int w = 30;
-        int h = 30;
+        int w = 26;
+        int h = 13;
         if (leaderBoardWindow == null) {
             leaderBoardWindow = WindowPoolManager.addWindow();
         }

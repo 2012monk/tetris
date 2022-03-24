@@ -1,9 +1,9 @@
-package tetris.system;
+package tetris.message;
 
 public class Post<T> {
 
     private String name;
-    private T payload;
+    private final T payload;
 
     public Post(String name, T payload) {
         this.name = name;

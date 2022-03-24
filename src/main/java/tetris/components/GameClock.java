@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import tetris.console.Console;
 import tetris.constants.GameStatus;
 import tetris.message.GameStatusMessage;
-import tetris.system.Post;
+import tetris.message.Post;
 import tetris.system.TaskManager;
 
 public class GameClock extends ComponentImpl {

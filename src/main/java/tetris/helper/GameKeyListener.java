@@ -15,8 +15,8 @@ import tetris.constants.GameStatus;
 import tetris.constants.SpecialKeyCode;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
+import tetris.message.Post;
 import tetris.system.MenuSelector;
-import tetris.system.Post;
 
 public class GameKeyListener extends ComponentImpl {
 

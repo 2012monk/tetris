@@ -1,7 +1,7 @@
 package tetris.components;
 
 import tetris.message.NextBlockMessage;
-import tetris.system.Post;
+import tetris.message.Post;
 
 public class NextBlockBoard extends ComponentImpl {
 

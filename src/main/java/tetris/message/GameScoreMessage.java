@@ -1,7 +1,6 @@
 package tetris.message;
 
 import tetris.components.GameScore;
-import tetris.system.Post;
 
 public class GameScoreMessage extends Post<GameScore> {
 

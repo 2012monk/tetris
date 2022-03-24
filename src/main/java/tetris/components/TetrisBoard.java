@@ -23,9 +23,9 @@ import tetris.message.GameKeyMessage;
 import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
 import tetris.message.NextBlockMessage;
+import tetris.message.Post;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MenuSelector;
-import tetris.system.Post;
 
 public class TetrisBoard extends ComponentContainer<Point> {
 
