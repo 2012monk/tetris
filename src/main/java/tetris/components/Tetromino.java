@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import tetris.ComponentContainer;
+import tetris.Spatial;
+import tetris.SpatialImpl;
 import tetris.constants.Color;
 import tetris.constants.GameKey;
 import tetris.constants.Shape;
 import tetris.constants.TetrominoPosition;
 import tetris.repository.PositionRepository;
-import tetris.window.Spatial;
-import tetris.window.SpatialImpl;
 
 public class Tetromino extends ComponentContainer<Point> {
 

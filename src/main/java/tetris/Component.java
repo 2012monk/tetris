@@ -1,8 +1,7 @@
-package tetris.components;
+package tetris;
 
 import tetris.constants.Char;
 import tetris.message.Post;
-import tetris.window.Spatial;
 
 public interface Component extends Spatial {
 

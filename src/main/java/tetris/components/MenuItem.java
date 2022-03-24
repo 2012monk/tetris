@@ -1,7 +1,8 @@
 package tetris.components;
 
+import tetris.ComponentImpl;
+import tetris.Task;
 import tetris.console.Console;
-import tetris.window.Task;
 
 public class MenuItem extends ComponentImpl {
 

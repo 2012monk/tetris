@@ -1,4 +1,4 @@
-package tetris;
+package tetris.game;
 
 import tetris.system.MenuSelector;
 import tetris.window.WindowPoolManager;

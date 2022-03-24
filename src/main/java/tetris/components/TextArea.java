@@ -2,6 +2,7 @@ package tetris.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import tetris.ComponentImpl;
 import tetris.console.Console;
 
 public class TextArea extends ComponentImpl {

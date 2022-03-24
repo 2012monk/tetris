@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import tetris.ComponentImpl;
 import tetris.console.Console;
 import tetris.constants.Color;
 import tetris.constants.Shape;

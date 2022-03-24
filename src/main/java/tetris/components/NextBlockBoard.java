@@ -1,5 +1,6 @@
 package tetris.components;
 
+import tetris.ComponentImpl;
 import tetris.message.NextBlockMessage;
 import tetris.message.Post;
 

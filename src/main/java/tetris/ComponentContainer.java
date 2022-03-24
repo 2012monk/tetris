@@ -1,4 +1,4 @@
-package tetris.components;
+package tetris;
 
 import java.util.ArrayList;
 import java.util.Collections;

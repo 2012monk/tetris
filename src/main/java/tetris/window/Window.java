@@ -1,7 +1,8 @@
 package tetris.window;
 
-import tetris.components.Component;
-import tetris.components.ComponentContainer;
+import tetris.Component;
+import tetris.ComponentContainer;
+import tetris.Spatial;
 
 public class Window extends ComponentContainer<Component> {
 

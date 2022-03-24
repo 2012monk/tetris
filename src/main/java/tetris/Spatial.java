@@ -1,4 +1,4 @@
-package tetris.window;
+package tetris;
 
 import tetris.constants.Color;
 

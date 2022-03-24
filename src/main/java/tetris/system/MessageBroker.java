@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
-import tetris.components.Component;
+import tetris.Component;
 import tetris.message.Post;
 
 public class MessageBroker implements Runnable {

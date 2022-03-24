@@ -1,4 +1,4 @@
-package tetris.window;
+package tetris;
 
 public interface Task {
 

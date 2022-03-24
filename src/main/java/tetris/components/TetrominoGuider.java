@@ -1,10 +1,12 @@
 package tetris.components;
 
 import java.util.NoSuchElementException;
+import tetris.Component;
+import tetris.ComponentContainer;
 
 public class TetrominoGuider extends ComponentContainer<Tetromino> {
 
-    private TetrisBoard board;
+    private final TetrisBoard board;
 
     public TetrominoGuider(TetrisBoard board) {
         super(board.getRelativeX(), board.getRelativeY(), board.getWidth(), board.getHeight(),

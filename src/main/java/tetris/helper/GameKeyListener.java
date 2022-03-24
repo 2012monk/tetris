@@ -8,7 +8,7 @@ import static tetris.constants.GameStatus.START;
 
 import java.util.HashMap;
 import java.util.Map;
-import tetris.components.ComponentImpl;
+import tetris.ComponentImpl;
 import tetris.constants.Char;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;

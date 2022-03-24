@@ -1,5 +1,6 @@
 package tetris.components;
 
+import tetris.ComponentImpl;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.Color;

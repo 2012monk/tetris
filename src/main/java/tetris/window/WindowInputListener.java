@@ -4,6 +4,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import tetris.Spatial;
 import tetris.console.Console;
 import tetris.constants.Char;
 
@@ -67,7 +68,7 @@ public class WindowInputListener {
 
     private static Spatial getSpace() {
         if (keyLogSpace == null) {
-            keyLogSpace = new Space(50, Console.getScreenWidth() - 10, 5, 2, false);
+            keyLogSpace = new Window(50, Console.getScreenWidth() - 10, 5, 2, false);
         }
         return keyLogSpace;
     }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import tetris.ComponentContainer;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;

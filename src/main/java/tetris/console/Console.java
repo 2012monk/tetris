@@ -3,8 +3,8 @@ package tetris.console;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
+import tetris.Spatial;
 import tetris.constants.Color;
-import tetris.window.Spatial;
 
 public class Console {
 

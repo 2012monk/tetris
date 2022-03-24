@@ -9,7 +9,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import tetris.components.ComponentImpl;
+import tetris.ComponentImpl;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.message.GameKeyMessage;

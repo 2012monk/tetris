@@ -1,11 +1,12 @@
 package tetris.components;
 
 import java.util.NoSuchElementException;
+import tetris.ComponentContainer;
+import tetris.Task;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.Color;
 import tetris.constants.SpecialKeyCode;
-import tetris.window.Task;
 
 public class Menu extends ComponentContainer<MenuItem> {
 
