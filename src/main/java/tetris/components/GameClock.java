@@ -5,10 +5,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.console.Console;
 import tetris.constants.GameStatus;
 import tetris.message.GameStatusMessage;
-import tetris.message.Post;
 import tetris.system.TaskManager;
 
 public class GameClock extends ComponentImpl {
@@ -21,19 +21,17 @@ public class GameClock extends ComponentImpl {
         subscribe(GameStatusMessage.class);
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameStatusMessage) {
-            GameStatus status = (GameStatus) post.getPayload();
-            if (status == GameStatus.END || status == GameStatus.PAUSE) {
-                stop();
-            }
-            if (status == GameStatus.START) {
-                initClock();
-            }
-            if (status == GameStatus.START || status == GameStatus.RESUME) {
-                start();
-            }
+    @OnMessage
+    public void onMessage(GameStatusMessage post) {
+        GameStatus status = post.getPayload();
+        if (status == GameStatus.END || status == GameStatus.PAUSE) {
+            stop();
+        }
+        if (status == GameStatus.START) {
+            initClock();
+        }
+        if (status == GameStatus.START || status == GameStatus.RESUME) {
+            start();
         }
     }
 

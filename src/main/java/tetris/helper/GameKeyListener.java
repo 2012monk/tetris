@@ -9,14 +9,14 @@ import static tetris.constants.GameStatus.START;
 import java.util.HashMap;
 import java.util.Map;
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.constants.Char;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.constants.SpecialKeyCode;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
-import tetris.message.Post;
-import tetris.system.MenuSelector;
+import tetris.message.MenuSelectedMessage;
 
 public class GameKeyListener extends ComponentImpl {
 
@@ -38,12 +38,9 @@ public class GameKeyListener extends ComponentImpl {
     public void update() {
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (!(post instanceof GameStatusMessage)) {
-            return;
-        }
-        this.status = ((GameStatusMessage) post).getPayload();
+    @OnMessage
+    public void onMessage(GameStatusMessage post) {
+        this.status = post.getPayload();
         if (status == RESUME) {
             status = START;
         }
@@ -67,11 +64,13 @@ public class GameKeyListener extends ComponentImpl {
             publishMessage(new GameStatusMessage(RESUME));
             return;
         }
-        if (status == END) {
-            MenuSelector.mainMenu();
+        if (!gameStatusOrder.containsKey(chr)) {
+            return;
         }
-        if (gameStatusOrder.containsKey(chr)) {
-            publishMessage(gameStatusOrder.get(chr));
+        GameStatusMessage message = gameStatusOrder.get(chr);
+        if (message.getPayload() == END) {
+            publishMessage(new MenuSelectedMessage("mainMenu"));
         }
+        publishMessage(gameStatusOrder.get(chr));
     }
 }

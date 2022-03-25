@@ -1,5 +1,6 @@
 package tetris;
 
+import tetris.annotations.OnMessage;
 import tetris.constants.Char;
 import tetris.message.Post;
 import tetris.system.MessageBroker;
@@ -30,16 +31,12 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
         MessageBroker.publish(post);
     }
 
+    @OnMessage
     protected void subscribe(Class<? extends Post<?>> post) {
         MessageBroker.subscribe(post, this);
     }
 
     @Override
     public void handleKey(Char chr) {
-    }
-
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-
     }
 }

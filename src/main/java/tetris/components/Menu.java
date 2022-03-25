@@ -2,7 +2,6 @@ package tetris.components;
 
 import java.util.NoSuchElementException;
 import tetris.ComponentContainer;
-import tetris.Task;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.Color;
@@ -12,7 +11,7 @@ public class Menu extends ComponentContainer<MenuItem> {
 
     private static final Color DEFAULT_POINTER_COLOR = Color.MAGENTA;
     private static final char DEFAULT_POINTER = '>';
-    private int selected = 0;
+    private int cursor = 0;
 
     public Menu(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -27,7 +26,7 @@ public class Menu extends ComponentContainer<MenuItem> {
     @Override
     public void handleKey(Char chr) {
         if (chr.is(SpecialKeyCode.KEY_ENTER)) {
-            components.get(selected).action();
+            activateMenu();
             return;
         }
         if (chr.is(SpecialKeyCode.KEY_UP)) {
@@ -38,14 +37,25 @@ public class Menu extends ComponentContainer<MenuItem> {
         }
     }
 
+    private void activateMenu() {
+        try {
+            components.get(cursor).select();
+        } catch (Exception ignore) {
+        }
+    }
+
     public MenuItem getItemByName(String name) {
         return components.stream().filter(m -> m.getName().equals(name))
             .findAny()
             .orElseThrow(NoSuchElementException::new);
     }
 
-    public void addMenuItem(String name, Task task) {
-        addComponent(new MenuItem(name, task));
+    public void addMenuItem(String name) {
+        addMenuItem(name, name);
+    }
+
+    public void addMenuItem(String name, String displayName) {
+        addComponent(new MenuItem(name, displayName));
         align();
     }
 
@@ -53,7 +63,7 @@ public class Menu extends ComponentContainer<MenuItem> {
         if (components.isEmpty()) {
             return;
         }
-        int x = getInnerX() + (selected * getItemMaxHeight());
+        int x = getInnerX() + (cursor * getItemMaxHeight());
         int y = getInnerY();
         if (!isInsideSpace(x, y)) {
             return;
@@ -62,14 +72,14 @@ public class Menu extends ComponentContainer<MenuItem> {
     }
 
     private void selectNext() {
-        this.selected = (this.selected + 1) % components.size();
+        this.cursor = (this.cursor + 1) % components.size();
         update();
     }
 
     private void selectPrevious() {
-        selected = (this.selected - 1) % components.size();
-        if (this.selected < 0) {
-            selected = components.size() - 1;
+        cursor = (this.cursor - 1) % components.size();
+        if (this.cursor < 0) {
+            cursor = components.size() - 1;
         }
         update();
     }

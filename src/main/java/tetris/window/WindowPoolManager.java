@@ -1,5 +1,6 @@
 package tetris.window;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.Spatial;
 import tetris.console.Console;
@@ -10,6 +11,7 @@ import tetris.system.TaskManager;
 public class WindowPoolManager {
 
     private static final LinkedBlockingDeque<Window> windowPool = new LinkedBlockingDeque<>();
+    private static final String SCREEN_NAME = "__DEFAULT_SCREEN";
     private static Spatial screen;
 
     public synchronized static void init() {
@@ -32,9 +34,9 @@ public class WindowPoolManager {
         window.setParent(getScreen());
     }
 
-    public static Window addWindow() {
+    public static Window addWindow(String name) {
         Window window = new Window(0, 0, getScreen().getInnerWidth(), getScreen().getInnerHeight(),
-            false);
+            false, name);
         addWindow(window);
         return window;
     }
@@ -55,7 +57,8 @@ public class WindowPoolManager {
 
     public static Spatial getScreen() {
         if (screen == null) {
-            screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false);
+            screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false,
+                SCREEN_NAME);
         }
         return screen;
     }
@@ -71,5 +74,11 @@ public class WindowPoolManager {
 
     private static Window getFocusedWindow() {
         return windowPool.getLast();
+    }
+
+    public static Window getWindow(String name) {
+        return windowPool.stream().filter(w -> w.getName().equals(name))
+            .findAny()
+            .orElseThrow(NoSuchElementException::new);
     }
 }

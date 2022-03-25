@@ -6,9 +6,9 @@ import tetris.ComponentContainer;
 
 public class TetrominoGuider extends ComponentContainer<Tetromino> {
 
-    private final TetrisBoard board;
+    private final TetrisBoardPanel board;
 
-    public TetrominoGuider(TetrisBoard board) {
+    public TetrominoGuider(TetrisBoardPanel board) {
         super(board.getRelativeX(), board.getRelativeY(), board.getWidth(), board.getHeight(),
             false);
         setParent(board);

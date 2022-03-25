@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.console.Console;
 import tetris.constants.Color;
 import tetris.constants.Shape;
 import tetris.message.CurrentBlockMessage;
-import tetris.message.Post;
 import tetris.repository.TetrominoRepository;
 
 public class BlockCounter extends ComponentImpl {
@@ -62,10 +62,10 @@ public class BlockCounter extends ComponentImpl {
         return getInnerY() + yAlign;
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof CurrentBlockMessage) {
-            increaseCount((Tetromino) post.getPayload());
+    @OnMessage
+    public void onMessage(CurrentBlockMessage post) {
+        if (post != null) {
+            increaseCount(post.getPayload());
         }
     }
 

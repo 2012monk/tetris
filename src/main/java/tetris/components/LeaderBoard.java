@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import tetris.constants.Char;
 import tetris.helper.LeaderBoardManager;
-import tetris.system.MenuSelector;
+import tetris.message.MenuSelectedMessage;
 
 public class LeaderBoard extends TextArea {
 
@@ -21,7 +21,7 @@ public class LeaderBoard extends TextArea {
 
     @Override
     public void handleKey(Char chr) {
-        MenuSelector.mainMenu();
+        publishMessage(new MenuSelectedMessage("mainMenu"));
     }
 
     @Override

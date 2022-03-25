@@ -1,14 +1,14 @@
 package tetris.components;
 
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.console.Console;
 import tetris.constants.Char;
 import tetris.constants.Color;
 import tetris.constants.SpecialKeyCode;
 import tetris.helper.LeaderBoardManager;
 import tetris.message.GameScoreMessage;
-import tetris.message.Post;
-import tetris.system.MenuSelector;
+import tetris.message.MenuSelectedMessage;
 
 public class LeaderInputBoard extends ComponentImpl {
 
@@ -51,7 +51,7 @@ public class LeaderInputBoard extends ComponentImpl {
         }
         LeaderBoardManager.saveScore(name.toString(), score);
         name = new StringBuilder();
-        MenuSelector.leaderBoard();
+        publishMessage(new MenuSelectedMessage("leaderBoardMenu"));
     }
 
     private void insert(char chr) {
@@ -69,11 +69,9 @@ public class LeaderInputBoard extends ComponentImpl {
         update();
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameScoreMessage) {
-            currentScore = (GameScore) post.getPayload();
-        }
+    @OnMessage
+    public void onMessage(GameScoreMessage post) {
+        currentScore = post.getPayload();
     }
 
     @Override

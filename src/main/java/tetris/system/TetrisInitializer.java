@@ -13,7 +13,7 @@ import tetris.components.GameTitle;
 import tetris.components.HelpMessage;
 import tetris.components.NextBlockBoard;
 import tetris.components.ScoreBoard;
-import tetris.components.TetrisBoard;
+import tetris.components.TetrisBoardPanel;
 import tetris.components.Tetromino;
 import tetris.constants.Color;
 import tetris.constants.Shape;
@@ -35,13 +35,14 @@ public class TetrisInitializer {
 
     public static Window getGameWindow() {
         if (window == null) {
-            init();
+            initGameWindow();
         }
         return window;
     }
 
-    private static void init() {
-        window = WindowPoolManager.addWindow();
+
+    public static void initGameWindow() {
+        window = WindowPoolManager.addWindow("gameMenu");
         GameTitle title = new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
             false);
         xAlign = GameTitle.getTitleHeight() + 1;
@@ -72,7 +73,7 @@ public class TetrisInitializer {
 
     private static void boardWindow() {
         int y = (window.getInnerWidth() - BOARD_SIZE) / 2;
-        TetrisBoard board = new TetrisBoard(xAlign, y, BOARD_SIZE, BOARD_SIZE);
+        TetrisBoardPanel board = new TetrisBoardPanel(xAlign, y, BOARD_SIZE, BOARD_SIZE);
         window.addComponent(board);
         window.addComponent(new GameKeyListener());
         window.addComponent(new AutoDropper());

@@ -10,12 +10,15 @@ import static tetris.constants.GameStatus.RESTART;
 import static tetris.constants.GameStatus.RESUME;
 import static tetris.constants.GameStatus.START;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import tetris.ComponentContainer;
+import tetris.annotations.OnMessage;
+import tetris.console.Console;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;
@@ -23,21 +26,22 @@ import tetris.message.CurrentBlockMessage;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
+import tetris.message.MenuSelectedMessage;
 import tetris.message.NextBlockMessage;
-import tetris.message.Post;
 import tetris.repository.TetrominoRepository;
-import tetris.system.MenuSelector;
 
-public class TetrisBoard extends ComponentContainer<Point> {
+public class TetrisBoardPanel extends ComponentContainer<Point> {
 
     private static final char EMPTY_SPACE = '.';
+    private static final char BLOCK_SPACE = ' ';
     private final TetrominoGuider guider;
     private final GameScore score = new GameScore();
     private final TetrominoController controller;
+    private final List<Point> points = new ArrayList<>();
     private GameStatus status = END;
     private Tetromino currentBlock = null;
 
-    public TetrisBoard(int x, int y, int width, int height) {
+    public TetrisBoardPanel(int x, int y, int width, int height) {
         super(x, y, width, height, true);
         this.emptySpace = EMPTY_SPACE;
         this.guider = new TetrominoGuider(this);
@@ -46,29 +50,30 @@ public class TetrisBoard extends ComponentContainer<Point> {
         subscribe(GameKeyMessage.class);
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameKeyMessage) {
-            move(((GameKeyMessage) post).getPayload());
-            return;
+    @OnMessage
+    public void gameStatusHandle(GameStatusMessage post) {
+        GameStatus gameStatus = post.getPayload();
+        if (gameStatus == START) {
+            start();
         }
-        if (post instanceof GameStatusMessage) {
-            GameStatus gameStatus = ((GameStatusMessage) post).getPayload();
-            if (gameStatus == START) {
-                start();
-            }
-            if (gameStatus == RESTART) {
-                restart();
-            }
-            if (gameStatus == PAUSE) {
-                pause();
-            }
-            if (gameStatus == END) {
-                endGame();
-            }
-            if (gameStatus == RESUME) {
-                this.status = START;
-            }
+        if (gameStatus == RESTART) {
+            restart();
+        }
+        if (gameStatus == PAUSE) {
+            pause();
+        }
+        if (gameStatus == END) {
+            endGame();
+        }
+        if (gameStatus == RESUME) {
+            this.status = START;
+        }
+    }
+
+    @OnMessage
+    public void gameKeyHandle(GameKeyMessage post) {
+        if (post != null) {
+            move(post.getPayload());
         }
     }
 
@@ -170,8 +175,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
     }
 
     private void stackBlock(Tetromino block) {
-        block.points().forEach(p -> addComponent(new Point(p.getRelativeX() + block.getRelativeX(),
-            p.getRelativeY() + block.getRelativeY(), block.getColor())));
+        block.points().forEach(p -> addComponent(new Point(p.getInnerX() - getInnerX(),
+            p.getInnerY() - getInnerY(), block.getColor())));
         popStack();
     }
 
@@ -215,7 +220,8 @@ public class TetrisBoard extends ComponentContainer<Point> {
     private void gameOver() {
         status = END;
         publishMessage(new GameStatusMessage(END));
-        MenuSelector.leaderBoardInput();
+        publishMessage(new MenuSelectedMessage("leaderBoardInputMenu"));
+//        MenuSelector.leaderBoardInput();
     }
 
     private void initBlock() {

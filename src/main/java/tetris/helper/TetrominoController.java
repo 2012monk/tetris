@@ -1,15 +1,15 @@
 package tetris.helper;
 
-import tetris.components.TetrisBoard;
+import tetris.components.TetrisBoardPanel;
 import tetris.components.Tetromino;
 import tetris.constants.WallKickData;
 import tetris.repository.WallKickDataRepository;
 
 public class TetrominoController {
 
-    private final TetrisBoard board;
+    private final TetrisBoardPanel board;
 
-    public TetrominoController(TetrisBoard board) {
+    public TetrominoController(TetrisBoardPanel board) {
         this.board = board;
     }
 

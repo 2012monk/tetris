@@ -2,8 +2,8 @@ package tetris.message;
 
 public class Post<T> {
 
-    private String name;
     private final T payload;
+    private String name;
 
     public Post(String name, T payload) {
         this.name = name;
@@ -20,5 +20,9 @@ public class Post<T> {
 
     public T getPayload() {
         return payload;
+    }
+
+    public boolean is(Object post) {
+        return this.getClass().equals(post.getClass());
     }
 }

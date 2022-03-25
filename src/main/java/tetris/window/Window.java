@@ -6,16 +6,26 @@ import tetris.Spatial;
 
 public class Window extends ComponentContainer<Component> {
 
-    public Window(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
+    private final String name;
 
-    public Window(int x, int y, int width, int height, boolean borderOn) {
+
+    public Window(int x, int y, int width, int height, boolean borderOn, String name) {
         super(x, y, width, height, borderOn);
+        this.name = name;
     }
 
-    public Window(int x, int y, int width, int height, Spatial screen) {
+    public Window(int x, int y, int width, int height, Spatial screen, String name) {
         super(x, y, width, height);
         setParent(screen);
+        this.name = name;
+    }
+
+    public Window(String name) {
+        super(0, 0, 0, 0, false);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

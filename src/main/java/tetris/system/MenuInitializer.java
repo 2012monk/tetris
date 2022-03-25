@@ -2,59 +2,51 @@ package tetris.system;
 
 import tetris.components.GameTitle;
 import tetris.components.LeaderBoard;
+import tetris.components.LeaderInputBoard;
 import tetris.components.Menu;
+import tetris.controller.MenuController;
 import tetris.window.Window;
 import tetris.window.WindowPoolManager;
 
 public class MenuInitializer {
 
-    private static Window window;
+    private static final MenuController controller = MenuController.getInstance();
+    private static Window mainMenuWindow;
     private static Window leaderBoardWindow;
 
-    public static Window getMenuWindow() {
-        if (window == null) {
-            init();
-        }
-        return window;
-    }
-
-    public static Window getLeaderBoardWindow() {
-        if (leaderBoardWindow == null) {
-            getLeaderBoard();
-        }
-        return leaderBoardWindow;
-    }
-
-    private static void init() {
-        getWindow().addComponent(getTitleBoard());
-        getWindow().addComponent(getMenu());
+    public static void initMenus() {
+        getMainWindow().addComponent(getTitleBoard());
+        getMainWindow().addComponent(getMenu());
+        createLeaderBoardInputWindow();
+        createLeaderBoardWindow();
+        WindowPoolManager.focus(getMainWindow());
     }
 
     private static Menu getMenu() {
         int h = 6;
         int w = 24;
         int x = GameTitle.getTitleHeight() + 1;
-        int y = (window.getInnerWidth() - w) / 2;
+        int y = (mainMenuWindow.getInnerWidth() - w) / 2;
         Menu menu = new Menu(x, y, w, h);
-        menu.addMenuItem("start", MenuSelector::gameStart);
-        menu.addMenuItem("leader board", MenuSelector::leaderBoard);
-        menu.addMenuItem("quit", MenuSelector::quit);
+        menu.addMenuItem("gameMenu", "start");
+        menu.addMenuItem("leaderBoardMenu", "leader board");
+        menu.addMenuItem("quit");
         return menu;
     }
 
     public static GameTitle getTitleBoard() {
         int x = 0;
         int y = 0;
-        return new GameTitle(x, y, getWindow().getInnerWidth() - y,
-            getWindow().getInnerHeight() - x,
+        return new GameTitle(x, y, WindowPoolManager.getScreen().getInnerWidth() - y,
+            WindowPoolManager.getScreen().getInnerHeight() - x,
             false);
     }
 
-    public static void getLeaderBoard() {
+    public static void createLeaderBoardWindow() {
         int w = 26;
         int h = 13;
         if (leaderBoardWindow == null) {
-            leaderBoardWindow = WindowPoolManager.addWindow();
+            leaderBoardWindow = WindowPoolManager.addWindow("leaderBoardMenu");
         }
         int x = GameTitle.getTitleHeight();
         int y = (leaderBoardWindow.getInnerWidth() - w) / 2;
@@ -62,10 +54,21 @@ public class MenuInitializer {
         leaderBoardWindow.addComponent(new LeaderBoard(x, y, w, h, true));
     }
 
-    private static Window getWindow() {
-        if (window == null) {
-            window = WindowPoolManager.addWindow();
+    private static void createLeaderBoardInputWindow() {
+        int width = 40;
+        int height = 10;
+        int x = (WindowPoolManager.getScreen().getInnerHeight() - height) / 2;
+        int y = (WindowPoolManager.getScreen().getInnerWidth() - width) / 2;
+        Window window = new Window(x, y, width, height, true, "leaderBoardInputMenu");
+        window.addComponent(new LeaderInputBoard(0, 0, width - 2, height - 2));
+        WindowPoolManager.addWindow(window);
+    }
+
+
+    private static Window getMainWindow() {
+        if (mainMenuWindow == null) {
+            mainMenuWindow = WindowPoolManager.addWindow("mainMenu");
         }
-        return window;
+        return mainMenuWindow;
     }
 }

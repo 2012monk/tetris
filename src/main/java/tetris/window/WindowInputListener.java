@@ -68,7 +68,7 @@ public class WindowInputListener {
 
     private static Spatial getSpace() {
         if (keyLogSpace == null) {
-            keyLogSpace = new Window(50, Console.getScreenWidth() - 10, 5, 2, false);
+            keyLogSpace = new Window(50, Console.getScreenWidth() - 10, 5, 2, false, "keyLog");
         }
         return keyLogSpace;
     }

@@ -1,9 +1,9 @@
 package tetris.components;
 
+import tetris.annotations.OnMessage;
 import tetris.constants.GameStatus;
 import tetris.message.GameScoreMessage;
 import tetris.message.GameStatusMessage;
-import tetris.message.Post;
 
 public class ScoreBoard extends TextArea {
 
@@ -20,14 +20,17 @@ public class ScoreBoard extends TextArea {
         writeString(MESSAGE + 0);
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameScoreMessage) {
-            printScore(((GameScoreMessage) post).getPayload().getScore());
-            return;
+    @OnMessage
+    public void onMessage(GameScoreMessage post) {
+        if (post != null) {
+            printScore(post.getPayload().getScore());
         }
-        if (post instanceof GameStatusMessage) {
-            GameStatus status = (GameStatus) post.getPayload();
+    }
+
+    @OnMessage
+    public void handleStatus(GameStatusMessage post) {
+        if (post != null) {
+            GameStatus status = post.getPayload();
             if (status == GameStatus.START) {
                 update();
             }

@@ -10,11 +10,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
-import tetris.message.Post;
 
 public class AutoDropper extends ComponentImpl {
 
@@ -62,17 +62,15 @@ public class AutoDropper extends ComponentImpl {
         };
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (post instanceof GameStatusMessage) {
-            status = ((GameStatusMessage) post).getPayload();
-            if (status == START || status == RESUME) {
-                start();
-                return;
-            }
-            if (status == END || status == PAUSE) {
-                shutDown();
-            }
+    @OnMessage
+    public void onMessage(GameStatusMessage post) {
+        status = post.getPayload();
+        if (status == START || status == RESUME) {
+            start();
+            return;
+        }
+        if (status == END || status == PAUSE) {
+            shutDown();
         }
     }
 

@@ -1,8 +1,8 @@
 package tetris.components;
 
 import tetris.ComponentImpl;
+import tetris.annotations.OnMessage;
 import tetris.message.NextBlockMessage;
-import tetris.message.Post;
 
 public class NextBlockBoard extends ComponentImpl {
 
@@ -32,13 +32,10 @@ public class NextBlockBoard extends ComponentImpl {
         }
     }
 
-    @Override
-    public <T extends Post<?>> void onMessage(T post) {
-        if (!(post instanceof NextBlockMessage)) {
-            return;
-        }
+    @OnMessage
+    public void onMessage(NextBlockMessage post) {
         clear();
-        Tetromino nextBlock = (Tetromino) post.getPayload();
+        Tetromino nextBlock = post.getPayload();
         if (nextBlock == null) {
             clear();
             return;
