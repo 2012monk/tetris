@@ -18,8 +18,8 @@ public class Menu extends ComponentContainer<MenuItem> {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void render() {
+        super.render();
         printCursor();
     }
 
@@ -73,7 +73,7 @@ public class Menu extends ComponentContainer<MenuItem> {
 
     private void selectNext() {
         this.cursor = (this.cursor + 1) % components.size();
-        update();
+        this.render();
     }
 
     private void selectPrevious() {
@@ -81,7 +81,7 @@ public class Menu extends ComponentContainer<MenuItem> {
         if (this.cursor < 0) {
             cursor = components.size() - 1;
         }
-        update();
+        this.render();
     }
 
     private void align() {

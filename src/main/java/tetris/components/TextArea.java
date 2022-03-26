@@ -21,7 +21,7 @@ public class TextArea extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent() || stringBuilder.length() == EMPTY) {
             return;
         }

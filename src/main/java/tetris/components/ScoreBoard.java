@@ -32,7 +32,7 @@ public class ScoreBoard extends TextArea {
         if (post != null) {
             GameStatus status = post.getPayload();
             if (status == GameStatus.START) {
-                update();
+                render();
             }
         }
     }
@@ -40,6 +40,6 @@ public class ScoreBoard extends TextArea {
     private void printScore(int score) {
         clearString();
         writeString(MESSAGE + score);
-        update();
+        render();
     }
 }

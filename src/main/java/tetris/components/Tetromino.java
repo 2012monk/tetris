@@ -191,7 +191,7 @@ public class Tetromino extends ComponentContainer<Point> {
 
     public void updateInParent() {
         if (hasParent()) {
-            update();
+            render();
         }
     }
 

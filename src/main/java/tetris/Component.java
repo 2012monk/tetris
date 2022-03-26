@@ -4,7 +4,7 @@ import tetris.constants.Char;
 
 public interface Component extends Spatial {
 
-    void update();
+    void render();
 
     void handleKey(Char chr);
 }

@@ -64,7 +64,7 @@ public class GameClock extends ComponentImpl {
             public void run() {
                 TaskManager.addTask(() -> {
                     increaseTick();
-                    update();
+                    render();
                 });
             }
         };
@@ -77,7 +77,7 @@ public class GameClock extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }

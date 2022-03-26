@@ -43,9 +43,10 @@ public class WindowPoolManager {
 
     public static void focus(Window window) {
         if (!getFocusedWindow().equals(window)) {
-            addFocusedWindow(window);
+            focusWindow(window);
         }
-        window.update();
+        window.onWindowFocused();
+        window.render();
     }
 
     public static void notifyKey(Char chr) {
@@ -64,10 +65,11 @@ public class WindowPoolManager {
     }
 
     public static void refreshAll() {
-        windowPool.forEach(w -> TaskManager.addTask(w::update));
+        windowPool.forEach(w -> TaskManager.addTask(w::render));
     }
 
-    private static void addFocusedWindow(Window window) {
+    private static void focusWindow(Window window) {
+        getFocusedWindow().onWindowUnFocused();
         windowPool.removeIf(w -> w.equals(window));
         windowPool.addLast(window);
     }

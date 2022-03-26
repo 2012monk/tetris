@@ -35,7 +35,7 @@ public class GameKeyListener extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
     }
 
     @OnMessage

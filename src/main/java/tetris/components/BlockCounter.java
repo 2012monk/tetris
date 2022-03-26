@@ -30,7 +30,7 @@ public class BlockCounter extends ComponentImpl {
     public void increaseCount(Tetromino block) {
         counter.putIfAbsent(block.getShape(), 0);
         counter.computeIfPresent(block.getShape(), (k, v) -> v + 1);
-        update();
+        render();
     }
 
     private void init() {
@@ -75,14 +75,14 @@ public class BlockCounter extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }
         clear();
         printTitle();
         alignedBlocks.forEach(b -> {
-            b.update();
+            b.render();
             int correction = 0;
             if (b.getShape() == Shape.I) {
                 correction = 1;

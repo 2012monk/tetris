@@ -5,6 +5,7 @@ import tetris.components.LeaderBoard;
 import tetris.components.LeaderInputBoard;
 import tetris.components.Menu;
 import tetris.controller.MenuController;
+import tetris.game.MenuWindow;
 import tetris.window.Window;
 import tetris.window.WindowPoolManager;
 
@@ -67,7 +68,9 @@ public class MenuInitializer {
 
     private static Window getMainWindow() {
         if (mainMenuWindow == null) {
-            mainMenuWindow = WindowPoolManager.addWindow("mainMenu");
+            mainMenuWindow = new MenuWindow(0, 0, WindowPoolManager.getScreen().getInnerWidth(),
+                WindowPoolManager.getScreen().getInnerHeight(), false, "mainMenu");
+            WindowPoolManager.addWindow(mainMenuWindow);
         }
         return mainMenuWindow;
     }

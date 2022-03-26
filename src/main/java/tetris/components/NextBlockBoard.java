@@ -18,10 +18,10 @@ public class NextBlockBoard extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         clear();
         if (nextBlock != null) {
-            nextBlock.update();
+            nextBlock.render();
         }
     }
 
@@ -43,6 +43,6 @@ public class NextBlockBoard extends ComponentImpl {
         nextBlock.setParent(this);
         alignBlock(nextBlock);
         this.nextBlock = nextBlock;
-        update();
+        render();
     }
 }

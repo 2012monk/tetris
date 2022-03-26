@@ -3,6 +3,7 @@ package tetris.window;
 import tetris.Component;
 import tetris.ComponentContainer;
 import tetris.Spatial;
+import tetris.message.WindowEvent;
 
 public class Window extends ComponentContainer<Component> {
 
@@ -15,9 +16,8 @@ public class Window extends ComponentContainer<Component> {
     }
 
     public Window(int x, int y, int width, int height, Spatial screen, String name) {
-        super(x, y, width, height);
+        this(x, y, width, height, false, name);
         setParent(screen);
-        this.name = name;
     }
 
     public Window(String name) {
@@ -27,5 +27,13 @@ public class Window extends ComponentContainer<Component> {
 
     public String getName() {
         return name;
+    }
+
+    public void onWindowFocused() {
+
+    }
+
+    public void onWindowUnFocused() {
+
     }
 }

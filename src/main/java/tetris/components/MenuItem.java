@@ -1,8 +1,6 @@
 package tetris.components;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import tetris.ComponentImpl;
 import tetris.console.Console;
@@ -14,7 +12,6 @@ public class MenuItem extends ComponentImpl {
     private static final String ERR_INVALID_NAME = "이름이 이미 존재합니다";
     private final String name;
     private final String displayName;
-    private final List<EventListener> listeners = new ArrayList<>();
 
     public MenuItem(String menuName, String displayName) {
         verifyUniqueName(menuName);
@@ -49,21 +46,13 @@ public class MenuItem extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }
         clear();
         Console.drawString(getInnerX(), (getInnerWidth() - displayName.length()) / 2 + getInnerY(),
             displayName);
-    }
-
-    public void addEventListener(EventListener listener) {
-        listeners.add(listener);
-    }
-
-    public void sendEvent() {
-        this.listeners.forEach(EventListener::notifyEvent);
     }
 
     @Override

@@ -35,12 +35,12 @@ public abstract class ComponentContainer<T extends Component> extends ComponentI
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }
         clear();
-        components.forEach(Component::update);
+        components.forEach(Component::render);
     }
 
     @Override

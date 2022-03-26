@@ -22,7 +22,7 @@ public class TetrominoGuider extends ComponentContainer<Tetromino> {
         }
         tmp.moveUp();
         addGuiderBlock(tmp);
-        update();
+        render();
     }
 
     private void addGuiderBlock(Tetromino block) {

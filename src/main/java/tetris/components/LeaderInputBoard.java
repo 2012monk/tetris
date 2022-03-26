@@ -59,14 +59,14 @@ public class LeaderInputBoard extends ComponentImpl {
             return;
         }
         name.append(chr);
-        update();
+        render();
     }
 
     private void erase() {
         if (name.length() > 0) {
             name.deleteCharAt(name.length() - 1);
         }
-        update();
+        render();
     }
 
     @OnMessage
@@ -75,7 +75,7 @@ public class LeaderInputBoard extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }

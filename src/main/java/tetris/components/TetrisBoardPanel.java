@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import tetris.ComponentContainer;
 import tetris.annotations.OnMessage;
-import tetris.console.Console;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.helper.TetrominoController;
@@ -126,20 +125,20 @@ public class TetrisBoardPanel extends ComponentContainer<Point> {
         if (isCollide(simulateBlock(this.currentBlock, key))) {
             return;
         }
-        update();
+        render();
         key.move(this.currentBlock);
         this.guider.guideBlock(currentBlock);
     }
 
     private void rotate(GameKey key) {
-        update();
+        render();
         this.currentBlock = controller.rotateLeft(currentBlock);
-        currentBlock.update();
+        currentBlock.render();
         guider.guideBlock(currentBlock);
     }
 
     private void drop() {
-        update();
+        render();
         if (isCollide(currentBlock)) {
             gameOver();
             return;
@@ -150,7 +149,7 @@ public class TetrisBoardPanel extends ComponentContainer<Point> {
             return;
         }
         currentBlock.printDown();
-        guider.update();
+        guider.render();
     }
 
     private void hardDrop() {
@@ -187,7 +186,7 @@ public class TetrisBoardPanel extends ComponentContainer<Point> {
         List<Integer> filledLines = getFilledLines(lines);
         int lineCount = filledLines.size();
         if (filledLines.isEmpty()) {
-            update();
+            render();
             return;
         }
         clearBoard();
@@ -200,7 +199,7 @@ public class TetrisBoardPanel extends ComponentContainer<Point> {
                     new Point(p.getRelativeX() + cali, p.getRelativeY(), p.getColor()))
                 );
             });
-        update();
+        render();
         sendPopLineCount(lineCount);
     }
 
@@ -230,7 +229,6 @@ public class TetrisBoardPanel extends ComponentContainer<Point> {
         publishMessage(new NextBlockMessage(TetrominoRepository.peekNextTetromino()));
         this.currentBlock.initBlock(this);
         guider.guideBlock(this.currentBlock);
-        this.currentBlock.update();
+        this.currentBlock.render();
     }
-
 }

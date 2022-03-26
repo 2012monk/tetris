@@ -75,6 +75,6 @@ public class AutoDropper extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
     }
 }

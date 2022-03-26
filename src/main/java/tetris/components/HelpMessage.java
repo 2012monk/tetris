@@ -23,7 +23,7 @@ public class HelpMessage extends TextArea {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!hasParent()) {
             return;
         }

@@ -30,7 +30,7 @@ public class MessageBroker implements Runnable {
     }
 
     public static void subscribe(Class<? extends Post<?>> post, Object subscriber) {
-        verifySubscriber(subscriber);
+//        verifySubscriber(subscriber);
         subs.putIfAbsent(post, new ConcurrentHashMap<>());
         subs.get(post).putIfAbsent(subscriber.hashCode(), new WeakReference<>(subscriber));
     }

@@ -31,7 +31,6 @@ public abstract class ComponentImpl extends SpatialImpl implements Component {
         MessageBroker.publish(post);
     }
 
-    @OnMessage
     protected void subscribe(Class<? extends Post<?>> post) {
         MessageBroker.subscribe(post, this);
     }

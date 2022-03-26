@@ -25,9 +25,9 @@ public class LeaderBoard extends TextArea {
     }
 
     @Override
-    public void update() {
+    public void render() {
         writeScores();
-        super.update();
+        super.render();
     }
 
     private void load() {

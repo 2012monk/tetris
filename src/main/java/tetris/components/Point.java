@@ -24,7 +24,7 @@ public class Point extends ComponentImpl {
     }
 
     @Override
-    public void update() {
+    public void render() {
         if (!isInsideParent()) {
             return;
         }

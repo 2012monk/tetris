@@ -12,9 +12,11 @@ jar.archiveFileName = "tetris.jar"
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation 'com.github.goxr3plus:java-stream-player:10.0.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
@@ -60,6 +62,8 @@ jar {
         includeEmptyDirs = false
         into "lib"
     }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from {
         configurations.runtimeClasspath.collect {
