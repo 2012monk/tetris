@@ -2,8 +2,6 @@ package tetris.controller;
 
 import tetris.annotations.OnMessage;
 import tetris.audio.GameAudioPlayer;
-import tetris.constants.GameStatus;
-import tetris.message.GameStatusMessage;
 import tetris.message.MenuSelectedMessage;
 import tetris.system.MessageBroker;
 import tetris.window.Window;
@@ -15,8 +13,8 @@ public class MenuController {
     private static final String GAME_MENU = "gameMenu";
     private static final String LEADER_BOARD_MENU = "leaderBoardMenu";
     private static final String QUIT = "quit";
-    private final GameAudioPlayer player = GameAudioPlayer.getInstance();
     private static MenuController instance;
+    private final GameAudioPlayer player = GameAudioPlayer.getInstance();
 
     private MenuController() {
         MessageBroker.subscribe(MenuSelectedMessage.class, this);
@@ -37,16 +35,8 @@ public class MenuController {
         }
         try {
             select(message.getPayload());
-            startGame(message.getPayload());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void startGame(String name) {
-        if (name.equals(GAME_MENU)) {
-            player.playInGameBgm();
-            MessageBroker.publish(new GameStatusMessage(GameStatus.START));
         }
     }
 

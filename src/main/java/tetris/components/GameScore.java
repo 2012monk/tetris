@@ -1,5 +1,8 @@
 package tetris.components;
 
+import tetris.message.GameScoreMessage;
+import tetris.system.MessageBroker;
+
 public class GameScore {
 
     private int score = 0;
@@ -8,9 +11,12 @@ public class GameScore {
         return score;
     }
 
-    public GameScore updateScore(int lineCount) {
+    public void updateScore(int lineCount) {
+        if (lineCount == 0) {
+            return;
+        }
         this.score += calculateScore(lineCount);
-        return this;
+        MessageBroker.publish(new GameScoreMessage(this));
     }
 
     public void resetScore() {

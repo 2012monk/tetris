@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 import tetris.components.Tetromino;
 
 public enum GameKey {
-    KEY_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::printDown, Tetromino::moveDown),
-    KEY_UP(SpecialKeyCode.KEY_UP, Tetromino::printRotateLeft, Tetromino::rotateLeft),
-    KEY_SPACE(SpecialKeyCode.KEY_SPACE, Tetromino::printRotateLeft, Tetromino::rotateLeft),
-    KEY_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::printLeft, Tetromino::moveLeft),
-    KEY_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::printRight, Tetromino::moveRight),
-    KET_H('h', Tetromino::printLeft, Tetromino::moveLeft),
-    KEY_L('l', Tetromino::printRight, Tetromino::moveRight),
-    KEY_J('j', Tetromino::printDown, Tetromino::moveDown),
-    KEY_K('k', Tetromino::printRotateLeft, Tetromino::rotateLeft);
+    KEY_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::moveDown, Tetromino::moveUp),
+    KEY_UP(SpecialKeyCode.KEY_UP, Tetromino::rotateLeft, Tetromino::rotateRight),
+    KEY_SPACE(SpecialKeyCode.KEY_SPACE, Tetromino::rotateLeft, Tetromino::rotateRight),
+    KEY_LEFT(SpecialKeyCode.KEY_LEFT, Tetromino::moveLeft, Tetromino::moveRight),
+    KEY_RIGHT(SpecialKeyCode.KEY_RIGHT, Tetromino::moveRight, Tetromino::moveLeft),
+    KET_H('h', Tetromino::moveLeft, Tetromino::moveRight),
+    KEY_L('l', Tetromino::moveRight, Tetromino::moveLeft),
+    KEY_J('j', Tetromino::moveDown, Tetromino::moveUp),
+    KEY_K('k', Tetromino::rotateLeft, Tetromino::rotateRight);
     private static final Map<Char, GameKey> keys;
 
     static {
@@ -25,19 +25,19 @@ public enum GameKey {
     }
 
     private final Consumer<Tetromino> action;
-    private final Consumer<Tetromino> simulateAction;
+    private final Consumer<Tetromino> reverseAction;
     private final Char trigger;
 
-    GameKey(SpecialKeyCode key, Consumer<Tetromino> action, Consumer<Tetromino> simulateAction) {
+    GameKey(SpecialKeyCode key, Consumer<Tetromino> action, Consumer<Tetromino> reverseAction) {
         this.action = action;
         this.trigger = new Char(key);
-        this.simulateAction = simulateAction;
+        this.reverseAction = reverseAction;
     }
 
-    GameKey(char key, Consumer<Tetromino> action, Consumer<Tetromino> simulateAction) {
+    GameKey(char key, Consumer<Tetromino> action, Consumer<Tetromino> reverseAction) {
         this.action = action;
         this.trigger = new Char(key);
-        this.simulateAction = simulateAction;
+        this.reverseAction = reverseAction;
     }
 
     public static GameKey getGameKey(Char keyCode) {
@@ -52,11 +52,11 @@ public enum GameKey {
         return trigger;
     }
 
-    public void move(Tetromino t) {
-        this.action.accept(t);
+    public void simulate(Tetromino block) {
+        this.action.accept(block);
     }
 
-    public void simulate(Tetromino block) {
-        this.simulateAction.accept(block);
+    public void reverse(Tetromino block) {
+        this.reverseAction.accept(block);
     }
 }

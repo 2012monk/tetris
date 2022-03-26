@@ -19,6 +19,7 @@ import tetris.constants.Color;
 import tetris.constants.Shape;
 import tetris.constants.TetrominoPosition;
 import tetris.constants.WallKickCorrectionValue;
+import tetris.game.GameWindow;
 import tetris.helper.AutoDropper;
 import tetris.helper.GameKeyListener;
 import tetris.repository.PositionRepository;
@@ -29,7 +30,7 @@ import tetris.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
-    private static final int BOARD_SIZE = 20;
+    private static final int BOARD_SIZE = 22;
     private static int xAlign;
     private static Window window;
 
@@ -42,7 +43,8 @@ public class TetrisInitializer {
 
 
     public static void initGameWindow() {
-        window = WindowPoolManager.addWindow("gameMenu");
+        window = new GameWindow("gameMenu", WindowPoolManager.getScreen());
+        WindowPoolManager.addWindow(window);
         GameTitle title = new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
             false);
         xAlign = GameTitle.getTitleHeight() + 1;

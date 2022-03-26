@@ -3,7 +3,6 @@ package tetris.window;
 import tetris.Component;
 import tetris.ComponentContainer;
 import tetris.Spatial;
-import tetris.message.WindowEvent;
 
 public class Window extends ComponentContainer<Component> {
 

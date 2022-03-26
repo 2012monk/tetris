@@ -68,9 +68,9 @@ public class GameKeyListener extends ComponentImpl {
             return;
         }
         GameStatusMessage message = gameStatusOrder.get(chr);
+        publishMessage(message);
         if (message.getPayload() == END) {
             publishMessage(new MenuSelectedMessage("mainMenu"));
         }
-        publishMessage(gameStatusOrder.get(chr));
     }
 }

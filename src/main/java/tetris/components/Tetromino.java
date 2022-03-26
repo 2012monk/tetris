@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import tetris.ComponentContainer;
 import tetris.Spatial;
 import tetris.SpatialImpl;
@@ -11,16 +12,24 @@ import tetris.constants.Color;
 import tetris.constants.GameKey;
 import tetris.constants.Shape;
 import tetris.constants.TetrominoPosition;
+import tetris.constants.WallKickData;
+import tetris.exception.BlockCollideException;
+import tetris.exception.EndOfMoveException;
+import tetris.exception.OutOfDataException;
+import tetris.model.Cell;
+import tetris.model.TetrisBoard;
 import tetris.repository.PositionRepository;
+import tetris.repository.WallKickDataRepository;
 
-public class Tetromino extends ComponentContainer<Point> {
+public class Tetromino extends ComponentContainer<PointView> {
 
     private static final int DEFAULT_BLOCK_SIZE = 3;
-    private static final int HORIZONTAL_BASIS = 2;
+    private static final int HORIZONTAL_BASIS = 1;
     private static final int VERTICAL_BASIS = 1;
     private static final char DEFAULT_CELL = ' ';
     private static final char GUIDER_CELL = '.';
-    private final List<Point> originalPoints = Collections.synchronizedList(new ArrayList<>());
+    private final List<PointView> originalPoints = Collections.synchronizedList(new ArrayList<>());
+    private final List<Cell> points = new ArrayList<>();
     private final char cell;
     private final int blockSize;
     private final Shape shape;
@@ -36,7 +45,7 @@ public class Tetromino extends ComponentContainer<Point> {
         this.position = PositionRepository.getInitialPosition();
     }
 
-    private Tetromino(List<Point> points, Color fg, Color bg, Shape shape, int x, int y,
+    private Tetromino(List<PointView> points, Color fg, Color bg, Shape shape, int x, int y,
         int blockSize, char cell, Spatial parent, TetrominoPosition position) {
         super(x, y, blockSize * 2, blockSize, false);
         this.shape = shape;
@@ -45,14 +54,6 @@ public class Tetromino extends ComponentContainer<Point> {
         this.position = position;
         setFg(fg);
         setBg(bg);
-        setParent(parent);
-        points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
-    }
-
-    private Tetromino(Spatial parent, List<Point> points, Color bg, Shape shape, int x, int y,
-        int blockSize, TetrominoPosition position) {
-        this(x, y, blockSize, bg, shape);
-        this.position = position;
         setParent(parent);
         points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
     }
@@ -73,11 +74,6 @@ public class Tetromino extends ComponentContainer<Point> {
         this.position = position.getLeftPosition();
     }
 
-    public void printRotateLeft() {
-        rotateLeft();
-        updateInParent();
-    }
-
     /**
      * 90 degree rotate
      */
@@ -86,54 +82,34 @@ public class Tetromino extends ComponentContainer<Point> {
         this.position = position.getRightPosition();
     }
 
-    public void printRotateRight() {
-        rotateRight();
-        updateInParent();
-    }
-
-    private void rotateLeft(Point point) {
+    private void rotateLeft(PointView point) {
         int rotatedY = point.getRelativeX();
         int rotatedX = blockSize - 1 - point.getRelativeY();
         addPoint(rotatedX, rotatedY);
     }
 
-    private void rotateRight(Point point) {
+    private void rotateRight(PointView point) {
         int rotatedX = point.getRelativeY();
         int rotatedY = blockSize - 1 - point.getRelativeX();
         addPoint(rotatedX, rotatedY);
     }
 
-    private List<Point> clearPoints() {
-        List<Point> tmp = new ArrayList<>(this.originalPoints);
+    private List<PointView> clearPoints() {
+        List<PointView> tmp = new ArrayList<>(this.originalPoints);
         this.originalPoints.clear();
         this.components.clear();
         return tmp;
     }
 
-    public void printDown() {
-        moveDown();
-        updateInParent();
-    }
-
-    public void printLeft() {
-        moveLeft();
-        updateInParent();
-    }
-
-
-    public void printRight() {
-        moveRight();
-        updateInParent();
-    }
 
     public void moveRight() {
         this.y += HORIZONTAL_BASIS;
-        this.y -= this.y % HORIZONTAL_BASIS;
+//        this.y -= this.y % HORIZONTAL_BASIS;
     }
 
     public void moveLeft() {
         this.y -= HORIZONTAL_BASIS;
-        this.y -= this.y % HORIZONTAL_BASIS;
+//        this.y -= this.y % HORIZONTAL_BASIS;
     }
 
     public void moveDown() {
@@ -145,9 +121,9 @@ public class Tetromino extends ComponentContainer<Point> {
     }
 
     public void addPoint(int x, int y) {
-        this.originalPoints.add(new Point(x, y, fg, bg, cell));
+        this.originalPoints.add(new PointView(x, y, fg, bg, cell));
         for (int i = 0; i < HORIZONTAL_BASIS; i++) {
-            addComponent(new Point(x, y * HORIZONTAL_BASIS + i, fg, bg, cell));
+            addComponent(new PointView(x, y * HORIZONTAL_BASIS + i, fg, bg, cell));
         }
     }
 
@@ -157,25 +133,29 @@ public class Tetromino extends ComponentContainer<Point> {
         }
         setParent(spatial);
         initialized = true;
-        moveToStartingPoint();
+        moveToStartingPoint(spatial.getInnerWidth());
     }
 
-    private void moveToStartingPoint() {
+    public void moveToStartingPosition(TetrisBoard board) {
+        moveToStartingPoint(board.getWidth() * 2);
+        board.collisionTest(this);
+    }
+
+    private void moveToStartingPoint(int maxWidth) {
         this.x = -components.stream()
             .mapToInt(SpatialImpl::getRelativeX)
-            .max()
+            .min()
             .orElseThrow(NoSuchElementException::new);
-        alignCenter();
+        alignCenter(maxWidth);
     }
 
-    public void alignCenter() {
-        this.y = (parent.getInnerWidth() - getActualWidth()) / 2;
-        this.y -= this.y % HORIZONTAL_BASIS;
+    public void alignCenter(int maxWidth) {
+        this.y = (maxWidth / 2 - blockSize) / 2;
     }
 
     public Tetromino copy() {
-        return new Tetromino(getParent(), originalPoints, bg, shape, getRelativeX(), getRelativeY(),
-            blockSize, position);
+        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(), getRelativeY(),
+            blockSize, cell, getParent(), position);
     }
 
     public Tetromino getGuideBlock() {
@@ -186,13 +166,7 @@ public class Tetromino extends ComponentContainer<Point> {
 
     @Override
     public void clear() {
-        this.components.forEach(Point::clear);
-    }
-
-    public void updateInParent() {
-        if (hasParent()) {
-            render();
-        }
+        this.components.forEach(PointView::clear);
     }
 
     public int getActualWidth() {
@@ -207,8 +181,61 @@ public class Tetromino extends ComponentContainer<Point> {
         return max - min + 1;
     }
 
-    public List<Point> points() {
-        return this.components;
+    public List<Cell> getCalculatedCells() {
+        return this.originalPoints.stream()
+            .map(p -> new Cell(getRelativeX() + p.getRelativeX(),
+                getRelativeY() + p.getRelativeY(),
+                getColor()))
+            .collect(Collectors.toList());
+    }
+
+    public void move(TetrisBoard board, GameKey key) throws EndOfMoveException {
+        if (key == GameKey.KEY_UP) {
+            rotateLeft(board);
+            return;
+        }
+        if (key == GameKey.KEY_SPACE) {
+            hardDrop(board);
+            throw new EndOfMoveException();
+        }
+        key.simulate(this);
+        try {
+            board.collisionTest(this);
+        } catch (BlockCollideException e) {
+            key.reverse(this);
+            if (key == GameKey.KEY_DOWN) {
+                throw new EndOfMoveException();
+            }
+        }
+    }
+
+    public void rotateLeft(TetrisBoard board) {
+        rotateLeft();
+        try {
+            rotate(this, board, WallKickDataRepository.getLeftRotateData(this));
+        } catch (OutOfDataException e) {
+            rotateRight();
+        }
+    }
+
+    private void rotate(Tetromino block, TetrisBoard board, WallKickData data) {
+        try {
+            data.correctPosition(block);
+            board.collisionTest(block);
+        } catch (BlockCollideException e) {
+            data.reversePosition(block);
+            rotate(block, board, data.next());
+        }
+    }
+
+    public void hardDrop(TetrisBoard board) {
+        try {
+            moveDown();
+            board.collisionTest(this);
+            hardDrop(board);
+        } catch (BlockCollideException e) {
+            moveUp();
+        }
     }
 
     public Shape getShape() {
@@ -219,15 +246,6 @@ public class Tetromino extends ComponentContainer<Point> {
         return this.bg;
     }
 
-    public Tetromino simulate(GameKey key) {
-        Tetromino copied = copy();
-        key.simulate(copied);
-        return copied;
-    }
-
-    public boolean isCollide() {
-        return false;
-    }
 
     public TetrominoPosition getPosition() {
         return this.position;
@@ -236,4 +254,5 @@ public class Tetromino extends ComponentContainer<Point> {
     public int getBlockSize() {
         return blockSize;
     }
+
 }

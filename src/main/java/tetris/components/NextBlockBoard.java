@@ -26,7 +26,7 @@ public class NextBlockBoard extends ComponentImpl {
     }
 
     public void alignBlock(Tetromino tetromino) {
-        tetromino.alignCenter();
+        tetromino.alignCenter(getInnerWidth());
         if (tetromino.getBlockSize() % 2 == 0) {
             tetromino.moveRight();
         }

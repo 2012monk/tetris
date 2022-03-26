@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import tetris.components.Tetromino;
+import tetris.exception.OutOfDataException;
 
 public class WallKickData {
 
@@ -42,6 +43,9 @@ public class WallKickData {
     }
 
     public WallKickData next() {
+        if (queue.isEmpty()) {
+            throw new OutOfDataException();
+        }
         queue.removeFirst();
         return this;
     }
