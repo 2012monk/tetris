@@ -6,15 +6,10 @@ import tetris.ComponentImpl;
 import tetris.console.Console;
 import tetris.constants.Color;
 import tetris.gameobject.Cell;
-import tetris.gameobject.TetrisBoard;
 
 public class MatrixBoard extends ComponentImpl {
 
-    private static final char POINT_CHAR = ' ';
     private final List<Cell> currentState = new ArrayList<>();
-
-    public MatrixBoard() {
-    }
 
     public MatrixBoard(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
@@ -29,14 +24,10 @@ public class MatrixBoard extends ComponentImpl {
         renderCurrentState();
     }
 
-    public void renderBoard(TetrisBoard board) {
-        updateCurrentState(board.getBoardStatus());
-        render();
-    }
-
-    private void updateCurrentState(List<Cell> points) {
+    protected void updateCurrentState(List<Cell> points) {
         this.currentState.clear();
         this.currentState.addAll(points);
+        render();
     }
 
     private void renderCurrentState() {
@@ -47,9 +38,10 @@ public class MatrixBoard extends ComponentImpl {
         if (!isInside(point)) {
             return;
         }
-        Console.drawChar(calculateX(point.getX() * 2), calculateY(point.getY()), POINT_CHAR,
+        Console.drawChar(calculateX(point.getX()), calculateY(point.getY() * 2), point.getSpace(),
             getDefaultFg(), point.getColor());
-        Console.drawChar(calculateX(point.getX() * 2 + 1), calculateY(point.getY()), POINT_CHAR,
+        Console.drawChar(calculateX(point.getX()), calculateY(point.getY() * 2 + 1),
+            point.getSpace(),
             getDefaultFg(), point.getColor());
     }
 

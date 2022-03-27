@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import tetris.ComponentImpl;
+import java.util.stream.Collectors;
 import tetris.annotations.OnMessage;
 import tetris.console.Console;
 import tetris.constants.Color;
@@ -13,12 +13,12 @@ import tetris.constants.Shape;
 import tetris.message.CurrentBlockMessage;
 import tetris.repository.TetrominoRepository;
 
-public class BlockCounter extends ComponentImpl {
+public class BlockCounter extends MatrixBoard {
 
     private static final String TITLE = "Block Counter";
     private static final Color COUNTER_COLOR = Color.GREEN;
     private final Map<Shape, Integer> counter = new HashMap<>();
-    private final List<Tetromino> alignedBlocks = new ArrayList<>();
+    private final Map<Shape, Integer> position = new HashMap<>();
     private final int yAlign = 12;
 
     public BlockCounter(int x, int y, int width, int height, boolean borderOn) {
@@ -27,25 +27,21 @@ public class BlockCounter extends ComponentImpl {
         subscribe(CurrentBlockMessage.class);
     }
 
-    public void increaseCount(Tetromino block) {
-        counter.putIfAbsent(block.getShape(), 0);
-        counter.computeIfPresent(block.getShape(), (k, v) -> v + 1);
-        render();
-    }
-
     private void init() {
+        List<Tetromino> alignedBlocks = new ArrayList<>();
         Arrays.stream(Shape.values())
             .forEach(s -> alignedBlocks.add(TetrominoRepository.getTetrominoByShape(s)));
-        alignedBlocks.forEach(b -> b.setParent(this));
-        alignedBlocks.forEach(b -> counter.put(b.getShape(), 0));
         for (int i = 1; i < alignedBlocks.size(); i++) {
             align(alignedBlocks.get(i - 1), alignedBlocks.get(i));
         }
-        alignedBlocks.forEach(b -> {
-            b.moveDown();
-            b.moveDown();
-            b.moveRight();
-        });
+        alignedBlocks.forEach(b -> b.move(2, 1));
+        alignedBlocks.forEach(b -> counter.put(b.getShape(), 0));
+        alignedBlocks.forEach(b -> position.put(b.getShape(), b.getX()));
+        position.computeIfPresent(Shape.I, (k, v) -> v + 1);
+        updateCurrentState(alignedBlocks
+            .stream()
+            .flatMap(b -> b.getCalculatedCells().stream())
+            .collect(Collectors.toList()));
     }
 
     private void align(Tetromino prev, Tetromino current) {
@@ -53,20 +49,15 @@ public class BlockCounter extends ComponentImpl {
         if (current.getShape() == Shape.I) {
             correction = -1;
         }
-        for (int i = 0; i < prev.getActualHeight() + prev.getRelativeX() + correction; i++) {
-            current.moveDown();
-        }
-    }
-
-    private int getYAlign() {
-        return getInnerY() + yAlign;
+        current.move(prev.getHeight() + prev.getX() + correction, 0);
     }
 
     @OnMessage
     public void onMessage(CurrentBlockMessage post) {
-        if (post != null) {
-            increaseCount(post.getPayload());
-        }
+        Shape shape = post.getPayload().getShape();
+        counter.putIfAbsent(shape, 0);
+        counter.computeIfPresent(shape, (k, v) -> v + 1);
+        render();
     }
 
     private void printTitle() {
@@ -76,20 +67,19 @@ public class BlockCounter extends ComponentImpl {
 
     @Override
     public void render() {
+        super.render();
         if (!hasParent()) {
             return;
         }
-        clear();
         printTitle();
-        alignedBlocks.forEach(b -> {
-            b.render();
-            int correction = 0;
-            if (b.getShape() == Shape.I) {
-                correction = 1;
-            }
-            Console.drawString(b.getInnerX() + correction, getYAlign(),
-                String.valueOf(counter.get(b.getShape())), COUNTER_COLOR, bg
-            );
-        });
+        position.keySet()
+            .forEach(this::printNumber);
+    }
+
+    private void printNumber(Shape shape) {
+        int pos = position.get(shape);
+        int count = counter.get(shape);
+        Console.drawString(pos + getInnerX(), yAlign + getInnerY(), String.valueOf(count),
+            COUNTER_COLOR, bg);
     }
 }

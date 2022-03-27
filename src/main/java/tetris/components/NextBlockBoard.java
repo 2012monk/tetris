@@ -1,28 +1,13 @@
 package tetris.components;
 
-import tetris.ComponentImpl;
 import tetris.annotations.OnMessage;
 import tetris.message.NextBlockMessage;
 
-public class NextBlockBoard extends ComponentImpl {
-
-    private Tetromino nextBlock;
-
-    public NextBlockBoard(int x, int y, int width, int height) {
-        this(x, y, width, height, false);
-    }
+public class NextBlockBoard extends MatrixBoard {
 
     public NextBlockBoard(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
         subscribe(NextBlockMessage.class);
-    }
-
-    @Override
-    public void render() {
-        clear();
-        if (nextBlock != null) {
-            nextBlock.render();
-        }
     }
 
     public void alignBlock(Tetromino tetromino) {
@@ -40,9 +25,8 @@ public class NextBlockBoard extends ComponentImpl {
             clear();
             return;
         }
-        nextBlock.setParent(this);
         alignBlock(nextBlock);
-        this.nextBlock = nextBlock;
+        updateCurrentState(nextBlock.getCalculatedCells());
         render();
     }
 }

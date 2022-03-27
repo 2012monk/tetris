@@ -23,14 +23,14 @@ public class TetrominoRepository {
         if (!tetrominos.containsKey(shape)) {
             throw new IllegalArgumentException();
         }
-        return tetrominos.get(shape).copy();
+        return tetrominos.get(shape).deepCopy();
     }
 
     public static Tetromino getNextTetromino() {
         if (pool.isEmpty()) {
             initPool();
         }
-        return pool.removeFirst().copy();
+        return pool.removeFirst().deepCopy();
     }
 
     private static void initPool() {
@@ -38,7 +38,7 @@ public class TetrominoRepository {
         for (int i = 0; i < 3; i++) {
             tmp.addAll(tetrominos.values()
                 .stream()
-                .map(Tetromino::copy)
+                .map(Tetromino::deepCopy)
                 .collect(Collectors.toList()));
             Collections.shuffle(tmp);
         }
@@ -50,7 +50,7 @@ public class TetrominoRepository {
         if (pool.isEmpty()) {
             initPool();
         }
-        return pool.getFirst().copy();
+        return pool.getFirst().deepCopy();
     }
 
     public static void shuffle() {

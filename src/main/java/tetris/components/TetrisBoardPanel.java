@@ -2,8 +2,8 @@ package tetris.components;
 
 import tetris.annotations.OnMessage;
 import tetris.console.Console;
-import tetris.message.BoardUpdateMessage;
 import tetris.gameobject.Cell;
+import tetris.message.BoardUpdateMessage;
 
 public class TetrisBoardPanel extends MatrixBoard {
 
@@ -17,9 +17,8 @@ public class TetrisBoardPanel extends MatrixBoard {
 
     @OnMessage
     public void renderBoard(BoardUpdateMessage message) {
-        clear();
-        message.getPayload().getBoardStatus()
-            .forEach(this::printCell);
+        updateCurrentState(message.getPayload().getBoardStatus());
+        render();
     }
 
     private void printCell(Cell p) {

@@ -68,8 +68,5 @@ public class WallKickDataRepository {
             throw new NoSuchElementException(from.name() + " " + to.name());
         }
         return new WallKickData(from, to, origin.get(from).get(to));
-//        return data.stream().filter(d -> d.coincide(from, to))
-//            .findFirst()
-//            .orElseThrow(NoSuchElementException::new);
     }
 }

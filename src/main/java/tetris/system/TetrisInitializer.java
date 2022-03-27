@@ -145,35 +145,35 @@ public class TetrisInitializer {
         initPosition();
         Tetromino S = getS();
         Tetromino I = new Tetromino(Color.RED, Shape.I, 4);
-        I.addPoint(1, 0);
-        I.addPoint(1, 1);
-        I.addPoint(1, 2);
-        I.addPoint(1, 3);
+        I.addCell(1, 0);
+        I.addCell(1, 1);
+        I.addCell(1, 2);
+        I.addCell(1, 3);
         Tetromino T = new Tetromino(Color.GREEN, Shape.T);
-        T.addPoint(0, 1);
-        T.addPoint(1, 0);
-        T.addPoint(1, 1);
-        T.addPoint(1, 2);
+        T.addCell(0, 1);
+        T.addCell(1, 0);
+        T.addCell(1, 1);
+        T.addCell(1, 2);
         Tetromino Z = new Tetromino(Color.YELLOW, Shape.Z);
-        Z.addPoint(0, 2);
-        Z.addPoint(0, 1);
-        Z.addPoint(1, 1);
-        Z.addPoint(1, 0);
+        Z.addCell(0, 2);
+        Z.addCell(0, 1);
+        Z.addCell(1, 1);
+        Z.addCell(1, 0);
         Tetromino O = new Tetromino(Color.CYAN, Shape.O, 2);
-        O.addPoint(0, 0);
-        O.addPoint(0, 1);
-        O.addPoint(1, 0);
-        O.addPoint(1, 1);
+        O.addCell(0, 0);
+        O.addCell(0, 1);
+        O.addCell(1, 0);
+        O.addCell(1, 1);
         Tetromino L = new Tetromino(Color.WHITE, Shape.L);
-        L.addPoint(1, 0);
-        L.addPoint(1, 1);
-        L.addPoint(1, 2);
-        L.addPoint(0, 2);
+        L.addCell(1, 0);
+        L.addCell(1, 1);
+        L.addCell(1, 2);
+        L.addCell(0, 2);
         Tetromino J = new Tetromino(Color.MAGENTA, Shape.J);
-        J.addPoint(1, 0);
-        J.addPoint(1, 1);
-        J.addPoint(1, 2);
-        J.addPoint(0, 0);
+        J.addCell(1, 0);
+        J.addCell(1, 1);
+        J.addCell(1, 2);
+        J.addCell(0, 0);
 
         TetrominoRepository.addTetromino(I);
         TetrominoRepository.addTetromino(S);
@@ -186,10 +186,10 @@ public class TetrisInitializer {
 
     public static Tetromino getS() {
         Tetromino S = new Tetromino(Color.BLUE, Shape.S);
-        S.addPoint(0, 0);
-        S.addPoint(0, 1);
-        S.addPoint(1, 1);
-        S.addPoint(1, 2);
+        S.addCell(0, 0);
+        S.addCell(0, 1);
+        S.addCell(1, 1);
+        S.addCell(1, 2);
         return S;
     }
 

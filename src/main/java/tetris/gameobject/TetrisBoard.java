@@ -23,6 +23,11 @@ public class TetrisBoard {
         this.height = DEFAULT_HEIGHT;
     }
 
+    public TetrisBoard(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -44,7 +49,6 @@ public class TetrisBoard {
     }
 
     public void updateGuideTetromino(Tetromino tetromino) throws BlockCollideException {
-        collisionTest(tetromino);
         this.temporaryCells.addAll(tetromino.getCalculatedCells());
     }
 

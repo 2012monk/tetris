@@ -1,13 +1,9 @@
 package tetris.components;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-import tetris.ComponentContainer;
-import tetris.Spatial;
-import tetris.SpatialImpl;
 import tetris.constants.Color;
 import tetris.constants.GameKey;
 import tetris.constants.Shape;
@@ -21,41 +17,41 @@ import tetris.gameobject.TetrisBoard;
 import tetris.repository.PositionRepository;
 import tetris.repository.WallKickDataRepository;
 
-public class Tetromino extends ComponentContainer<PointView> {
+public class Tetromino {
 
     private static final int DEFAULT_BLOCK_SIZE = 3;
-    private static final int HORIZONTAL_BASIS = 1;
-    private static final int VERTICAL_BASIS = 1;
+    private static final int BASIS = 1;
     private static final char DEFAULT_CELL = ' ';
     private static final char GUIDER_CELL = '.';
-    private final List<PointView> originalPoints = Collections.synchronizedList(new ArrayList<>());
     private final List<Cell> points = new ArrayList<>();
-    private final char cell;
+    private final char space;
     private final int blockSize;
     private final Shape shape;
+    private final Color color;
     private TetrominoPosition position;
-    private boolean initialized = false;
+    private int x;
+    private int y;
 
-    private Tetromino(int x, int y, int blockSize, Color bg, Shape shape) {
-        super(x, y, blockSize * 2, blockSize, false);
-        setBg(bg);
-        this.shape = shape;
+    public Tetromino(char space, int blockSize, Shape shape, TetrominoPosition position, int x,
+        int y, Color color, List<Cell> cells) {
+        this.space = space;
         this.blockSize = blockSize;
-        this.cell = DEFAULT_CELL;
-        this.position = PositionRepository.getInitialPosition();
+        this.shape = shape;
+        this.position = position;
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        cells.forEach(c -> addCell(c.getX(), c.getY()));
     }
 
-    private Tetromino(List<PointView> points, Color fg, Color bg, Shape shape, int x, int y,
-        int blockSize, char cell, Spatial parent, TetrominoPosition position) {
-        super(x, y, blockSize * 2, blockSize, false);
+    private Tetromino(int x, int y, int blockSize, Color bg, Shape shape) {
+        this.x = x;
+        this.y = y;
+        this.color = bg;
         this.shape = shape;
         this.blockSize = blockSize;
-        this.cell = cell;
-        this.position = position;
-        setFg(fg);
-        setBg(bg);
-        setParent(parent);
-        points.forEach(p -> addPoint(p.getRelativeX(), p.getRelativeY()));
+        this.space = DEFAULT_CELL;
+        this.position = PositionRepository.getInitialPosition();
     }
 
     public Tetromino(Color bg, Shape shape, int blockSize) {
@@ -82,58 +78,48 @@ public class Tetromino extends ComponentContainer<PointView> {
         this.position = position.getRightPosition();
     }
 
-    private void rotateLeft(PointView point) {
-        int rotatedY = point.getRelativeX();
-        int rotatedX = blockSize - 1 - point.getRelativeY();
-        addPoint(rotatedX, rotatedY);
+    private void rotateLeft(Cell point) {
+        int rotatedY = point.getX();
+        int rotatedX = blockSize - 1 - point.getY();
+        addCell(rotatedX, rotatedY);
     }
 
-    private void rotateRight(PointView point) {
-        int rotatedX = point.getRelativeY();
-        int rotatedY = blockSize - 1 - point.getRelativeX();
-        addPoint(rotatedX, rotatedY);
+    private void rotateRight(Cell point) {
+        int rotatedX = point.getY();
+        int rotatedY = blockSize - 1 - point.getX();
+        addCell(rotatedX, rotatedY);
     }
 
-    private List<PointView> clearPoints() {
-        List<PointView> tmp = new ArrayList<>(this.originalPoints);
-        this.originalPoints.clear();
-        this.components.clear();
+    private List<Cell> clearPoints() {
+        List<Cell> tmp = new ArrayList<>(this.points);
+        this.points.clear();
         return tmp;
     }
 
 
     public void moveRight() {
-        this.y += HORIZONTAL_BASIS;
-//        this.y -= this.y % HORIZONTAL_BASIS;
+        move(0, BASIS);
     }
 
     public void moveLeft() {
-        this.y -= HORIZONTAL_BASIS;
-//        this.y -= this.y % HORIZONTAL_BASIS;
+        move(0, -BASIS);
     }
 
     public void moveDown() {
-        this.x += VERTICAL_BASIS;
+        move(BASIS, 0);
     }
 
     public void moveUp() {
-        this.x -= VERTICAL_BASIS;
+        move(-BASIS, 0);
     }
 
-    public void addPoint(int x, int y) {
-        this.originalPoints.add(new PointView(x, y, fg, bg, cell));
-        for (int i = 0; i < HORIZONTAL_BASIS; i++) {
-            addComponent(new PointView(x, y * HORIZONTAL_BASIS + i, fg, bg, cell));
-        }
+    public void move(int x, int y) {
+        this.x += x;
+        this.y += y;
     }
 
-    public void initBlock(Spatial spatial) {
-        if (initialized && spatial.equals(this.parent)) {
-            return;
-        }
-        setParent(spatial);
-        initialized = true;
-        moveToStartingPoint(spatial.getInnerWidth());
+    public void addCell(int x, int y) {
+        this.points.add(new Cell(x, y, getColor(), space));
     }
 
     public void moveToStartingPosition(TetrisBoard board) {
@@ -142,8 +128,8 @@ public class Tetromino extends ComponentContainer<PointView> {
     }
 
     private void moveToStartingPoint(int maxWidth) {
-        this.x = -components.stream()
-            .mapToInt(SpatialImpl::getRelativeX)
+        this.x = -this.points.stream()
+            .mapToInt(Cell::getX)
             .min()
             .orElseThrow(NoSuchElementException::new);
         alignCenter(maxWidth);
@@ -153,39 +139,29 @@ public class Tetromino extends ComponentContainer<PointView> {
         this.y = (maxWidth / 2 - blockSize) / 2;
     }
 
-    public Tetromino copy() {
-        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(), getRelativeY(),
-            blockSize, cell, getParent(), position);
+    public Tetromino deepCopy() {
+        return new Tetromino(space, blockSize, shape, position, x, y, color, points);
     }
 
     public Tetromino getGuideBlock() {
-        return new Tetromino(originalPoints, fg, bg, shape, getRelativeX(),
-            getRelativeY(),
-            blockSize, GUIDER_CELL, getParent(), position);
+        return new Tetromino(GUIDER_CELL, blockSize, shape, position, x, y, color, points);
     }
 
-    @Override
-    public void clear() {
-        this.components.forEach(PointView::clear);
-    }
-
-    public int getActualWidth() {
-        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeY).min().orElse(0);
-        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeY).max().orElse(0);
+    public int getWidth() {
+        int min = this.points.stream().mapToInt(Cell::getY).min().orElse(0);
+        int max = this.points.stream().mapToInt(Cell::getY).max().orElse(0);
         return max - min + 1;
     }
 
-    public int getActualHeight() {
-        int min = this.components.stream().mapToInt(SpatialImpl::getRelativeX).min().orElse(0);
-        int max = this.components.stream().mapToInt(SpatialImpl::getRelativeX).max().orElse(0);
+    public int getHeight() {
+        int min = this.points.stream().mapToInt(Cell::getX).min().orElse(0);
+        int max = this.points.stream().mapToInt(Cell::getX).max().orElse(0);
         return max - min + 1;
     }
 
     public List<Cell> getCalculatedCells() {
-        return this.originalPoints.stream()
-            .map(p -> new Cell(getRelativeX() + p.getRelativeX(),
-                getRelativeY() + p.getRelativeY(),
-                getColor()))
+        return this.points.stream()
+            .map(p -> new Cell(x + p.getX(), y + p.getY(), getColor(), space))
             .collect(Collectors.toList());
     }
 
@@ -243,9 +219,8 @@ public class Tetromino extends ComponentContainer<PointView> {
     }
 
     public Color getColor() {
-        return this.bg;
+        return this.color;
     }
-
 
     public TetrominoPosition getPosition() {
         return this.position;
@@ -255,4 +230,11 @@ public class Tetromino extends ComponentContainer<PointView> {
         return blockSize;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

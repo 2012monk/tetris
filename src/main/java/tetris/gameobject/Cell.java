@@ -18,6 +18,13 @@ public class Cell implements Point {
         this.space = DEFAULT_SPACE;
     }
 
+    public Cell(int x, int y, Color color, char space) {
+        this.color = color;
+        this.space = space;
+        this.x = x;
+        this.y = y;
+    }
+
     public int getX() {
         return x;
     }
