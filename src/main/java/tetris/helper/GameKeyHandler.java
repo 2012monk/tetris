@@ -8,12 +8,14 @@ import static tetris.constants.GameStatus.START;
 
 import java.util.HashMap;
 import java.util.Map;
+import tetris.constants.AudioStatus;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
 import tetris.system.MessageBroker;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.constants.Char;
 import tetris.ui.constants.SpecialKeyCode;
+import tetris.ui.message.AudioMessage;
 import tetris.ui.message.GameKeyMessage;
 import tetris.ui.message.GameStatusMessage;
 import tetris.ui.message.MenuSelectedMessage;
@@ -39,6 +41,10 @@ public class GameKeyHandler {
     }
 
     public void handleKey(Char chr) {
+        if (chr.is('m')) {
+            publishMessage(new AudioMessage(AudioStatus.MUTE));
+            return;
+        }
         if (isMoveBlocked()) {
             statusOrder(chr);
             return;

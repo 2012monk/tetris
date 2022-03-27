@@ -1,5 +1,8 @@
 package tetris.audio;
 
+import static tetris.constants.AudioStatus.MUTE;
+import static tetris.constants.AudioStatus.STOP;
+
 import com.goxr3plus.streamplayer.stream.StreamPlayer;
 import com.goxr3plus.streamplayer.stream.StreamPlayerEvent;
 import com.goxr3plus.streamplayer.stream.StreamPlayerException;
@@ -14,6 +17,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import tetris.constants.AudioStatus;
+import tetris.system.MessageBroker;
+import tetris.ui.annotations.OnMessage;
+import tetris.ui.message.AudioMessage;
 
 public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListener {
 
@@ -25,7 +32,8 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
     private static final ExecutorService parentService1;
     private static final ExecutorService parentService2;
     private static final ScheduledExecutorService loopService;
-    private static final Logger logger; // disabled logger
+    // disabled logger
+    private static final Logger logger;
     private static ScheduledFuture<?> future;
     private static GameAudioPlayer instance;
 
@@ -43,6 +51,7 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
 
     private GameAudioPlayer() {
         super(logger, parentService1, parentService2);
+        MessageBroker.subscribe(AudioMessage.class, this);
     }
 
     public static GameAudioPlayer getInstance() {
@@ -50,6 +59,18 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
             instance = new GameAudioPlayer();
         }
         return instance;
+    }
+
+    @OnMessage
+    private void onMessage(AudioMessage message) {
+        AudioStatus status = message.getPayload();
+        if (status == MUTE) {
+            toggleMute();
+        }
+        if (status == STOP) {
+            stop();
+            call();
+        }
     }
 
     public void playMenuBgm() {
@@ -60,14 +81,18 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
         startLoop(PLAY_BGM_PATH);
     }
 
+    public void toggleMute() {
+        setMute(!getMute());
+    }
+
     public void shutDown() {
         stop();
         call();
         // stream player bug
         parentService1.shutdownNow();
         parentService2.shutdownNow();
-        loopService.shutdownNow();
         shutDownLoop();
+        loopService.shutdownNow();
     }
 
     private void startLoop(String path) {
