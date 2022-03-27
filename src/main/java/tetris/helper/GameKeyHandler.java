@@ -27,7 +27,6 @@ public class GameKeyHandler {
     public GameKeyHandler() {
         gameStatusOrder.put(new Char('q'), new GameStatusMessage(END));
         gameStatusOrder.put(new Char(SpecialKeyCode.KEY_ESC), new GameStatusMessage(END));
-        gameStatusOrder.put(new Char(SpecialKeyCode.KEY_SPACE), new GameStatusMessage(START));
         gameStatusOrder.put(new Char('p'), new GameStatusMessage(PAUSE));
         gameStatusOrder.put(new Char('s'), new GameStatusMessage(START));
         gameStatusOrder.put(new Char('r'), new GameStatusMessage(RESTART));
@@ -37,36 +36,64 @@ public class GameKeyHandler {
     @OnMessage
     public void onMessage(GameStatusMessage post) {
         this.status = post.getPayload();
-        if (status == RESUME) {
-            status = START;
-        }
     }
 
     public void handleKey(Char chr) {
-        if (status != START) {
+        if (isMoveBlocked()) {
             statusOrder(chr);
             return;
         }
-        if (GameKey.hasKey(chr)) {
-            publishMessage(new GameKeyMessage(GameKey.getGameKey(chr)));
-        } else {
+        if (isStatusOrder(chr)) {
             statusOrder(chr);
+            return;
+        }
+        if (isGameKey(chr)) {
+            publishMessage(new GameKeyMessage(GameKey.getGameKey(chr)));
         }
     }
 
+    private boolean isStatusOrder(Char chr) {
+        if (isPaused()) {
+            return true;
+        }
+        boolean isHasKey = gameStatusOrder.containsKey(chr);
+        if (isHasKey) {
+            return gameStatusOrder.get(chr).getPayload() != status;
+        }
+        return false;
+    }
+
+    private boolean isGameKey(Char chr) {
+        return GameKey.hasKey(chr);
+    }
+
+    private boolean isMoveBlocked() {
+        return status != RESUME && status != START;
+    }
+
+    private boolean isPaused() {
+        return status == PAUSE;
+    }
+
     private void statusOrder(Char chr) {
-        if (this.status == PAUSE && chr.is(SpecialKeyCode.KEY_SPACE)) {
+        if (isPaused()) {
             publishMessage(new GameStatusMessage(RESUME));
             return;
         }
-        if (!gameStatusOrder.containsKey(chr)) {
+        GameStatusMessage message = gameStatusOrder.get(chr);
+        if (message.getPayload() == RESTART) {
+            restart();
             return;
         }
-        GameStatusMessage message = gameStatusOrder.get(chr);
         publishMessage(message);
         if (message.getPayload() == END) {
             publishMessage(new MenuSelectedMessage("mainMenu"));
         }
+    }
+
+    private void restart() {
+        publishMessage(new GameStatusMessage(END));
+        publishMessage(new GameStatusMessage(START));
     }
 
     private void publishMessage(Post<?> msg) {

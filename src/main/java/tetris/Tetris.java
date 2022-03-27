@@ -1,7 +1,7 @@
 package tetris;
 
-import tetris.system.MenuInitializer;
-import tetris.system.TetrisInitializer;
+import tetris.game.MenuInitializer;
+import tetris.game.TetrisInitializer;
 import tetris.ui.window.WindowPoolManager;
 
 public class Tetris {

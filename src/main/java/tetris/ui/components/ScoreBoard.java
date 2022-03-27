@@ -1,6 +1,5 @@
 package tetris.ui.components;
 
-import tetris.constants.GameStatus;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.message.GameScoreMessage;
 import tetris.ui.message.GameStatusMessage;
@@ -22,19 +21,7 @@ public class ScoreBoard extends TextArea {
 
     @OnMessage
     public void onMessage(GameScoreMessage post) {
-        if (post != null) {
-            printScore(post.getPayload().getScore());
-        }
-    }
-
-    @OnMessage
-    public void handleStatus(GameStatusMessage post) {
-        if (post != null) {
-            GameStatus status = post.getPayload();
-            if (status == GameStatus.START) {
-                render();
-            }
-        }
+        printScore(post.getPayload().getScore());
     }
 
     private void printScore(int score) {

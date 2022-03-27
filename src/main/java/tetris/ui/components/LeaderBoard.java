@@ -4,7 +4,7 @@ package tetris.ui.components;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import tetris.helper.LeaderBoardManager;
+import tetris.helper.LeaderBoardIOManger;
 import tetris.ui.constants.Char;
 import tetris.ui.message.MenuSelectedMessage;
 
@@ -32,7 +32,7 @@ public class LeaderBoard extends TextArea {
 
     private void load() {
         loadedScore.clear();
-        LeaderBoardManager.loadScores()
+        LeaderBoardIOManger.loadScores()
             .forEach(this::addScore);
         loadedScore.sort(Comparator.comparingInt(s -> -s.score));
     }

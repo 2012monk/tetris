@@ -1,7 +1,7 @@
 package tetris.ui.components;
 
 import tetris.gameobject.GameScore;
-import tetris.helper.LeaderBoardManager;
+import tetris.helper.LeaderBoardIOManger;
 import tetris.ui.ComponentImpl;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.console.Console;
@@ -50,7 +50,7 @@ public class LeaderInputBoard extends ComponentImpl {
         if (currentScore != null) {
             score = currentScore.getScore();
         }
-        LeaderBoardManager.saveScore(name.toString(), score);
+        LeaderBoardIOManger.saveScore(name.toString(), score);
         name = new StringBuilder();
         publishMessage(new MenuSelectedMessage("leaderBoardMenu"));
     }

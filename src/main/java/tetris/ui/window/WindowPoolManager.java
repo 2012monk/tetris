@@ -2,7 +2,6 @@ package tetris.ui.window;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingDeque;
-import tetris.system.MessageBroker;
 import tetris.system.TaskManager;
 import tetris.ui.Spatial;
 import tetris.ui.console.Console;
@@ -17,14 +16,12 @@ public class WindowPoolManager {
     public synchronized static void init() {
         Console.initConsole();
         TaskManager.init();
-        MessageBroker.init();
         WindowInputListener.init();
     }
 
     public synchronized static void shutDown() {
         WindowInputListener.shutDown();
         TaskManager.shutDown();
-        MessageBroker.shutDown();
         Console.shutdown();
     }
 
@@ -53,7 +50,7 @@ public class WindowPoolManager {
         if (windowPool.isEmpty()) {
             return;
         }
-        TaskManager.addTask(() -> getFocusedWindow().handleKey(chr));
+        getFocusedWindow().handleKey(chr);
     }
 
     public static Spatial getScreen() {
@@ -62,10 +59,6 @@ public class WindowPoolManager {
                 SCREEN_NAME);
         }
         return screen;
-    }
-
-    public static void refreshAll() {
-        windowPool.forEach(w -> TaskManager.addTask(w::render));
     }
 
     private static void focusWindow(Window window) {

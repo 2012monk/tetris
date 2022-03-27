@@ -3,29 +3,21 @@ package tetris.system;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
 import tetris.Task;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.message.Post;
 
-public class MessageBroker implements Runnable {
+public class MessageBroker {
 
     private static final ConcurrentHashMap<Class<? extends Post<?>>,
         ConcurrentHashMap<Integer, WeakReference<Object>>> subs = new ConcurrentHashMap<>();
-    private static final BlockingDeque<Post<?>> messageQueue = new LinkedBlockingDeque<>();
-    private static final long DEFAULT_TIMEOUT = 5000;
-    private static MessageBroker instance;
-    private static Thread thread;
-    private static boolean isRunning;
 
     private MessageBroker() {
     }
 
-    public static void publish(Post<?> post) {
-        messageQueue.add(post);
-        thread.interrupt();
+    public synchronized static void publish(Post<?> post) {
+        broadCast(post);
     }
 
     public static void subscribe(Class<? extends Post<?>> post, Object subscriber) {
@@ -46,10 +38,12 @@ public class MessageBroker implements Runnable {
     }
 
     public static void broadCast(Object subscriber, Post<?> post) {
+        if (subscriber == null || post == null) {
+            return;
+        }
         Arrays.stream(subscriber.getClass().getDeclaredMethods())
             .filter(m -> m.getAnnotation(OnMessage.class) != null)
             .forEach(m -> broadCast(subscriber, m, post));
-
     }
 
     private static void broadCast(Object subscriber, Method method, Post<?> post) {
@@ -65,43 +59,5 @@ public class MessageBroker implements Runnable {
 
     private static boolean isMatchedParameter(Method method, Post<?> post) {
         return Arrays.stream(method.getParameterTypes()).anyMatch(t -> t.equals(post.getClass()));
-    }
-
-    public static MessageBroker getInstance() {
-        if (instance == null) {
-            instance = new MessageBroker();
-        }
-        return instance;
-    }
-
-    public static synchronized void init() {
-        isRunning = true;
-        if (thread == null) {
-            thread = new Thread(getInstance());
-            thread.start();
-        }
-    }
-
-    public static synchronized void shutDown() {
-        isRunning = false;
-        messageQueue.clear();
-        if (thread != null && thread.isAlive()) {
-            thread.interrupt();
-            thread = null;
-        }
-    }
-
-    @Override
-    public void run() {
-        while (isRunning) {
-            if (messageQueue.isEmpty()) {
-                try {
-                    Thread.sleep(DEFAULT_TIMEOUT);
-                } catch (InterruptedException ignore) {
-                }
-                continue;
-            }
-            broadCast(messageQueue.removeFirst());
-        }
     }
 }

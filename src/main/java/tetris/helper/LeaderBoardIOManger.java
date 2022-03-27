@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LeaderBoardManager {
+public class LeaderBoardIOManger {
 
     private static final String DEFAULT_LOCATION = "./scores.txt";
 

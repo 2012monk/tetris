@@ -1,4 +1,4 @@
-package tetris.system;
+package tetris.game;
 
 import static tetris.constants.TetrominoStatus.INVERSE;
 import static tetris.constants.TetrominoStatus.LEFT;
@@ -11,12 +11,11 @@ import tetris.constants.TetrominoPosition;
 import tetris.constants.TetrominoShape;
 import tetris.constants.WallKickCorrectionValue;
 import tetris.gameobject.Tetromino;
-import tetris.helper.AutoDropper;
 import tetris.repository.PositionRepository;
 import tetris.repository.TetrominoRepository;
 import tetris.repository.WallKickDataRepository;
 import tetris.ui.components.BlockCounter;
-import tetris.ui.components.GameClock;
+import tetris.ui.components.GameClockPanel;
 import tetris.ui.components.GameTitle;
 import tetris.ui.components.HelpMessage;
 import tetris.ui.components.NextBlockBoard;
@@ -68,7 +67,7 @@ public class TetrisInitializer {
     private static void leftBoard() {
         int w = 17;
         int y = (window.getInnerWidth() - BOARD_SIZE) / 2 - BOARD_SIZE + 1;
-        window.addComponent(new GameClock(xAlign, y, w, 3, true));
+        window.addComponent(new GameClockPanel(xAlign, y, w, 3, true));
         window.addComponent(new BlockCounter(xAlign + 3, y, w, 17, true));
     }
 
@@ -76,7 +75,6 @@ public class TetrisInitializer {
         int y = (window.getInnerWidth() - BOARD_SIZE) / 2;
         TetrisBoardPanel board = new TetrisBoardPanel(xAlign, y, BOARD_SIZE, BOARD_SIZE);
         window.addComponent(board);
-        window.addComponent(new AutoDropper());
     }
 
     /*

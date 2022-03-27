@@ -1,12 +1,9 @@
-package tetris.controller;
+package tetris.gameobject;
 
 import tetris.constants.GameKey;
 import tetris.exception.BlockCollideException;
 import tetris.exception.EndOfGameException;
 import tetris.exception.EndOfMoveException;
-import tetris.gameobject.GameScore;
-import tetris.gameobject.TetrisBoard;
-import tetris.gameobject.Tetromino;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MessageBroker;
 import tetris.ui.message.BoardUpdateMessage;
@@ -14,14 +11,14 @@ import tetris.ui.message.CurrentBlockMessage;
 import tetris.ui.message.NextBlockMessage;
 import tetris.ui.message.Post;
 
-public class TetrisGameController {
+public class TetrisGame {
 
     private final TetrisBoard board;
     private final GameScore score;
     private Tetromino currentBlock;
     private Tetromino guideBlock;
 
-    public TetrisGameController(TetrisBoard board) {
+    public TetrisGame(TetrisBoard board) {
         this.board = board;
         this.score = new GameScore();
     }
@@ -65,10 +62,6 @@ public class TetrisGameController {
         publishMessage(new NextBlockMessage(TetrominoRepository.peekNextTetromino()));
     }
 
-    private void publishMessage(Post<?> message) {
-        MessageBroker.publish(message);
-    }
-
     private void calculateScore() {
         int deletedRowCount = board.stackTetromino(currentBlock);
         score.updateScore(deletedRowCount);
@@ -77,5 +70,9 @@ public class TetrisGameController {
     private void resetGuideBlock() {
         guideBlock = currentBlock.getGuideBlock();
         guideBlock.hardDrop(board);
+    }
+
+    private void publishMessage(Post<?> message) {
+        MessageBroker.publish(message);
     }
 }

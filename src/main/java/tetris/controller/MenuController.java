@@ -14,7 +14,6 @@ public class MenuController {
     private static final String LEADER_BOARD_MENU = "leaderBoardMenu";
     private static final String QUIT = "quit";
     private static MenuController instance;
-    private final GameAudioPlayer player = GameAudioPlayer.getInstance();
 
     private MenuController() {
         MessageBroker.subscribe(MenuSelectedMessage.class, this);
@@ -41,8 +40,8 @@ public class MenuController {
     }
 
     public void quit() {
-        WindowPoolManager.shutDown();
         GameAudioPlayer.getInstance().shutDown();
+        WindowPoolManager.shutDown();
     }
 
     private void select(String name) {

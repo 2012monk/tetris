@@ -1,4 +1,4 @@
-package tetris.system;
+package tetris.game;
 
 import tetris.controller.MenuController;
 import tetris.ui.components.GameTitle;
