@@ -2,16 +2,12 @@ package tetris.controller;
 
 import tetris.audio.GameAudioPlayer;
 import tetris.system.MessageBroker;
-import tetris.ui.annotations.OnMessage;
 import tetris.ui.message.MenuSelectedMessage;
 import tetris.ui.window.Window;
 import tetris.ui.window.WindowPoolManager;
 
 public class MenuController {
 
-    private static final String MAIN_MENU = "mainMenu";
-    private static final String GAME_MENU = "gameMenu";
-    private static final String LEADER_BOARD_MENU = "leaderBoardMenu";
     private static final String QUIT = "quit";
     private static MenuController instance;
 
@@ -26,17 +22,17 @@ public class MenuController {
         return instance;
     }
 
-    @OnMessage
-    private void selectMenu(MenuSelectedMessage message) {
-        if (message.getPayload().equals(QUIT)) {
+    public void selectMenu(String name) {
+        if (name.equals(QUIT)) {
             quit();
             return;
         }
         try {
-            select(message.getPayload());
+            select(name);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void quit() {

@@ -20,12 +20,13 @@ import tetris.ui.window.Window;
 
 public class GameWindow extends Window {
 
+    private static final String GAME_MENU = "gameMenu";
     private final TetrisController controller;
     private final GameKeyHandler keyHandler;
     private final GameAudioPlayer player = GameAudioPlayer.getInstance();
 
-    public GameWindow(String name, Spatial screen) {
-        super(0, 0, screen.getWidth(), screen.getHeight(), false, name);
+    public GameWindow(Spatial screen) {
+        super(0, 0, screen.getWidth(), screen.getHeight(), false, GAME_MENU);
         keyHandler = new GameKeyHandler();
         controller = new TetrisController(new TetrisGame(new TetrisBoard()));
         subscribe(GameKeyMessage.class);

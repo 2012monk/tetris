@@ -1,6 +1,5 @@
 package tetris.game;
 
-import tetris.controller.MenuController;
 import tetris.ui.components.GameTitle;
 import tetris.ui.components.LeaderBoard;
 import tetris.ui.components.LeaderInputBoard;
@@ -11,7 +10,10 @@ import tetris.ui.window.WindowPoolManager;
 
 public class MenuInitializer {
 
-    private static final MenuController controller = MenuController.getInstance();
+    private static final String GAME_MENU = "gameMenu";
+    private static final String LEADER_BOARD_MENU = "leaderBoardMenu";
+    private static final String QUIT = "quit";
+    private static final String LEADER_INPUT_BOARD = "leaderBoardInputMenu";
     private static Window mainMenuWindow;
     private static Window leaderBoardWindow;
 
@@ -29,9 +31,9 @@ public class MenuInitializer {
         int x = GameTitle.getTitleHeight() + 1;
         int y = (mainMenuWindow.getInnerWidth() - w) / 2;
         Menu menu = new Menu(x, y, w, h);
-        menu.addMenuItem("gameMenu", "start");
-        menu.addMenuItem("leaderBoardMenu", "leader board");
-        menu.addMenuItem("quit");
+        menu.addMenuItem(GAME_MENU, "start");
+        menu.addMenuItem(LEADER_BOARD_MENU, "leader board");
+        menu.addMenuItem(QUIT);
         return menu;
     }
 
@@ -60,7 +62,7 @@ public class MenuInitializer {
         int height = 10;
         int x = (WindowPoolManager.getScreen().getInnerHeight() - height) / 2;
         int y = (WindowPoolManager.getScreen().getInnerWidth() - width) / 2;
-        Window window = new Window(x, y, width, height, true, "leaderBoardInputMenu");
+        Window window = new Window(x, y, width, height, true, LEADER_INPUT_BOARD);
         window.addComponent(new LeaderInputBoard(0, 0, width - 2, height - 2));
         WindowPoolManager.addWindow(window);
     }
@@ -69,7 +71,7 @@ public class MenuInitializer {
     private static Window getMainWindow() {
         if (mainMenuWindow == null) {
             mainMenuWindow = new MenuWindow(0, 0, WindowPoolManager.getScreen().getInnerWidth(),
-                WindowPoolManager.getScreen().getInnerHeight(), false, "mainMenu");
+                WindowPoolManager.getScreen().getInnerHeight(), false);
             WindowPoolManager.addWindow(mainMenuWindow);
         }
         return mainMenuWindow;

@@ -2,9 +2,10 @@ package tetris.ui.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import tetris.ui.ComponentImpl;
 import tetris.ui.console.Console;
 
-public class HelpMessage extends TextArea {
+public class HelpMessage extends ComponentImpl {
 
     private static final List<String[]> keyDescription = new ArrayList<String[]>() {{
         add(new String[]{"pause", "p"});
@@ -20,7 +21,6 @@ public class HelpMessage extends TextArea {
 
     public HelpMessage(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
-        setHorizontalAlign(TextAlign.START);
     }
 
     @Override
@@ -37,12 +37,16 @@ public class HelpMessage extends TextArea {
         int rightPadding = getRightPadding();
         keyDescription.forEach(
             v -> {
-                Console.drawString(getInnerX() + keyDescription.indexOf(v),
+                Console.drawString(getInnerX() + verticalPadding() + keyDescription.indexOf(v),
                     getInnerY() + leftPadding, v[0], fg, bg);
-                Console.drawString(getInnerX() + keyDescription.indexOf(v),
+                Console.drawString(getInnerX() + verticalPadding() + keyDescription.indexOf(v),
                     getInnerY() + rightPadding, v[1], fg, bg);
             }
         );
+    }
+
+    private int verticalPadding() {
+        return (getInnerHeight() - keyDescription.size()) / 2;
     }
 
     private int getLeftPadding() {

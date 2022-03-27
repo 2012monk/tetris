@@ -35,7 +35,7 @@ public class BlockCounter extends MatrixBoard {
         for (int i = 1; i < alignedBlocks.size(); i++) {
             align(alignedBlocks.get(i - 1), alignedBlocks.get(i));
         }
-        alignedBlocks.forEach(b -> b.move(2, 1));
+        alignedBlocks.forEach(b -> b.move(3, 1));
         alignedBlocks.forEach(b -> counter.put(b.getShape(), 0));
         alignedBlocks.forEach(b -> position.put(b.getShape(), b.getX()));
         position.computeIfPresent(TetrominoShape.I, (k, v) -> v + 1);
