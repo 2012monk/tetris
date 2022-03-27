@@ -10,7 +10,7 @@ import tetris.message.BoardUpdateMessage;
 import tetris.message.CurrentBlockMessage;
 import tetris.message.NextBlockMessage;
 import tetris.message.Post;
-import tetris.model.TetrisBoard;
+import tetris.gameobject.TetrisBoard;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MessageBroker;
 

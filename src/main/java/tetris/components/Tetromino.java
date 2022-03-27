@@ -16,8 +16,8 @@ import tetris.constants.WallKickData;
 import tetris.exception.BlockCollideException;
 import tetris.exception.EndOfMoveException;
 import tetris.exception.OutOfDataException;
-import tetris.model.Cell;
-import tetris.model.TetrisBoard;
+import tetris.gameobject.Cell;
+import tetris.gameobject.TetrisBoard;
 import tetris.repository.PositionRepository;
 import tetris.repository.WallKickDataRepository;
 

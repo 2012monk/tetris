@@ -5,8 +5,8 @@ import java.util.List;
 import tetris.ComponentImpl;
 import tetris.console.Console;
 import tetris.constants.Color;
-import tetris.model.Cell;
-import tetris.model.TetrisBoard;
+import tetris.gameobject.Cell;
+import tetris.gameobject.TetrisBoard;
 
 public class MatrixBoard extends ComponentImpl {
 

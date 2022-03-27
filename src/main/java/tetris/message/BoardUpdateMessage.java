@@ -1,6 +1,6 @@
 package tetris.message;
 
-import tetris.model.TetrisBoard;
+import tetris.gameobject.TetrisBoard;
 
 public class BoardUpdateMessage extends Post<TetrisBoard> {
 

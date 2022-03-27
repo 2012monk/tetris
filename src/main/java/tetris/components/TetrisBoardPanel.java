@@ -3,7 +3,7 @@ package tetris.components;
 import tetris.annotations.OnMessage;
 import tetris.console.Console;
 import tetris.message.BoardUpdateMessage;
-import tetris.model.Cell;
+import tetris.gameobject.Cell;
 
 public class TetrisBoardPanel extends MatrixBoard {
 

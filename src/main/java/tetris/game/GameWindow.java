@@ -14,7 +14,7 @@ import tetris.exception.EndOfGameException;
 import tetris.message.GameKeyMessage;
 import tetris.message.GameStatusMessage;
 import tetris.message.MenuSelectedMessage;
-import tetris.model.TetrisBoard;
+import tetris.gameobject.TetrisBoard;
 import tetris.window.Window;
 
 public class GameWindow extends Window {

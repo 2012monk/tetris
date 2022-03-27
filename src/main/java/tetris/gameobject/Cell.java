@@ -1,4 +1,4 @@
-package tetris.model;
+package tetris.gameobject;
 
 import tetris.components.Point;
 import tetris.constants.Color;

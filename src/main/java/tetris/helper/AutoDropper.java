@@ -7,8 +7,8 @@ import static tetris.constants.GameStatus.START;
 
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import tetris.ComponentImpl;
 import tetris.annotations.OnMessage;
@@ -21,8 +21,8 @@ public class AutoDropper extends ComponentImpl {
 
     private static final int DROP_RATE = 450;
     private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
-    private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private static Future<?> future;
+    private static ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledFuture<?> future;
     private static GameStatus status = END;
 
     public AutoDropper() {
@@ -31,18 +31,25 @@ public class AutoDropper extends ComponentImpl {
     }
 
     public static void shutDown() {
+        stopTask();
+        service.shutdownNow();
+        status = END;
+    }
+
+    public static void stopTask() {
         if (future == null) {
             return;
         }
         future.cancel(true);
-        service.shutdownNow();
         future = null;
-        status = END;
     }
 
     private void start() {
         shutDown();
         status = START;
+        if (service.isTerminated()) {
+            service = Executors.newSingleThreadScheduledExecutor();
+        }
         future = service.scheduleAtFixedRate(wrap(task()), 0, DROP_RATE, TIME_UNIT);
     }
 
