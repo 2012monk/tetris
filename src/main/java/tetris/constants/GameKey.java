@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import tetris.components.Tetromino;
+import tetris.gameobject.Tetromino;
+import tetris.ui.constants.Char;
+import tetris.ui.constants.SpecialKeyCode;
 
 public enum GameKey {
     KEY_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::moveDown, Tetromino::moveUp),

@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import tetris.components.Tetromino;
-import tetris.constants.Shape;
 import tetris.constants.TetrominoPosition;
+import tetris.constants.TetrominoShape;
 import tetris.constants.TetrominoStatus;
 import tetris.constants.WallKickCorrectionValue;
 import tetris.constants.WallKickData;
+import tetris.gameobject.Tetromino;
 
 public class WallKickDataRepository {
 
@@ -21,7 +21,7 @@ public class WallKickDataRepository {
     public static WallKickData getLeftRotateData(Tetromino block) {
         TetrominoPosition position = block.getPosition();
         TetrominoPosition next = position.getLeftPosition();
-        if (block.getShape() == Shape.I) {
+        if (block.getShape() == TetrominoShape.I) {
             return getIData(position.getStatus(), next.getStatus());
         }
         return getData(position.getStatus(), next.getStatus());
@@ -30,7 +30,7 @@ public class WallKickDataRepository {
     public static WallKickData getRightRotateData(Tetromino block) {
         TetrominoPosition position = block.getPosition();
         TetrominoPosition next = position.getRightPosition();
-        if (block.getShape() == Shape.I) {
+        if (block.getShape() == TetrominoShape.I) {
             return getIData(position.getStatus(), next.getStatus());
         }
         return getData(position.getStatus(), next.getStatus());

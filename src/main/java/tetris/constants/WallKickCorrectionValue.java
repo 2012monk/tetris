@@ -1,7 +1,7 @@
 package tetris.constants;
 
 import tetris.Task;
-import tetris.components.Tetromino;
+import tetris.gameobject.Tetromino;
 
 public class WallKickCorrectionValue {
 

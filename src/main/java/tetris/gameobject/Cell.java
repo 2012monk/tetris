@@ -1,7 +1,6 @@
 package tetris.gameobject;
 
-import tetris.components.Point;
-import tetris.constants.Color;
+import tetris.ui.constants.Color;
 
 public class Cell implements Point {
 

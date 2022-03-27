@@ -1,4 +1,4 @@
-#include "tetris_console_Console.h"
+#include "tetris_ui_console_Console.h"
 #include <ncurses.h>
 
 static int inAction = 0;
@@ -11,14 +11,14 @@ void endDraw() {
   }
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_endDraw (JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_endDraw (JNIEnv *env, jclass clazz) {
   if (inAction > 0) {
     inAction--;
   }
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_startDraw (JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_startDraw (JNIEnv *env, jclass clazz) {
   inAction++;
 }
 
@@ -50,29 +50,29 @@ void unsetColorPair(int number) {
   attroff(COLOR_PAIR(number));
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_readBytes (JNIEnv *env, jclass clazz) {
+JNIEXPORT jint JNICALL Java_tetris_ui_console_Console_readBytes (JNIEnv *env, jclass clazz) {
   return wgetch(stdscr);
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getScreenWidth (JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_tetris_ui_console_Console_getScreenWidth (JNIEnv *env, jobject obj) {
   return COLS;
 }
 
-JNIEXPORT jint JNICALL Java_tetris_console_Console_getScreenHeight (JNIEnv *env, jobject obj) {
+JNIEXPORT jint JNICALL Java_tetris_ui_console_Console_getScreenHeight (JNIEnv *env, jobject obj) {
   return LINES;
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_shutdown (JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_shutdown (JNIEnv *env, jobject obj) {
   endwin();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearLine (JNIEnv *env, jobject obj, jint x) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_clearLine (JNIEnv *env, jobject obj, jint x) {
   move(x, 0);
   clrtoeol();
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_init (JNIEnv *env, jobject obj) {
   initscr();
   curs_set(0);
   keypad(stdscr, TRUE);
@@ -88,11 +88,11 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_init (JNIEnv *env, jobject ob
   refresh();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_refresh (JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_refresh (JNIEnv *env, jclass clazz) {
   refresh();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_drawBorder (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jint fg, jint bg) {
   width--;
   height--;
   drawHorizontalLine(x, y, width, height);
@@ -101,14 +101,14 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawBorder (JNIEnv *env, jcla
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_drawChar (JNIEnv *env, jclass clazz, jint x, jint y, jchar chr, jint fg, jint bg) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_drawChar (JNIEnv *env, jclass clazz, jint x, jint y, jchar chr, jint fg, jint bg) {
   int n = setColorPair(fg, bg);
   mvaddch(x, y, chr);
   unsetColorPair(n);
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jclass clazz, jint x, jint y, jstring str, jint fg, jint bg) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_drawString (JNIEnv *env, jclass clazz, jint x, jint y, jstring str, jint fg, jint bg) {
   const char *cString = (*env)->GetStringUTFChars(env, str, NULL);
   int n = setColorPair(fg, bg);
   mvaddstr(x, y, cString);
@@ -117,7 +117,7 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_drawString (JNIEnv *env, jcla
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jchar chr, jint fg, jint bg) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_clearArea (JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jchar chr, jint fg, jint bg) {
   int n = setColorPair(fg, bg);
   // start inclusive, end exclusive
   for (int i = x; i < x + height; i++) {
@@ -129,7 +129,7 @@ JNIEXPORT void JNICALL Java_tetris_console_Console_clearArea (JNIEnv *env, jclas
   endDraw();
 }
 
-JNIEXPORT void JNICALL Java_tetris_console_Console_clearScreen (JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_tetris_ui_console_Console_clearScreen (JNIEnv *env, jclass clazz) {
   clear();
   endDraw();
 }

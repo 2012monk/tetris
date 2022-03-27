@@ -60,7 +60,6 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - [x] create new window
 - [x] non blocking input handle
 - [x] paint border
-- [ ] paint border with character
 - [x] move window position
 
 ## TODO
@@ -74,3 +73,12 @@ JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 - 블록이 쌓이기 전 가이드와 겹치는 이슈
 - music player 동시성 이슈
 - 반응성 개선
+
+road map
+
+1. view 로직 분리
+2. in, out view 로직 분리
+
+회전로직 아이디어
+
+중심점 변환후 각 점들을 회전

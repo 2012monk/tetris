@@ -42,7 +42,7 @@ tasks.register('cp', Copy) {
 
 tasks.register('jniHeader', Exec) {
     def targetDir = sourceSets.main.runtimeClasspath.asPath
-    commandLine "javah", "-d", "src/native", "-classpath", targetDir, "tetris.console.Console"
+    commandLine "javah", "-d", "src/native", "-classpath", targetDir, "tetris.ui.console.Console"
     dependsOn classes
 }
 

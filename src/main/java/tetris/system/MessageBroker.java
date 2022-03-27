@@ -1,6 +1,5 @@
 package tetris.system;
 
-import java.lang.annotation.IncompleteAnnotationException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -8,8 +7,8 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.Task;
-import tetris.annotations.OnMessage;
-import tetris.message.Post;
+import tetris.ui.annotations.OnMessage;
+import tetris.ui.message.Post;
 
 public class MessageBroker implements Runnable {
 
@@ -30,18 +29,8 @@ public class MessageBroker implements Runnable {
     }
 
     public static void subscribe(Class<? extends Post<?>> post, Object subscriber) {
-//        verifySubscriber(subscriber);
         subs.putIfAbsent(post, new ConcurrentHashMap<>());
         subs.get(post).putIfAbsent(subscriber.hashCode(), new WeakReference<>(subscriber));
-    }
-
-    private static void verifySubscriber(Object subscriber) {
-        Method[] methods = subscriber.getClass().getDeclaredMethods();
-        if (Arrays.stream(methods)
-            .anyMatch(method -> method.getAnnotation(OnMessage.class) != null)) {
-            return;
-        }
-        throw new IncompleteAnnotationException(OnMessage.class, subscriber.getClass().getName());
     }
 
     private static void broadCast(Post<?> post) {

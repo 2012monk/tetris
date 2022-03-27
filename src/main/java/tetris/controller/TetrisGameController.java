@@ -1,25 +1,25 @@
 package tetris.controller;
 
-import tetris.components.GameScore;
-import tetris.components.Tetromino;
 import tetris.constants.GameKey;
 import tetris.exception.BlockCollideException;
 import tetris.exception.EndOfGameException;
 import tetris.exception.EndOfMoveException;
-import tetris.message.BoardUpdateMessage;
-import tetris.message.CurrentBlockMessage;
-import tetris.message.NextBlockMessage;
-import tetris.message.Post;
+import tetris.gameobject.GameScore;
 import tetris.gameobject.TetrisBoard;
+import tetris.gameobject.Tetromino;
 import tetris.repository.TetrominoRepository;
 import tetris.system.MessageBroker;
+import tetris.ui.message.BoardUpdateMessage;
+import tetris.ui.message.CurrentBlockMessage;
+import tetris.ui.message.NextBlockMessage;
+import tetris.ui.message.Post;
 
 public class TetrisGameController {
 
     private final TetrisBoard board;
+    private final GameScore score;
     private Tetromino currentBlock;
     private Tetromino guideBlock;
-    private final GameScore score;
 
     public TetrisGameController(TetrisBoard board) {
         this.board = board;

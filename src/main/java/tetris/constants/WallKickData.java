@@ -3,8 +3,8 @@ package tetris.constants;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import tetris.components.Tetromino;
 import tetris.exception.OutOfDataException;
+import tetris.gameobject.Tetromino;
 
 public class WallKickData {
 

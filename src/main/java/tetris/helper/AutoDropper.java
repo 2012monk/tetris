@@ -10,12 +10,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import tetris.ComponentImpl;
-import tetris.annotations.OnMessage;
 import tetris.constants.GameKey;
 import tetris.constants.GameStatus;
-import tetris.message.GameKeyMessage;
-import tetris.message.GameStatusMessage;
+import tetris.ui.ComponentImpl;
+import tetris.ui.annotations.OnMessage;
+import tetris.ui.message.GameKeyMessage;
+import tetris.ui.message.GameStatusMessage;
 
 public class AutoDropper extends ComponentImpl {
 

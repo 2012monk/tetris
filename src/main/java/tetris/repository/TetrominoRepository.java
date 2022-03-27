@@ -7,19 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import tetris.components.Tetromino;
-import tetris.constants.Shape;
+import tetris.constants.TetrominoShape;
+import tetris.gameobject.Tetromino;
 
 public class TetrominoRepository {
 
-    private static final Map<Shape, Tetromino> tetrominos = new HashMap<>();
+    private static final Map<TetrominoShape, Tetromino> tetrominos = new HashMap<>();
     private static final ArrayDeque<Tetromino> pool = new ArrayDeque<>();
 
     public static void addTetromino(Tetromino tetromino) {
         tetrominos.put(tetromino.getShape(), tetromino);
     }
 
-    public static Tetromino getTetrominoByShape(Shape shape) {
+    public static Tetromino getTetrominoByShape(TetrominoShape shape) {
         if (!tetrominos.containsKey(shape)) {
             throw new IllegalArgumentException();
         }

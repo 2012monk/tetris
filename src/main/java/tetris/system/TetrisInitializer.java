@@ -7,26 +7,25 @@ import static tetris.constants.TetrominoStatus.SPAWN_STATE;
 
 import java.util.Arrays;
 import java.util.List;
-import tetris.components.BlockCounter;
-import tetris.components.GameClock;
-import tetris.components.GameTitle;
-import tetris.components.HelpMessage;
-import tetris.components.NextBlockBoard;
-import tetris.components.ScoreBoard;
-import tetris.components.TetrisBoardPanel;
-import tetris.components.Tetromino;
-import tetris.constants.Color;
-import tetris.constants.Shape;
 import tetris.constants.TetrominoPosition;
+import tetris.constants.TetrominoShape;
 import tetris.constants.WallKickCorrectionValue;
-import tetris.game.GameWindow;
+import tetris.gameobject.Tetromino;
 import tetris.helper.AutoDropper;
-import tetris.helper.GameKeyListener;
 import tetris.repository.PositionRepository;
 import tetris.repository.TetrominoRepository;
 import tetris.repository.WallKickDataRepository;
-import tetris.window.Window;
-import tetris.window.WindowPoolManager;
+import tetris.ui.components.BlockCounter;
+import tetris.ui.components.GameClock;
+import tetris.ui.components.GameTitle;
+import tetris.ui.components.HelpMessage;
+import tetris.ui.components.NextBlockBoard;
+import tetris.ui.components.ScoreBoard;
+import tetris.ui.components.TetrisBoardPanel;
+import tetris.ui.constants.Color;
+import tetris.ui.game.GameWindow;
+import tetris.ui.window.Window;
+import tetris.ui.window.WindowPoolManager;
 
 public class TetrisInitializer {
 
@@ -77,7 +76,6 @@ public class TetrisInitializer {
         int y = (window.getInnerWidth() - BOARD_SIZE) / 2;
         TetrisBoardPanel board = new TetrisBoardPanel(xAlign, y, BOARD_SIZE, BOARD_SIZE);
         window.addComponent(board);
-        window.addComponent(new GameKeyListener());
         window.addComponent(new AutoDropper());
     }
 
@@ -144,32 +142,32 @@ public class TetrisInitializer {
         initWallKickData();
         initPosition();
         Tetromino S = getS();
-        Tetromino I = new Tetromino(Color.RED, Shape.I, 4);
+        Tetromino I = new Tetromino(Color.RED, TetrominoShape.I, 4);
         I.addCell(1, 0);
         I.addCell(1, 1);
         I.addCell(1, 2);
         I.addCell(1, 3);
-        Tetromino T = new Tetromino(Color.GREEN, Shape.T);
+        Tetromino T = new Tetromino(Color.GREEN, TetrominoShape.T);
         T.addCell(0, 1);
         T.addCell(1, 0);
         T.addCell(1, 1);
         T.addCell(1, 2);
-        Tetromino Z = new Tetromino(Color.YELLOW, Shape.Z);
+        Tetromino Z = new Tetromino(Color.YELLOW, TetrominoShape.Z);
         Z.addCell(0, 2);
         Z.addCell(0, 1);
         Z.addCell(1, 1);
         Z.addCell(1, 0);
-        Tetromino O = new Tetromino(Color.CYAN, Shape.O, 2);
+        Tetromino O = new Tetromino(Color.CYAN, TetrominoShape.O, 2);
         O.addCell(0, 0);
         O.addCell(0, 1);
         O.addCell(1, 0);
         O.addCell(1, 1);
-        Tetromino L = new Tetromino(Color.WHITE, Shape.L);
+        Tetromino L = new Tetromino(Color.WHITE, TetrominoShape.L);
         L.addCell(1, 0);
         L.addCell(1, 1);
         L.addCell(1, 2);
         L.addCell(0, 2);
-        Tetromino J = new Tetromino(Color.MAGENTA, Shape.J);
+        Tetromino J = new Tetromino(Color.MAGENTA, TetrominoShape.J);
         J.addCell(1, 0);
         J.addCell(1, 1);
         J.addCell(1, 2);
@@ -185,7 +183,7 @@ public class TetrisInitializer {
     }
 
     public static Tetromino getS() {
-        Tetromino S = new Tetromino(Color.BLUE, Shape.S);
+        Tetromino S = new Tetromino(Color.BLUE, TetrominoShape.S);
         S.addCell(0, 0);
         S.addCell(0, 1);
         S.addCell(1, 1);

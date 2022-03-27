@@ -1,11 +1,11 @@
 package tetris.controller;
 
-import tetris.annotations.OnMessage;
 import tetris.audio.GameAudioPlayer;
-import tetris.message.MenuSelectedMessage;
 import tetris.system.MessageBroker;
-import tetris.window.Window;
-import tetris.window.WindowPoolManager;
+import tetris.ui.annotations.OnMessage;
+import tetris.ui.message.MenuSelectedMessage;
+import tetris.ui.window.Window;
+import tetris.ui.window.WindowPoolManager;
 
 public class MenuController {
 

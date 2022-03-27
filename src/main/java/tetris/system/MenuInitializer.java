@@ -1,13 +1,13 @@
 package tetris.system;
 
-import tetris.components.GameTitle;
-import tetris.components.LeaderBoard;
-import tetris.components.LeaderInputBoard;
-import tetris.components.Menu;
 import tetris.controller.MenuController;
-import tetris.game.MenuWindow;
-import tetris.window.Window;
-import tetris.window.WindowPoolManager;
+import tetris.ui.components.GameTitle;
+import tetris.ui.components.LeaderBoard;
+import tetris.ui.components.LeaderInputBoard;
+import tetris.ui.components.Menu;
+import tetris.ui.game.MenuWindow;
+import tetris.ui.window.Window;
+import tetris.ui.window.WindowPoolManager;
 
 public class MenuInitializer {
 

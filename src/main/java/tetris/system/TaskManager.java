@@ -3,7 +3,7 @@ package tetris.system;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.Task;
-import tetris.console.Console;
+import tetris.ui.console.Console;
 
 public class TaskManager implements Runnable {
 
