@@ -1,12 +1,53 @@
 # TETRIS
 
-tetris implemented with java
+terminal tetris implemented in java
+
+---
+![](./imgs/play.gif)
+## 지원
+
+Only Tested on Mac OS X mojave
+
+## Installation
+
+---
+
+```sh
+git clone https://github.com/2012monk/tetris
+cd tetris
+gradlew install
+```
+
+run
+
+```sh
+./tetris
+```
+
+link global
+
+```sh
+gradlew link
+```
+
+unlink
+```sh
+gradlew unlink
+```
+
+## TODO
+
+- 크로스 플랫폼 지원
+- 화면이 가끔씩 밀려서 갱신되는 버그 수정
+- 반응성 개선
 
 ## features
 
+- bgm
 - in game score board
-- presenting next block
-- global score board
+- preview next block
+- local score board
+- block counter
 
 ## UI
 
@@ -57,28 +98,9 @@ tetris implemented with java
 
 JNI 를 이용한 ncurses 라이브러리를 통해 터미널 제어
 
+jcurses 라이브러리 참고
+
 - [x] create new window
 - [x] non blocking input handle
 - [x] paint border
 - [x] move window position
-
-## TODO
-
-1. __상속구조 리팩터링__
-
-- ascii key code 크로스 플랫폼 체크
-- 화면 갱신 작업 단위
-- 화면이 가끔씩 밀려서 갱신되는 버그 수정
-- decoupling
-- 블록이 쌓이기 전 가이드와 겹치는 이슈
-- music player 동시성 이슈
-- 반응성 개선
-
-road map
-
-1. view 로직 분리
-2. in, out view 로직 분리
-
-회전로직 아이디어
-
-중심점 변환후 각 점들을 회전
