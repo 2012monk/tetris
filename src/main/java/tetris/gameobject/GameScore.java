@@ -1,7 +1,7 @@
 package tetris.gameobject;
 
-import tetris.system.MessageBroker;
 import tetris.ui.message.GameScoreMessage;
+import tetris.ui.system.MessageBroker;
 
 public class GameScore {
 

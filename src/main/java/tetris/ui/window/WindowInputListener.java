@@ -3,9 +3,9 @@ package tetris.ui.window;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import tetris.system.TaskManager;
 import tetris.ui.console.Console;
 import tetris.ui.constants.Char;
+import tetris.ui.system.TaskManager;
 
 public class WindowInputListener {
 

@@ -21,9 +21,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import tetris.constants.AudioStatus;
-import tetris.system.MessageBroker;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.message.AudioMessage;
+import tetris.ui.system.MessageBroker;
 
 public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListener {
 

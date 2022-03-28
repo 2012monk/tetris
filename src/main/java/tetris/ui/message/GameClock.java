@@ -1,6 +1,6 @@
 package tetris.ui.message;
 
-import tetris.system.MessageBroker;
+import tetris.ui.system.MessageBroker;
 
 public class GameClock {
 

@@ -2,11 +2,11 @@ package tetris.ui.window;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingDeque;
-import tetris.system.ScheduledTaskHelper;
-import tetris.system.TaskManager;
 import tetris.ui.Spatial;
 import tetris.ui.console.Console;
 import tetris.ui.constants.Char;
+import tetris.ui.system.ScheduledTaskHelper;
+import tetris.ui.system.TaskManager;
 
 public class WindowPoolManager {
 

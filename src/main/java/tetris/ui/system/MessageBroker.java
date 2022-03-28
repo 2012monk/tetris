@@ -1,4 +1,4 @@
-package tetris.system;
+package tetris.ui.system;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;

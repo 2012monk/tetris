@@ -3,10 +3,10 @@ package tetris.helper;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import tetris.constants.BlockMovement;
-import tetris.system.MessageBroker;
-import tetris.system.ScheduledTaskHelper;
 import tetris.ui.message.GameKeyMessage;
 import tetris.ui.message.GameStatusMessage;
+import tetris.ui.system.MessageBroker;
+import tetris.ui.system.ScheduledTaskHelper;
 
 public class AutoDropHelper implements GameHelper {
 

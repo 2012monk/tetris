@@ -1,4 +1,4 @@
-package tetris.system;
+package tetris.ui.system;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

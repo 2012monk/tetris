@@ -1,4 +1,4 @@
-package tetris.system;
+package tetris.ui.system;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;

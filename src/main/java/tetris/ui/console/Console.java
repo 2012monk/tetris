@@ -57,10 +57,6 @@ public class Console {
         drawChar(x, y, chr, fg.getNumber(), bg.getNumber());
     }
 
-    public static void drawChar(int x, int y, char chr) {
-        drawChar(x, y, chr, DEFAULT_FG, DEFAULT_BG);
-    }
-
     public static void drawString(int x, int y, String text) {
         drawString(x, y, text, DEFAULT_FG.getNumber(), DEFAULT_BG.getNumber());
     }

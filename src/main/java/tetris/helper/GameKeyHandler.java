@@ -11,7 +11,6 @@ import java.util.Map;
 import tetris.constants.AudioStatus;
 import tetris.constants.BlockMovement;
 import tetris.constants.GameStatus;
-import tetris.system.MessageBroker;
 import tetris.ui.annotations.OnMessage;
 import tetris.ui.constants.Char;
 import tetris.ui.constants.SpecialKeyCode;
@@ -20,6 +19,7 @@ import tetris.ui.message.GameKeyMessage;
 import tetris.ui.message.GameStatusMessage;
 import tetris.ui.message.MenuSelectedMessage;
 import tetris.ui.message.Post;
+import tetris.ui.system.MessageBroker;
 
 public class GameKeyHandler {
 

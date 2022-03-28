@@ -5,11 +5,11 @@ import tetris.exception.BlockCollideException;
 import tetris.exception.EndOfGameException;
 import tetris.exception.EndOfMoveException;
 import tetris.repository.TetrominoRepository;
-import tetris.system.MessageBroker;
 import tetris.ui.message.BoardUpdateMessage;
 import tetris.ui.message.CurrentBlockMessage;
 import tetris.ui.message.NextBlockMessage;
 import tetris.ui.message.Post;
+import tetris.ui.system.MessageBroker;
 
 public class TetrisGame {
 

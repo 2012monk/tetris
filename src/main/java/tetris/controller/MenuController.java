@@ -1,8 +1,8 @@
 package tetris.controller;
 
 import tetris.audio.GameAudioPlayer;
-import tetris.system.MessageBroker;
 import tetris.ui.message.MenuSelectedMessage;
+import tetris.ui.system.MessageBroker;
 import tetris.ui.window.Window;
 import tetris.ui.window.WindowPoolManager;
 

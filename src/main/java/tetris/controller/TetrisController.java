@@ -2,10 +2,10 @@ package tetris.controller;
 
 import tetris.constants.BlockMovement;
 import tetris.exception.EndOfGameException;
-import tetris.helper.GameHelperManager;
 import tetris.gameobject.TetrisGame;
-import tetris.system.MessageBroker;
+import tetris.helper.GameHelperManager;
 import tetris.ui.message.MenuSelectedMessage;
+import tetris.ui.system.MessageBroker;
 
 public class TetrisController {
 

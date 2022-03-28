@@ -2,8 +2,8 @@ package tetris.helper;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import tetris.system.ScheduledTaskHelper;
 import tetris.ui.message.GameClock;
+import tetris.ui.system.ScheduledTaskHelper;
 
 public class ClockTickHelper implements GameHelper {
 
