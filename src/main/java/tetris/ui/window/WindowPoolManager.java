@@ -44,8 +44,14 @@ public class WindowPoolManager {
         if (!getFocusedWindow().equals(window)) {
             focusWindow(window);
         }
-        window.onWindowFocused();
         window.render();
+        window.onWindowFocused();
+    }
+
+    private static void focusWindow(Window window) {
+        getFocusedWindow().onWindowUnFocused();
+        windowPool.removeIf(w -> w.equals(window));
+        windowPool.addLast(window);
     }
 
     public static void notifyKey(Char chr) {
@@ -53,20 +59,6 @@ public class WindowPoolManager {
             return;
         }
         getFocusedWindow().handleKey(chr);
-    }
-
-    public static Spatial getScreen() {
-        if (screen == null) {
-            screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false,
-                SCREEN_NAME);
-        }
-        return screen;
-    }
-
-    private static void focusWindow(Window window) {
-        getFocusedWindow().onWindowUnFocused();
-        windowPool.removeIf(w -> w.equals(window));
-        windowPool.addLast(window);
     }
 
     private static Window getFocusedWindow() {
@@ -78,4 +70,13 @@ public class WindowPoolManager {
             .findAny()
             .orElseThrow(NoSuchElementException::new);
     }
+
+    public static Spatial getScreen() {
+        if (screen == null) {
+            screen = new Window(0, 0, Console.getScreenWidth(), Console.getScreenHeight(), false,
+                SCREEN_NAME);
+        }
+        return screen;
+    }
+
 }

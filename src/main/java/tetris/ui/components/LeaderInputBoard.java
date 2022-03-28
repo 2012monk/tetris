@@ -15,15 +15,12 @@ public class LeaderInputBoard extends ComponentImpl {
 
     private static final String GAME_OVER_MESSAGE = "GAME OVER";
     private static final String HELP_MESSAGE = "Enter your name";
+    private static final String DEFAULT_NAME = "PLAYER";
+    private static final int MAX_LENGTH = 6;
 
     private static final Color GAME_OVER_COLOR = Color.MAGENTA;
     private GameScore currentScore;
     private StringBuilder name = new StringBuilder();
-
-
-    public LeaderInputBoard() {
-        this(0, 0, 20, 8);
-    }
 
     public LeaderInputBoard(int x, int y, int width, int height) {
         super(x, y, width, height, true);
@@ -50,13 +47,17 @@ public class LeaderInputBoard extends ComponentImpl {
         if (currentScore != null) {
             score = currentScore.getScore();
         }
-        LeaderBoardIOManger.saveScore(name.toString(), score);
+        String currentName = DEFAULT_NAME;
+        if (name.length() != 0) {
+            currentName = name.toString();
+        }
+        LeaderBoardIOManger.saveScore(currentName, score);
         name = new StringBuilder();
         publishMessage(new MenuSelectedMessage("leaderBoardMenu"));
     }
 
     private void insert(char chr) {
-        if (name.length() >= getInnerWidth() - 1) {
+        if (name.length() >= MAX_LENGTH) {
             return;
         }
         name.append(chr);

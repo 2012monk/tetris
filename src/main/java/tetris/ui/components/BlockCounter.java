@@ -20,7 +20,7 @@ public class BlockCounter extends MatrixBoard {
     private static final Color COUNTER_COLOR = Color.GREEN;
     private final Map<TetrominoShape, Integer> counter = new HashMap<>();
     private final Map<TetrominoShape, Integer> position = new HashMap<>();
-    private final int yAlign = 12;
+    private final int Y_ALIGN = 12;
 
     public BlockCounter(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
@@ -80,7 +80,7 @@ public class BlockCounter extends MatrixBoard {
     private void printNumber(TetrominoShape shape) {
         int pos = position.get(shape);
         int count = counter.get(shape);
-        Console.drawString(pos + getInnerX(), yAlign + getInnerY(), String.valueOf(count),
+        Console.drawString(pos + getInnerX(), Y_ALIGN + getInnerY(), String.valueOf(count),
             COUNTER_COLOR, bg);
     }
 }

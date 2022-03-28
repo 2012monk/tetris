@@ -67,7 +67,6 @@ public class MenuInitializer {
         WindowPoolManager.addWindow(window);
     }
 
-
     private static Window getMainWindow() {
         if (mainMenuWindow == null) {
             mainMenuWindow = new MenuWindow(0, 0, WindowPoolManager.getScreen().getInnerWidth(),

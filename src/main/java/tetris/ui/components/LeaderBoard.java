@@ -12,11 +12,12 @@ public class LeaderBoard extends TextArea {
 
 
     private static final String TITLE = "LEADER BOARD";
-    private final List<Score> loadedScore = new ArrayList<>();
+    private final List<String> scoreList = new ArrayList<>();
 
     public LeaderBoard(int x, int y, int width, int height, boolean borderOn) {
         super(x, y, width, height, borderOn);
-        setHorizontalAlign(TextAlign.START);
+        setHorizontalAlign(TextAlign.CENTER);
+        setVerticalAlign(TextAlign.START);
     }
 
     @Override
@@ -31,15 +32,19 @@ public class LeaderBoard extends TextArea {
     }
 
     private void load() {
-        loadedScore.clear();
+        List<Score> loadedScore = new ArrayList<>();
         LeaderBoardIOManger.loadScores()
-            .forEach(this::addScore);
+            .forEach(s -> addScore(s, loadedScore));
         loadedScore.sort(Comparator.comparingInt(s -> -s.score));
+        for (int i = 0; i < 10; i++) {
+            loadedScore.get(i).number = i + 1;
+            scoreList.add(loadedScore.get(i).format());
+        }
     }
 
-    private void addScore(String s) {
+    private void addScore(String s, List<Score> loadedScore) {
         try {
-            this.loadedScore.add(new Score(s));
+            loadedScore.add(new Score(s));
         } catch (Exception ignore) {
         }
     }
@@ -47,26 +52,16 @@ public class LeaderBoard extends TextArea {
     private void writeScores() {
         load();
         clearString();
-        printTitle();
-        for (int i = 0; i < Math.min(10, loadedScore.size()); i++) {
-            String line = (i + 1) + ". " + loadedScore.get(i).format();
-            writeString(line + "\n");
-        }
-        if (loadedScore.size() == 0) {
+        writeString(TITLE + "\n");
+        writeString(String.join("\n", scoreList));
+        if (scoreList.size() == 0) {
             writeString("Nothing");
         }
     }
 
-    private void printTitle() {
-        int padding = (getInnerWidth() - TITLE.length()) / 2;
-        for (int i = 0; i < padding; i++) {
-            writeString(" ");
-        }
-        writeString(TITLE + "\n");
-    }
-
     static class Score {
 
+        int number;
         int score;
         String name;
 
@@ -77,7 +72,7 @@ public class LeaderBoard extends TextArea {
         }
 
         public String format() {
-            return name + " " + score;
+            return number + ". " + name + " " + score;
         }
     }
 }

@@ -21,10 +21,9 @@ public class TetrisInitializer {
     public static void initGameWindow() {
         window = new GameWindow(WindowPoolManager.getScreen());
         WindowPoolManager.addWindow(window);
-        GameTitle title = new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
-            false);
         xAlign = GameTitle.getTitleHeight() + 1;
-        window.addComponent(title);
+        window.addComponent(new GameTitle(0, 0, window.getInnerWidth(), window.getInnerHeight(),
+            false));
         boardWindow();
         presentWindow();
         leftBoard();
