@@ -7,7 +7,7 @@ import tetris.ui.console.Console;
 
 public class TaskManager implements Runnable {
 
-    private static final long DEFAULT_TIMEOUT = 2000;
+    private static final long DEFAULT_TIMEOUT = 100;
     private static final BlockingDeque<Task> taskQueue = new LinkedBlockingDeque<>();
     private static TaskManager instance;
     private static Thread thread;

@@ -53,18 +53,6 @@ public class Console {
         clearArea(x, y, width, height, chr, fg.getNumber(), bg.getNumber());
     }
 
-    public static void setForeGroundColor(Color color) {
-
-    }
-
-    public static void setBackGroundColor(Color color) {
-
-    }
-
-    public static void setColorPaint(Color foreGround, Color backGround) {
-
-    }
-
     public static void drawChar(int x, int y, char chr, Color fg, Color bg) {
         drawChar(x, y, chr, fg.getNumber(), bg.getNumber());
     }

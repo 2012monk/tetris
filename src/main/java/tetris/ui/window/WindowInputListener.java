@@ -10,7 +10,7 @@ import tetris.ui.constants.Char;
 public class WindowInputListener {
 
     private static final long DELAY = 0;
-    private static final long RATE = 8;
+    private static final long RATE = 10;
     private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
     private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private static boolean isRunning = false;

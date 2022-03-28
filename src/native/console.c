@@ -5,7 +5,7 @@ static int inAction = 0;
 int COLOR_COUNT = 8;
 
 void endDraw() {
-  if (!inAction) {
+  if (!inAction && !isendwin()) {
     move(0, 0);
     refresh();
   }
