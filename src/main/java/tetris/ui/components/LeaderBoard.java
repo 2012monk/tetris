@@ -32,6 +32,7 @@ public class LeaderBoard extends TextArea {
     }
 
     private void load() {
+        scoreList.clear();
         List<Score> loadedScore = new ArrayList<>();
         LeaderBoardIOManger.loadScores()
             .forEach(s -> addScore(s, loadedScore));

@@ -11,9 +11,9 @@ public class HelpMessage extends ComponentImpl {
         add(new String[]{"pause", "p"});
         add(new String[]{"restart", "r"});
         add(new String[]{"quit", "q"});
-        add(new String[]{"down", "↓ j"});
-        add(new String[]{"left", "← h"});
-        add(new String[]{"right", "→ l"});
+        add(new String[]{"down", "↓"});
+        add(new String[]{"left", "←"});
+        add(new String[]{"right", "→"});
         add(new String[]{"rotate", "↑"});
         add(new String[]{"hard drop", "space"});
         add(new String[]{"mute", "m"});
