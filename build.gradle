@@ -27,7 +27,7 @@ application {
     applicationDefaultJvmArgs = ['-Djava.library.path=./lib']
 }
 
-tasks.register('cp', Copy) {
+tasks.register('install', Copy) {
     dependsOn 'build'
     from(layout.buildDirectory)
     println layout.buildDirectory
@@ -37,6 +37,14 @@ tasks.register('cp', Copy) {
     }
     includeEmptyDirs = false
     into 'lib'
+}
+
+tasks.register('link', Exec) {
+    commandLine 'sh', '-c', 'ln -sf $(pwd)/tetris /usr/local/bin'
+}
+
+tasks.register('unlink', Exec) {
+    commandLine 'sh', '-c', 'unlink /usr/local/bin/tetris'
 }
 
 
@@ -54,15 +62,6 @@ jar {
                 'Main-Class': 'tetris.Application'
         )
     }
-    from("$buildDir/libs") {
-        include "**/*.dylib"
-        eachFile {
-            path = name
-        }
-        includeEmptyDirs = false
-        into "lib"
-    }
-
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from {
