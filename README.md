@@ -4,6 +4,7 @@ terminal tetris implemented in java
 
 ---
 ![](./imgs/play.gif)
+
 ## 지원
 
 Only Tested on Mac OS X mojave
@@ -15,7 +16,7 @@ Only Tested on Mac OS X mojave
 ```sh
 git clone https://github.com/2012monk/tetris
 cd tetris
-gradlew install
+./gradlew install
 ```
 
 run
@@ -27,12 +28,13 @@ run
 link global
 
 ```sh
-gradlew link
+./gradlew link
 ```
 
 unlink
+
 ```sh
-gradlew unlink
+./gradlew unlink
 ```
 
 ## TODO
@@ -65,24 +67,24 @@ gradlew unlink
 
 ### menu select
 
--[x] play
--[x] score board
--[x] quit
+- [x] play
+- [x] score board
+- [x] quit
 
 ### user input
 
--[x] get single char
--[x] get arrow input
--[x] down, up, rotate, force drop
--[x] pause
--[x] quit
+- [x] get single char
+- [x] get arrow input
+- [x] down, up, rotate, force drop
+- [x] pause
+- [x] quit
 
 ### print
 
--[x] refresh board
--[x] print single block
--[x] print board
--[x] print blocks in different color
+- [x] refresh board
+- [x] print single block
+- [x] print board
+- [x] print blocks in different color
 
 ### tetris
 
