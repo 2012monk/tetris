@@ -5,6 +5,7 @@ import tetris.ui.components.GameClockPanel;
 import tetris.ui.components.GameTitle;
 import tetris.ui.components.HelpMessage;
 import tetris.ui.components.NextBlockBoard;
+import tetris.ui.components.PausedAlert;
 import tetris.ui.components.ScoreBoard;
 import tetris.ui.components.TetrisBoardPanel;
 import tetris.ui.game.GameWindow;
@@ -38,6 +39,14 @@ public class TetrisInitializer {
         window.addComponent(
             new NextBlockBoard(xAlign + scoreH, y, w, boardHeight, true));
         window.addComponent(new HelpMessage(xAlign + scoreH + boardHeight, y, w, 13, true));
+        alertComponent();
+    }
+
+    private static void alertComponent() {
+        int height = 3;
+        int x = xAlign + height;
+        int y = (WindowPoolManager.getScreen().getInnerWidth() - BOARD_SIZE) / 2;
+        window.addComponent(new PausedAlert(x, y, BOARD_SIZE, height, true));
     }
 
     private static void leftBoard() {

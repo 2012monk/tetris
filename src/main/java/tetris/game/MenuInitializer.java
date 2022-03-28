@@ -60,7 +60,7 @@ public class MenuInitializer {
     private static void createLeaderBoardInputWindow() {
         int width = 40;
         int height = 10;
-        int x = (WindowPoolManager.getScreen().getInnerHeight() - height) / 2;
+        int x = (WindowPoolManager.getScreen().getInnerHeight() - height) / 2 - 6;
         int y = (WindowPoolManager.getScreen().getInnerWidth() - width) / 2;
         Window window = new Window(x, y, width, height, true, LEADER_INPUT_BOARD);
         window.addComponent(new LeaderInputBoard(0, 0, width - 2, height - 2));

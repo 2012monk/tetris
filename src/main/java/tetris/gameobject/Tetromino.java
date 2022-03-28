@@ -197,19 +197,19 @@ public class Tetromino {
 
     public void hardDrop(TetrisBoard board) {
         int limit = board.getHeight();
-        while (!isCollide(board) && limit > 0) {
-            moveDown();
-            limit--;
-        }
-        moveUp();
+        downUntilCollide(board, limit);
     }
 
-    private boolean isCollide(TetrisBoard board) {
+    private void downUntilCollide(TetrisBoard board, int limit) {
+        if (limit == 0) {
+            return;
+        }
         try {
+            moveDown();
             board.collisionTest(this);
-            return true;
+            downUntilCollide(board, --limit);
         } catch (BlockCollideException e) {
-            return false;
+            moveUp();
         }
     }
 

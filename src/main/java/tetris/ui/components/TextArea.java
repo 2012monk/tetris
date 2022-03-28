@@ -73,7 +73,7 @@ public class TextArea extends ComponentImpl {
         if (!isInsideBox(x, y, str)) {
             return;
         }
-        Console.drawString(x + getInnerX(), y + getInnerY(), str);
+        Console.drawString(x + getInnerX(), y + getInnerY(), str, fg, bg);
     }
 
     public boolean isInsideBox(int x, int y, String str) {
