@@ -1,8 +1,8 @@
 package tetris.ui.message;
 
-public class ClockTickMessage extends Post<Void> {
+public class ClockTickMessage extends Post<GameClock> {
 
-    public ClockTickMessage() {
-        super(null);
+    public ClockTickMessage(GameClock payload) {
+        super(payload);
     }
 }

@@ -1,67 +1,60 @@
 package tetris.system;
 
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
 import tetris.Task;
 import tetris.ui.console.Console;
 
-public class TaskManager implements Runnable {
+public class TaskManager {
 
-    private static final long DEFAULT_TIMEOUT = 100;
+    private static final ExecutorService service = Executors.newSingleThreadExecutor();
     private static final BlockingDeque<Task> taskQueue = new LinkedBlockingDeque<>();
-    private static TaskManager instance;
-    private static Thread thread;
-    private static boolean isRunning;
+    private static Future<?> future;
 
     private TaskManager() {
     }
 
-    public static TaskManager getInstance() {
-        if (instance == null) {
-            instance = new TaskManager();
-        }
-        return instance;
-    }
-
-    public static synchronized void init() {
-        isRunning = true;
-        if (thread == null) {
-            thread = new Thread(getInstance());
-            thread.start();
-        }
+    public static void init() {
+        start();
     }
 
     public static synchronized void shutDown() {
-        isRunning = false;
-        taskQueue.clear();
-        if (thread != null) {
-            thread.interrupt();
-            thread = null;
+        if (future != null && !future.isCancelled()) {
+            future.cancel(true);
         }
+        service.shutdownNow();
     }
 
     public static void addTask(Task task) {
         taskQueue.add(task);
-        thread.interrupt();
+        start();
+    }
+
+    private static void start() {
+        if (isRunning()) {
+            return;
+        }
+        future = service.submit(mainTask());
+    }
+
+    private static Runnable mainTask() {
+        return () -> {
+            while (!taskQueue.isEmpty()) {
+                Console.startDraw();
+                taskQueue.removeFirst().action();
+                Console.endDraw();
+            }
+        };
+    }
+
+    private static boolean isRunning() {
+        return future != null && !future.isDone();
     }
 
     public static boolean removeTask(Task task) {
         return taskQueue.remove(task);
-    }
-
-    @Override
-    public void run() {
-        while (isRunning) {
-            if (taskQueue.isEmpty()) {
-                try {
-                    Thread.sleep(DEFAULT_TIMEOUT);
-                } catch (InterruptedException ignore) {
-                }
-                continue;
-            }
-            Console.startDraw();
-            taskQueue.removeFirst().action();
-            Console.endDraw();
-        }
     }
 }

@@ -1,8 +1,8 @@
 package tetris.controller;
 
-import tetris.constants.GameKey;
+import tetris.constants.BlockMovement;
 import tetris.exception.EndOfGameException;
-import tetris.game.GameHelperManager;
+import tetris.helper.GameHelperManager;
 import tetris.gameobject.TetrisGame;
 import tetris.system.MessageBroker;
 import tetris.ui.message.MenuSelectedMessage;
@@ -16,7 +16,7 @@ public class TetrisController {
         this.game = game;
     }
 
-    public void moveOrder(GameKey key) {
+    public void moveOrder(BlockMovement key) {
         try {
             game.move(key);
         } catch (EndOfGameException e) {
@@ -31,7 +31,7 @@ public class TetrisController {
     }
 
     public void resume() {
-        helperManager.start();
+        helperManager.resume();
     }
 
     public void stop() {

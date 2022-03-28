@@ -3,8 +3,10 @@ package tetris.gameobject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import tetris.constants.GameKey;
+import java.util.stream.IntStream;
+import tetris.constants.BlockMovement;
 import tetris.constants.TetrominoPosition;
 import tetris.constants.TetrominoShape;
 import tetris.constants.WallKickData;
@@ -30,9 +32,26 @@ public class Tetromino {
     private int x;
     private int y;
 
+    public Tetromino(Color color, TetrominoShape shape, int blockSize) {
+        this(0, 0, blockSize, color, shape);
+    }
+
+    public Tetromino(Color color, TetrominoShape shape) {
+        this(color, shape, DEFAULT_BLOCK_SIZE);
+    }
+
     public Tetromino(char space, int blockSize, TetrominoShape shape, TetrominoPosition position,
-        int x,
-        int y, Color color, List<Cell> cells) {
+        int x, int y, Color color, List<Cell> cells) {
+        this(x, y, blockSize, space, color, shape, position);
+        cells.forEach(c -> addCell(c.getX(), c.getY()));
+    }
+
+    private Tetromino(int x, int y, int blockSize, Color bg, TetrominoShape shape) {
+        this(x, y, blockSize, DEFAULT_CELL, bg, shape, PositionRepository.getInitialPosition());
+    }
+
+    private Tetromino(int x, int y, int blockSize, char space, Color color, TetrominoShape shape,
+        TetrominoPosition position) {
         this.space = space;
         this.blockSize = blockSize;
         this.shape = shape;
@@ -40,25 +59,6 @@ public class Tetromino {
         this.x = x;
         this.y = y;
         this.color = color;
-        cells.forEach(c -> addCell(c.getX(), c.getY()));
-    }
-
-    private Tetromino(int x, int y, int blockSize, Color bg, TetrominoShape shape) {
-        this.x = x;
-        this.y = y;
-        this.color = bg;
-        this.shape = shape;
-        this.blockSize = blockSize;
-        this.space = DEFAULT_CELL;
-        this.position = PositionRepository.getInitialPosition();
-    }
-
-    public Tetromino(Color bg, TetrominoShape shape, int blockSize) {
-        this(0, 0, blockSize, bg, shape);
-    }
-
-    public Tetromino(Color bg, TetrominoShape shape) {
-        this(bg, shape, DEFAULT_BLOCK_SIZE);
     }
 
     /*
@@ -94,7 +94,6 @@ public class Tetromino {
         this.points.clear();
         return tmp;
     }
-
 
     public void moveRight() {
         move(0, BASIS);
@@ -138,23 +137,12 @@ public class Tetromino {
         this.y = (maxWidth / 2 - blockSize) / 2;
     }
 
-    public Tetromino deepCopy() {
-        return new Tetromino(space, blockSize, shape, position, x, y, color, points);
-    }
-
-    public Tetromino getGuideBlock() {
-        return new Tetromino(GUIDER_CELL, blockSize, shape, position, x, y, color, points);
-    }
-
-    public int getWidth() {
-        int min = this.points.stream().mapToInt(Cell::getY).min().orElse(0);
-        int max = this.points.stream().mapToInt(Cell::getY).max().orElse(0);
-        return max - min + 1;
-    }
-
-    public int getHeight() {
-        int min = this.points.stream().mapToInt(Cell::getX).min().orElse(0);
-        int max = this.points.stream().mapToInt(Cell::getX).max().orElse(0);
+    private int calculateSize(Supplier<IntStream> streamSupplier) {
+        if (points.isEmpty()) {
+            return 0;
+        }
+        int min = streamSupplier.get().min().orElse(0);
+        int max = streamSupplier.get().max().orElse(0);
         return max - min + 1;
     }
 
@@ -164,21 +152,25 @@ public class Tetromino {
             .collect(Collectors.toList());
     }
 
-    public void move(TetrisBoard board, GameKey key) throws EndOfMoveException {
-        if (key == GameKey.KEY_UP) {
+    public void move(TetrisBoard board, BlockMovement key) throws EndOfMoveException {
+        if (key == BlockMovement.KEY_UP) {
             rotateLeft(board);
             return;
         }
-        if (key == GameKey.KEY_SPACE) {
+        if (key == BlockMovement.KEY_SPACE) {
             hardDrop(board);
             throw new EndOfMoveException();
         }
-        key.simulate(this);
+        moveCoordinate(board, key);
+    }
+
+    private void moveCoordinate(TetrisBoard board, BlockMovement key) throws EndOfMoveException {
+        key.tarnsform(this);
         try {
             board.collisionTest(this);
         } catch (BlockCollideException e) {
             key.reverse(this);
-            if (key == GameKey.KEY_DOWN) {
+            if (key == BlockMovement.KEY_DOWN) {
                 throw new EndOfMoveException();
             }
         }
@@ -204,13 +196,37 @@ public class Tetromino {
     }
 
     public void hardDrop(TetrisBoard board) {
-        try {
+        int limit = board.getHeight();
+        while (!isCollide(board) && limit > 0) {
             moveDown();
-            board.collisionTest(this);
-            hardDrop(board);
-        } catch (BlockCollideException e) {
-            moveUp();
+            limit--;
         }
+        moveUp();
+    }
+
+    private boolean isCollide(TetrisBoard board) {
+        try {
+            board.collisionTest(this);
+            return true;
+        } catch (BlockCollideException e) {
+            return false;
+        }
+    }
+
+    public Tetromino deepCopy() {
+        return new Tetromino(space, blockSize, shape, position, x, y, color, points);
+    }
+
+    public Tetromino getGuideBlock() {
+        return new Tetromino(GUIDER_CELL, blockSize, shape, position, x, y, color, points);
+    }
+
+    public int getWidth() {
+        return calculateSize(() -> points.stream().mapToInt(Cell::getY));
+    }
+
+    public int getHeight() {
+        return calculateSize(() -> points.stream().mapToInt(Cell::getX));
     }
 
     public TetrominoShape getShape() {

@@ -9,7 +9,7 @@ import static tetris.constants.GameStatus.START;
 import java.util.HashMap;
 import java.util.Map;
 import tetris.constants.AudioStatus;
-import tetris.constants.GameKey;
+import tetris.constants.BlockMovement;
 import tetris.constants.GameStatus;
 import tetris.system.MessageBroker;
 import tetris.ui.annotations.OnMessage;
@@ -54,7 +54,7 @@ public class GameKeyHandler {
             return;
         }
         if (isGameKey(chr)) {
-            publishMessage(new GameKeyMessage(GameKey.getGameKey(chr)));
+            publishMessage(new GameKeyMessage(BlockMovement.getGameKey(chr)));
         }
     }
 
@@ -70,7 +70,7 @@ public class GameKeyHandler {
     }
 
     private boolean isGameKey(Char chr) {
-        return GameKey.hasKey(chr);
+        return BlockMovement.hasKey(chr);
     }
 
     private boolean isMoveBlocked() {

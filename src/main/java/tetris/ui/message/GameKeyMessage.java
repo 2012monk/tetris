@@ -1,10 +1,10 @@
 package tetris.ui.message;
 
-import tetris.constants.GameKey;
+import tetris.constants.BlockMovement;
 
-public class GameKeyMessage extends Post<GameKey> {
+public class GameKeyMessage extends Post<BlockMovement> {
 
-    public GameKeyMessage(GameKey payload) {
+    public GameKeyMessage(BlockMovement payload) {
         super(payload);
     }
 }

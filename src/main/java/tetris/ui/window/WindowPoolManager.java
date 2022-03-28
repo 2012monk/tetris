@@ -2,6 +2,7 @@ package tetris.ui.window;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingDeque;
+import tetris.system.ScheduledTaskHelper;
 import tetris.system.TaskManager;
 import tetris.ui.Spatial;
 import tetris.ui.console.Console;
@@ -21,6 +22,7 @@ public class WindowPoolManager {
 
     public synchronized static void shutDown() {
         WindowInputListener.shutDown();
+        ScheduledTaskHelper.shutDown();
         TaskManager.shutDown();
         Console.shutdown();
     }

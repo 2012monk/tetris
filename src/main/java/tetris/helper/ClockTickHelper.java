@@ -1,18 +1,19 @@
 package tetris.helper;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import tetris.system.MessageBroker;
-import tetris.ui.message.ClockTickMessage;
+import tetris.system.ScheduledTaskHelper;
+import tetris.ui.message.GameClock;
 
-public class ClockTickHelper {
+public class ClockTickHelper implements GameHelper {
 
     private static ScheduledFuture<?> task;
-
     private static ClockTickHelper instance;
-    private ScheduledExecutorService service;
+    private final GameClock clock;
+
+    private ClockTickHelper() {
+        clock = new GameClock();
+    }
 
     public static ClockTickHelper getInstance() {
         if (instance == null) {
@@ -21,32 +22,37 @@ public class ClockTickHelper {
         return instance;
     }
 
-    public ScheduledExecutorService getService() {
-        if (service == null) {
-            service = Executors.newSingleThreadScheduledExecutor();
-        }
-        return service;
+    @Override
+    public void start() {
+        clock.reset();
+        startGameClock();
     }
 
-    private void shutDown() {
-        if (service == null) {
-            return;
-        }
-        service.shutdownNow();
-        service = null;
-    }
-
-    public void startGameClock() {
+    @Override
+    public void pause() {
         stopClock();
-        task = getService().scheduleAtFixedRate(
-            () -> MessageBroker.publish(new ClockTickMessage()), 0, 1, TimeUnit.SECONDS);
     }
 
-    public void stopClock() {
+    @Override
+    public void resume() {
+        startGameClock();
+    }
+
+    @Override
+    public void stop() {
+        stopClock();
+    }
+
+    private void startGameClock() {
+        stopClock();
+        task = ScheduledTaskHelper.scheduleAtFixedRate(
+            clock::increaseTick, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void stopClock() {
         if (task == null) {
             return;
         }
         task.cancel(true);
-        shutDown();
     }
 }

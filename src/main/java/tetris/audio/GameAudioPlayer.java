@@ -9,8 +9,11 @@ import com.goxr3plus.streamplayer.stream.StreamPlayerException;
 import com.goxr3plus.streamplayer.stream.StreamPlayerListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,14 +29,15 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
 
     private static final String PATH_PREFIX = "resources/";
     private static final String MENU_BGM_PATH = "bgm1.mp3";
+    private static final String MENU_BGM2_PATH = "bgm3.mp3";
+    private static final String MENU_BGM3_PATH = "bgm4.mp3";
     private static final String PLAY_BGM_PATH = "bgm2.mp3";
-    private static final String LEADERBOARD_BGM_PATH = "bgm3.mp3";
-    private static final String _BGM_PATH = "bgm4.mp3";
     private static final ExecutorService parentService1;
     private static final ExecutorService parentService2;
     private static final ScheduledExecutorService loopService;
     // disabled logger
     private static final Logger logger;
+    private static final List<String> menuBgmList = new ArrayList<>();
     private static ScheduledFuture<?> future;
     private static GameAudioPlayer instance;
 
@@ -45,6 +49,9 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
         logger.setUseParentHandlers(false);
         Arrays.stream(logger.getHandlers())
             .forEach(logger::removeHandler);
+        menuBgmList.add(MENU_BGM2_PATH);
+        menuBgmList.add(MENU_BGM3_PATH);
+        menuBgmList.add(MENU_BGM_PATH);
     }
 
     private String currentLoop = "";
@@ -74,7 +81,8 @@ public class GameAudioPlayer extends StreamPlayer implements StreamPlayerListene
     }
 
     public void playMenuBgm() {
-        startLoop(MENU_BGM_PATH);
+        Random random = new Random();
+        startLoop(menuBgmList.get(random.nextInt(menuBgmList.size())));
     }
 
     public void playInGameBgm() {

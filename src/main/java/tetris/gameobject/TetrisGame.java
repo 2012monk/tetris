@@ -1,6 +1,6 @@
 package tetris.gameobject;
 
-import tetris.constants.GameKey;
+import tetris.constants.BlockMovement;
 import tetris.exception.BlockCollideException;
 import tetris.exception.EndOfGameException;
 import tetris.exception.EndOfMoveException;
@@ -32,7 +32,7 @@ public class TetrisGame {
         }
     }
 
-    public void move(GameKey key) throws EndOfGameException {
+    public void move(BlockMovement key) throws EndOfGameException {
         try {
             currentBlock.move(board, key);
             resetGuideBlock();

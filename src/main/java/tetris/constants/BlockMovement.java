@@ -9,7 +9,7 @@ import tetris.gameobject.Tetromino;
 import tetris.ui.constants.Char;
 import tetris.ui.constants.SpecialKeyCode;
 
-public enum GameKey {
+public enum BlockMovement {
     KEY_DOWN(SpecialKeyCode.KEY_DOWN, Tetromino::moveDown, Tetromino::moveUp),
     KEY_UP(SpecialKeyCode.KEY_UP, Tetromino::rotateLeft, Tetromino::rotateRight),
     KEY_SPACE(SpecialKeyCode.KEY_SPACE, Tetromino::rotateLeft, Tetromino::rotateRight),
@@ -19,30 +19,31 @@ public enum GameKey {
     KEY_L('l', Tetromino::moveRight, Tetromino::moveLeft),
     KEY_J('j', Tetromino::moveDown, Tetromino::moveUp),
     KEY_K('k', Tetromino::rotateLeft, Tetromino::rotateRight);
-    private static final Map<Char, GameKey> keys;
+    private static final Map<Char, BlockMovement> keys;
 
     static {
-        keys = Arrays.stream(GameKey.values())
-            .collect(Collectors.toMap(GameKey::getTrigger, Function.identity()));
+        keys = Arrays.stream(BlockMovement.values())
+            .collect(Collectors.toMap(BlockMovement::getTrigger, Function.identity()));
     }
 
     private final Consumer<Tetromino> action;
     private final Consumer<Tetromino> reverseAction;
     private final Char trigger;
 
-    GameKey(SpecialKeyCode key, Consumer<Tetromino> action, Consumer<Tetromino> reverseAction) {
+    BlockMovement(SpecialKeyCode key, Consumer<Tetromino> action,
+        Consumer<Tetromino> reverseAction) {
         this.action = action;
         this.trigger = new Char(key);
         this.reverseAction = reverseAction;
     }
 
-    GameKey(char key, Consumer<Tetromino> action, Consumer<Tetromino> reverseAction) {
+    BlockMovement(char key, Consumer<Tetromino> action, Consumer<Tetromino> reverseAction) {
         this.action = action;
         this.trigger = new Char(key);
         this.reverseAction = reverseAction;
     }
 
-    public static GameKey getGameKey(Char keyCode) {
+    public static BlockMovement getGameKey(Char keyCode) {
         return keys.get(keyCode);
     }
 
@@ -54,7 +55,7 @@ public enum GameKey {
         return trigger;
     }
 
-    public void simulate(Tetromino block) {
+    public void tarnsform(Tetromino block) {
         this.action.accept(block);
     }
 

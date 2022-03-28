@@ -19,15 +19,16 @@ public class GameClockPanel extends ComponentImpl {
 
     @OnMessage
     public void onMessage(GameStatusMessage post) {
-        GameStatus status = post.getPayload();
-        if (status == GameStatus.START || status == GameStatus.END) {
-            initClock();
-        }
+//        GameStatus status = post.getPayload();
+//        if (status == GameStatus.START || status == GameStatus.END) {
+//            initClock();
+//        }
     }
 
     @OnMessage
     public void onTick(ClockTickMessage message) {
-        increaseTick();
+        this.tick = message.getPayload().getCurrentTick();
+        render();
     }
 
     private void initClock() {
